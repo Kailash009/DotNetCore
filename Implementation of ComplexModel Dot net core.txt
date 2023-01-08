@@ -1,0 +1,284 @@
+Working with Complex Model:-
+-------------------------------------------------------
+1. School
+2. Teacher
+3. Student
+--------------------------------
+School  -> Many Teachers.
+Teacher -> Many Student.
+-----------------------------------------------------------------
+Controller:-
+-----------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch10AMWEDotNetCore.SchoolOperation;
+using Batch10AMWEDotNetCore.Models;
+
+namespace Batch10AMWEDotNetCore.Controllers
+{
+    public class SchoolController : Controller
+    {
+        public IActionResult Index()
+        {
+           School sm=SchoolDbOperation.getSchoolInfo();
+           return View(sm);
+        }
+    }
+}
+------------------------------------------------------------------
+Models:-
+----------------------
+namespace Batch10AMWEDotNetCore.Models
+{
+    public class Student
+    {
+        public int SID { get; set; }
+        public string ?SName { get; set; }
+        public string ?Address { get; set; }
+        public string ?MobileNo { get; set; }
+        public List<Course> ?Courses { get; set; }
+    }
+}
+------------------------------------------------
+namespace Batch10AMWEDotNetCore.Models
+{
+    public class Teacher
+    {
+        public int Teacher_id { get; set; }
+        public string  ?Teacher_Name { get; set; }
+        public string ?Role { get; set; }
+        public string  ?Teacher_img { get; set; }
+
+        public List<Student> ?Students { get; set; }
+
+
+    }
+}
+-----------------------------------
+namespace Batch10AMWEDotNetCore.Models
+{
+    public class School
+    {
+        public int School_ID { get; set; }
+        public string  ?School_Name { get; set; }
+        public string  ?City { get; set; }
+
+        public List<Teacher> ?Teachers { get; set; }
+    }
+}
+namespace Batch10AMWEDotNetCore.Models
+{
+    public class Course
+    {
+        public int course_id { get; set; }
+        public string ?course_name { get; set; }
+    }
+}
+
+-----------------------
+School DB Operation:-
+---------------------------------
+using Batch10AMWEDotNetCore.Models;
+
+namespace Batch10AMWEDotNetCore.SchoolOperation
+{
+    public class SchoolDbOperation
+    {
+        public static List<Student> listofStudentforTeacherA()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st1 = new Student();
+            st1.SID = 1;
+            st1.SName = "Ronit";
+            st1.MobileNo = "9879878979";
+            st1.Address = "Greater Noida";
+
+            stuList.Add(st1);
+
+            st1 = new Student();
+            st1.SID = 2;
+            st1.SName = "Shiva";
+            st1.MobileNo = "790878979";
+            st1.Address = "Noida Sec-42";
+            stuList.Add(st1);
+
+            st1 = new Student();
+            st1.SID = 3;
+            st1.SName = "Vinita";
+            st1.MobileNo = "69878979";
+            st1.Address = "Kirti Nagar";
+            stuList.Add(st1);
+
+            st1 = new Student();
+            st1.SID = 4;
+            st1.SName = "Patanjali";
+            st1.MobileNo = "90278979";
+            st1.Address = "Uttam Nagar";
+            stuList.Add(st1);
+
+            return stuList;
+        }
+        public static List<Student> listofStudentforTeacherB()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st1 = new Student();
+            st1.SID = 6;
+            st1.SName = "Ram";
+            st1.MobileNo = "79878979";
+            st1.Address = "Bihar";
+
+            stuList.Add(st1);
+
+            st1 = new Student();
+            st1.SID = 7;
+            st1.SName = "Shyam";
+            st1.MobileNo = "63878979";
+            st1.Address = "Noida Sec-12";
+            stuList.Add(st1);
+
+            
+            return stuList;
+        }
+        public static List<Student> listofStudentforTeacherC()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st1 = new Student();
+            st1.SID = 10;
+            st1.SName = "Kunal";
+            st1.MobileNo = "79878979";
+            st1.Address = "New Ashok Nagar";
+
+            stuList.Add(st1);
+
+            st1 = new Student();
+            st1.SID = 11;
+            st1.SName = "Bablu";
+            st1.MobileNo = "38078979";
+            st1.Address = "Noida Sec-12";
+            stuList.Add(st1);
+
+            st1 = new Student();
+            st1.SID = 12;
+            st1.SName = "Rajesh";
+            st1.MobileNo = "3278979";
+            st1.Address = "Awadh Nagar";
+            stuList.Add(st1);
+
+            return stuList;
+        }
+
+        public static List<Teacher> getTeachers()
+        {
+            List<Teacher> tchList = new List<Teacher>();
+            Teacher tch1 = new Teacher();
+            tch1.Teacher_id = 101;
+            tch1.Teacher_Name = "Mr. John";
+            tch1.Role = "Math";
+            tch1.Teacher_img = "images/testimonial-2.jpg";
+            tch1.Students = listofStudentforTeacherA();
+            tchList.Add(tch1);  // First Teacher
+
+
+            tch1 = new Teacher();
+            tch1.Teacher_id = 102;
+            tch1.Teacher_Name = "Mrs. Jennefer";
+            tch1.Role = "Physics";
+            tch1.Teacher_img = "images/testimonial-4.jpg";
+            tch1.Students = listofStudentforTeacherB();
+            tchList.Add(tch1);  // Second
+
+            tch1 = new Teacher();
+            tch1.Teacher_id = 103;
+            tch1.Teacher_Name = "Mrs. Linda";
+            tch1.Role = "Chemistry";
+            tch1.Teacher_img = "images/testimonial-1.jpg";
+            tch1.Students = listofStudentforTeacherC();
+            tchList.Add(tch1); // Third
+
+            return tchList;
+
+        }
+        public static School getSchoolInfo()
+        {
+            School sm = new School();
+            sm.School_ID = 12345602;
+            sm.School_Name = "Delhi Public School";
+            sm.City = "Delhi";
+            sm.Teachers = getTeachers();
+            return sm;
+        }
+    }
+}
+--------------------------
+Index.cshtml:-
+---------------------------
+@model Batch10AMWEDotNetCore.Models.School
+
+
+<h2 class="bg-dark text-center text-white">SCHOOL INFORMATION </h2>
+<table class="table table-bordered">
+    <tr>
+        <th>School ID</th>
+        <th>@Model.School_ID</th>
+    </tr>
+    <tr>
+        <th>School Name</th>
+        <th>@Model.School_Name</th>
+    </tr>
+    <tr>
+        <th>City</th>
+        <th>@Model.City</th>
+    </tr>
+</table>
+
+@{
+    foreach (Teacher tch in Model.Teachers)
+    {
+        <table class="table table-bordered">
+        <tr>
+                <th colspan="2"><h2 class="bg-info text-center text-red">Teacher Information</h2>  </th>
+        </tr>
+            <tr>
+                <th>Teacher ID</th>
+                <td>@tch.Teacher_id</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>@tch.Teacher_Name</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>@tch.Role</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td><img src="@tch.Teacher_img" width="200px" height="200px" /></td>
+            </tr>
+        </table>
+        <table class="table table-bordered">
+            <tr>
+                <th colspan="2"><h3 class="bg-warning text-center text-blue">Student Information </h3></th>
+            </tr>
+            @foreach (Student stu in tch.Students)
+            {
+                <tr>
+                    <th>SID</th>
+                    <td>@stu.SID</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>@stu.SName</td>
+                </tr>
+                <tr>
+                    <th>Mobile</th>
+                    <td>@stu.MobileNo</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>@stu.Address</td>
+                </tr>
+            }
+        </table>
+    }
+}
+------------------------------------------------------------------------------------------
+
