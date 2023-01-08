@@ -1,0 +1,254 @@
+Razor Syntax:-
+---------------------------------
+>> In razor syntax we use @ symbol.
+>> If you want to write c# code in .cshtml => ( C# + HTML ) file then use @ symbol before writing any c# code.
+Different ways to write razor syntax - 
+1. Inline Expression.
+2. Conditional Statements.
+if-else , if_elseif-else
+3. Looping.
+a) while
+b) do-while
+c) for
+d) foreach -> collection of element.
+foreach element in collection
+{
+// Statements
+}
+---------------------------------------------------------
+
+<h1> Welcome to My Employee Page </h1>
+
+@{
+    string Empname = "Pantanjali";
+    int age = 14;
+    string address = "New Ashok Nagar";
+    var dateofjoining = DateTime.Now;
+}
+<h2>Employee Information</h2>
+<h3>Name = @Empname</h3>
+<h3>Age = @age</h3>
+<h3>Address = @address</h3>
+<h3>DateofJoining = @dateofjoining</h3>
+
+@{
+    int a = 14, b = 34;
+    if (a > b)
+    {
+        <h2>a is Greater than b</h2>
+    }
+    else
+    {
+        <h2>b is Greater than a</h2>
+    }
+}
+
+@{
+    int i = 3904, j = 430, k = 100;
+    if (i > j && i > k)
+    {
+        <h2> I is Greater</h2>
+    }
+    else if (j > i && j > k)
+    {
+        <h2>J is Greater</h2>
+    }
+    else
+    {
+        <h2>K is Greater</h2>
+    }
+}
+
+@{
+    string msg = "GN";
+    switch (msg)
+    {
+        case "GM":
+            <h2>Good Morning</h2>
+            break;
+        case "GFN":
+            <h2>Good AfterNoon</h2>
+            break;
+        case "GE":
+            <h2>Good Evening</h2>
+            break;
+        case "GN":
+            <h2>Good Night</h2>
+            break;
+        default:
+            <h2>Wrong Input Choice</h2>
+            break;
+    }
+}
+
+@{
+    int p = 1;
+    while (p <= 10)
+    {
+        <h3>@p</h3>
+         p=@p + 1;
+    }
+}
+@{
+    int q = 10;
+    do
+    {
+        <h2>@q</h2>
+        q = @q - 1;
+    }
+    while (q >=1);
+}
+@{
+    for (int t = 1; t <= 10; t++)
+    {
+    <h1>@t</h1>    
+    }
+}
+@{
+    string name = "PATANJALI";
+    foreach (char res in name)
+    {
+        <h2 style="color:red;">@res</h2>
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------
+HTML Helper:-
+-----------------------------
+>> It is used to render html file.
+1. Normal Html.
+@*Normal Html*@
+@*<form action="/" method="post">
+Name : <input type="text" name="name" /> <br/>
+Age : <input type="text" name="age" /> <br/>
+Adress: <input type="text" name="address" /> <br/>
+<input type="submit" value="Register" />
+</form>*@
+------------------------------------------------------------------------------------
+2. Standard html helper.
+---------------------------------------
+@Html.textBox()
+@Html.Password()
+@Html.CheckBox()
+@Html.RadioButton()
+@Html.Form()
+@*Standard Html Helper*@
+@using(Html.BeginForm("Index","Employee",FormMethod.Post)){
+    <span>Name</span>
+     @Html.TextBox("name")
+    <span>Age</span>
+    @Html.TextBox("age")
+    <span>Address</span>
+    @Html.TextBox("address")
+    <input type="submit" value="Register">
+}
+------------------------------------------
+3. Strongly typed html helper.
+------------------------------------------------
+>> In strongly typed we directly bind our Html with Model.
+@model Batch10AMWEDotNetCore.Models.Student
+
+@*Strongly Html Helper*@
+
+@using(Html.BeginForm("Index","Employee",FormMethod.Post)){
+    <span>SID</span>
+     @Html.TextBoxFor(m=>m.SID)
+    <span>Name</span>
+    @Html.TextBoxFor(model=>model.SName)
+    <span>Address</span>
+    @Html.TextBoxFor(m=>m.Address)
+    <span>MobileNo</span>
+    @Html.TextBoxFor(m=>m.MobileNo)
+    <input type="submit" value="Register">
+}
+-----------------------------------------------------------------------
+4. Tag Helper  -> Dot Net Core
+----------------------------------------------------------
+@model Batch10AMWEDotNetCore.Models.Student
+
+@*Tag Helper*@
+
+<form asp-action="Index" asp-controller="Employee" method="post">
+    Name: <input type="text" asp-for="SID" />
+    Age: <input type="text" asp-for="SName" />
+    Address: <input type="text" asp-for="Address" />
+    MobileNo: <input type="text" asp-for="MobileNo" />
+    <input type="submit" value="Register" />
+</form>
+-------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
