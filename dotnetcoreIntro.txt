@@ -1,0 +1,91 @@
+MVC Dot Net Core:-
+-----------------------------------------------
+MVC  ->
+Model  -> Business Entites.  (DAL) Data Access Layer  -> All database related operation performed in this layer or we can create properties here. 
+View    -> PLL (Presentation Logic Layer)  -> It is UI for the User. (html,css,js,jquery).
+Controller -> BLL (Business Logic Layer) ->  All business related logic or actual logic of program or c# code written in this layer.
+>> It is main layer of MVC.
+>> Controller interact both model and view.
+>> it is the heart of mvc.
+----------------------------------------------------------------------------------
+Dot Net Core:-
+----------------------------
+>> 2016.
+>> It is a cross platform(win,linux,mac),open source framework.
+>> Fast.
+>> Roslyn (RYUJit) (just in time) compiler is used to execute dot net application.
+>> Middleware. 
+>> appsettings.json -> here, you write connection string.
+------------------------------------------------------------------------------------
+Life Cycle of Dot Net Core:-
+---------------------------------------------
+How to take Dot net core mvc Project:-
+-----------------------------------------------------------------
+Install one package by which you can see all the changes commit in view at runtime ->
+Microsoft.aspnetcore.mvc.razor.runtimecompilation
+-------------------------------------------------------------------------------------------
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+----------------------------------------------------------------------------------------------------------------
+Query String:-
+------------------------
+Syntax of Query String:-
+-------------------------------------------
+https://locahost:34555/Controllername/ActionName?varname1=value1&varname2=value2&varname3=value3
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://localhost:7229/Employee/Welcome?UserName=Ashish
+or
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+https://localhost:7229/Employee/Welcome?user=ashish&age=19&address=newashoknagar
+-------------------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public string Welcome(string user,int age,string address)
+        {
+            return "Welcome!" + user;
+        }
+        public int getEmpid(int ?id)
+        {
+            int res = id ?? 100;  // Null coalescing Operator
+            return res;
+        }
+    }
+}
+------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
