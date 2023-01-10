@@ -1,0 +1,150 @@
+Controller and View -> Done
+----------------------------------------------
+How to Create Model-
+------------------------------------
+How to access one Employee -
+--------------------------------------------------------
+namespace Batch12PMMohit.Models
+{
+    // DAL
+    public class Employee
+    {
+        public int EId { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?MobileNo { get; set; }
+        public double Salary { get; set; }
+
+        public static List<Employee> getEmployees()
+        {
+            List<Employee> empList = new List<Employee>();
+
+            // First Employee
+            Employee emp1 = new Employee();
+            emp1.EId = 101;
+            emp1.Name = "Mohit";
+            emp1.Age = 20;
+            emp1.MobileNo = "97987979";
+            emp1.Salary = 34536.78;
+            empList.Add(emp1);
+
+            // Second Employee
+            Employee emp2 = new Employee();
+            emp2.EId = 102;
+            emp2.Name = "Rahul";
+            emp2.Age = 23;
+            emp2.MobileNo = "87987979";
+            emp2.Salary = 24536.78;
+            empList.Add(emp2);
+
+            // Third Employee
+            Employee emp3 = new Employee();
+            emp3.EId = 103;
+            emp3.Name = "Arun";
+            emp3.Age = 28;
+            emp3.MobileNo = "76987979";
+            emp3.Salary = 14536.78;
+            empList.Add(emp3);
+
+            // Fourth Employee
+            Employee emp4 = new Employee();
+            emp4.EId = 104;
+            emp4.Name = "Gagan";
+            emp4.Age = 34;
+            emp4.MobileNo = "45987979";
+            emp4.Salary = 1236.78;
+            empList.Add(emp4);
+
+            // Fivth Employee
+            Employee emp5 = new Employee();
+            emp5.EId = 105;
+            emp5.Name = "Sachin";
+            emp5.Age = 67;
+            emp5.MobileNo = "733987979";
+            emp5.Salary = 30036.78;
+            empList.Add(emp5);
+
+            return empList;
+        }
+
+    }
+}
+-----------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        //  BAL 
+        public IActionResult Index()
+        {
+            
+           List<Employee> empList=Employee.getEmployees();
+           return View(empList);
+
+            // SHow One Employee Information
+            //Employee emp = new Employee();
+            //emp.EId = 10023;
+            //emp.Name = "Ashish";
+            //emp.Age = 19;
+            //emp.MobileNo = "89789793";
+            //emp.Salary = 34056.78;
+            //return View(emp);
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+    }
+}
+-----------------------------------------------
+@model IEnumerable<Batch12PMMohit.Models.Employee>
+
+    @*PLL*@
+<h1 style="text-align:center;background-color:black;color:white;">Show Employee Details</h1>
+<table style="background-color:greenyellow;" class="table table-bordered">
+    <tr>
+        <th>EID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Mobile No</th>
+        <th>Salary</th>
+    </tr>
+
+    @foreach (var emp in Model)
+    {
+    <tr>
+        <td>@emp.EId</td>
+        <td>@emp.Name</td>
+        <td>@emp.Age</td>
+        <td>@emp.MobileNo</td>
+        <td>@emp.Salary</td>
+    </tr>
+    }
+</table>
+@*<h1 align="center" style="background-color:pink;">One Employee Information</h1>
+<table class="table table-bordered">
+    <tr>
+        <th>EID</th>
+        <th>@Model.EId</th>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>Age</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>MobileNO</th>
+        <th>@Model.MobileNo</th>
+    </tr>
+    <tr>
+        <th>Salary</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+*@
