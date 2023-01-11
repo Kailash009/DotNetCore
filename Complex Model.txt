@@ -1,0 +1,247 @@
+How to work with Complex Model:-
+----------------------------------------------------------------
+1. School  -> List of Teachers
+2. Teacher -> List of Students
+3. Student  -> List of Courses.
+--------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.SchoolOperation;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class SchoolController : Controller
+    {
+        public IActionResult Index()
+        {
+            School sc=SchoolDbOperation.getSchoolDetails();
+            return View(sc);
+        }
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------
+namespace Batch12PMMohit.Models
+{
+    public class School
+    {
+        public int School_id { get; set; }
+        public string ?School_Name { get; set; }
+        public string ?Schoo_City { get; set; }
+
+        public List<Teacher> ?Teachers { get; set; }
+    }
+}
+---------------------------------------------------------------
+namespace Batch12PMMohit.Models
+{
+    public class Teacher
+    {
+        public int  tid { get; set; }
+        public string ?tName { get; set; }
+        public int tAge { get; set; }
+        public string ?role { get; set; }
+        public string ?tImage { get; set; }
+
+        public List<Student> ?Students { get; set; }
+    }
+}
+---------------------------------------------------------------------
+namespace Batch12PMMohit.Models
+{
+    public class Student
+    {
+        public int Sid { get; set; }
+        public string ?Sname { get; set; }
+        public int sAge { get; set; }
+        public string ?sAddress { get; set; }
+
+        public List<Course> ?Courses { get; set; }
+    }
+}
+---------------------------------------------------------
+namespace Batch12PMMohit.Models
+{
+    public class Course
+    {
+        public int cid { get; set; }
+        public string ?Cname { get; set; }
+    }
+}
+------------------------------------------------
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.SchoolOperation
+{
+    public class SchoolDbOperation
+    {
+        public static List<Student> ListofStudentForTeacherA()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st1 = new Student();
+            st1.Sid = 1;
+            st1.Sname = "Mohit";
+            st1.sAge = 19;
+            st1.sAddress = "New Ashok Nagar";
+            stuList.Add(st1);
+
+            Student st2 = new Student();
+            st2.Sid = 2;
+            st2.Sname = "Rahul";
+            st2.sAge = 23;
+            st2.sAddress = "Pratap Nagar";
+            stuList.Add(st2);
+
+            Student st3 = new();
+            st3.Sid = 3;
+            st3.Sname = "Rajendra";
+            st3.sAge = 34;
+            st3.sAddress = "Kirti Nagar";
+            stuList.Add(st3);
+
+            return stuList;
+        }
+        public static List<Student> ListofStudentForTeacherB()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st1 = new Student();
+            st1.Sid = 4;
+            st1.Sname = "Ravi";
+            st1.sAge = 49;
+            st1.sAddress = "Subhas Nagar";
+            stuList.Add(st1);
+
+            Student st2 = new Student();
+            st2.Sid = 5;
+            st2.Sname = "Ramesh";
+            st2.sAge = 13;
+            st2.sAddress = "Noida Sec-4";
+            stuList.Add(st2);
+
+            return stuList;
+        }
+        public static List<Student> ListofStudentForTeacherC()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st1 = new Student();
+            st1.Sid = 6;
+            st1.Sname = "Sahil";
+            st1.sAge = 25;
+            st1.sAddress = "Rana Pratap Marg";
+            stuList.Add(st1);
+
+            return stuList;
+        }
+        public static List<Teacher> getTeachers()
+        {
+            List<Teacher> tchList = new List<Teacher>();
+            Teacher tc1 = new Teacher();
+            tc1.tid = 101;
+            tc1.tName = "John";
+            tc1.tAge = 45;
+            tc1.role = "Computer Science";
+            tc1.tImage = "images/testimonial-2.jpg";
+            tc1.Students = ListofStudentForTeacherA();
+            tchList.Add(tc1);
+
+            Teacher tc2 = new Teacher();
+            tc2.tid = 102;
+            tc2.tName = "Mandy";
+            tc2.tAge = 34;
+            tc2.role = "Digital Marketing";
+            tc2.tImage = "images/testimonial-1.jpg";
+            tc2.Students = ListofStudentForTeacherB();
+            tchList.Add(tc2);
+
+            Teacher tc3 = new Teacher();
+            tc3.tid = 103;
+            tc3.tName = "Alis";
+            tc3.tAge = 54;
+            tc3.role = "Marketing";
+            tc3.tImage = "images/testimonial-3.jpg";
+            tc3.Students = ListofStudentForTeacherC();
+            tchList.Add(tc3);
+
+            return tchList;
+
+        }
+        public static School getSchoolDetails()
+        {
+            School sc = new School();
+            sc.School_id = 576839;
+            sc.School_Name = "Delhi Public School";
+            sc.Schoo_City = "Noida";
+            sc.Teachers = getTeachers();
+            return sc;
+        }
+    }
+}
+--------------------------------------
+@model Batch12PMMohit.Models.School
+
+<h1 class="bg-dark text-white text-center">School Information</h1>
+<table class="table table-bordered bg-primary">
+    <tr>
+        <th>School ID</th>
+        <th>@Model.School_id</th>
+    </tr>
+    <tr>
+        <th>School Name</th>
+        <th>@Model.School_Name</th>
+    </tr>
+    <tr>
+        <th>School City</th>
+        <th>@Model.Schoo_City</th>
+    </tr>
+</table>
+@{
+    foreach (Teacher tch in Model.Teachers)
+    {
+        <h2 class="bg-dark text-white text-center">Teacher Information</h2>
+        <table class="table table-bordered" style="background-color:cyan;">
+            <tr>
+                <th>TID</th>
+                <th>@tch.tid</th>
+            </tr>
+            <tr>
+                <th>Teacher Name</th>
+                <th>@tch.tName</th>
+            </tr>
+            <tr>
+                <th>Age</th>
+                <th>@tch.tAge</th>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <th>@tch.role</th>
+            </tr>
+            <tr>
+                <th>Pic</th>
+                <th> <img src="@tch.tImage" height="200px" width="200px" alt="Image"> </th>
+            </tr>
+        </table>
+
+        foreach (var stu in tch.Students)
+        {
+            <h2 class="bg-dark text-white text-center">Student Information</h2>
+            <table class="table table-bordered" style="background-color:coral;">
+                <tr>
+                    <th>SID</th>
+                    <th>@stu.Sid</th>
+                </tr>
+                <tr>
+                    <th>Student Name</th>
+                    <th>@stu.Sname</th>
+                </tr>
+                <tr>
+                    <th>Age</th>
+                    <th>@stu.sAge</th>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <th>@stu.sAddress</th>
+                </tr>
+            </table>
+        }
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------
