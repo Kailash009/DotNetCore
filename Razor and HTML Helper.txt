@@ -1,0 +1,331 @@
+Razor Syntax:-
+-----------------------------------
+>> when you want to write anything dynamic in your html file then we use razor syntax.
+>> It is represented by @ symbol.
+-------------------------------------------------------------------
+Types of writing razor in cshtml file:-
+------------------------------------------------------------
+1. Inline Expression.
+@{
+    string name="Ravi";
+    int age=34;
+    string city="Noida";
+    DateTime date = DateTime.Now;
+}
+<h2>Name=@name</h2>
+<h2>Age=@age</h2>
+<h2>City=@city</h2>
+<h2>DateTime=@date</h2>
+-----------------------------------------------------------------------------------
+2. Conditional Statements.
+
+@{
+    int ag = 19;
+    if (ag > 18)
+    {
+        <h1>Valid for Vote</h1>
+    }
+    else
+    {
+     <h1> Not Valid for Vote</h1>   
+    }
+}
+------------------------------------------------------------------------------
+3. Loop.
+while,for,do-while
+------------------------------------------
+@{
+    int ag = 19;
+    if (ag > 18)
+    {
+        <h1>Valid for Vote</h1>
+    }
+    else
+    {
+     <h1> Not Valid for Vote</h1>   
+    }
+}
+
+@{
+    int a = 10;
+    while (a >= 1)
+    {
+        <h3>@a</h3>
+        a= @a - 1;
+    }
+}
+@{
+    int i = 5;
+    do
+    {
+        <h3>Welcome to Dot net Core</h3>
+        i =@i + 1;
+    }
+    while(i<=10);
+}
+@{
+    for (int j = 1; j <= 15; j++)
+    {
+        <h3>@j</h3>
+    }
+}
+----------------------------------------------------------------
+4. Switch.
+-------------------------------------------------------------
+@{
+    int day = 31;
+    switch (day)
+    {
+            case 1:
+            <h3>Sun</h3>
+            break;
+            case 2:
+            <h3>Mon</h3>
+            break;
+            case 3:
+            <h3>Tue</h3>
+            break;
+            default:
+            <h2>Invalid Choice</h2>
+            break;
+    }
+}
+---------------------------------------------------------
+HTML Helper:-
+---------------------------------------------------------
+>> It is used to render Html file.
+We have different helper methods in dot net core which are as follows:-
+1. Normal HTML.
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        [HttpGet]  
+        public IActionResult Index()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Index(string name,int age,string address)
+        {
+            return View();
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+    }
+}
+-------------------------------------------------------------------------
+
+<form action="\" method="post">
+    <label>Name</label>
+    <input type="text" name="name" />
+    <label>Age</label>
+    <input type="text" name="age" />
+    <label>Address</label>
+    <input type="text" name="address" />
+    <button type="submit">Register</button>
+</form>
+----------------------------------------------------------------------------------------------------------
+2. Standard HTML.
+@Html.TextBox()
+@Html.RadioButton()
+@Html.CheckBox()
+@Html.Password()
+@Html.DropDownList()
+@Html.Display()
+@Html.BeginForm()
+@Html.Label()
+----------------------------------------------------------------------------------------
+@using(Html.BeginForm("Index", "Employee", FormMethod.Post))
+{
+    @Html.Label("Name")
+    @Html.TextBox("name")
+    
+    @Html.Label("Age")
+    @Html.TextBox("age")
+    
+    @Html.Label("Address")
+    @Html.TextBox("address")
+    
+    <button type="submit">Register</button>
+}
+---------------------------------------------
+3. Strongly Typed.
+>> All the fields generated directly with help of Model.
+@Html.TextBoxFor()
+@Html.RadioButtonFor()
+@Html.CheckBoxFor()
+@Html.PasswordFor()
+@Html.DropDownListFor()
+@Html.DisplayFor()
+@Html.BeginFormFor()
+@Html.LabelFor()
+----------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        [HttpGet]  
+        public IActionResult Index()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Index(Employee empObj)
+        {
+            return RedirectToAction("GetEmployeedetails",empObj);
+        }
+        public IActionResult GetEmployeedetails(Employee empObj)
+        {
+            return View(empObj);
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------
+@model Batch12PMMohit.Models.Employee;
+<style>
+    .mohit
+    {
+        background-color:antiquewhite;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "Employee", FormMethod.Post))
+{
+    @Html.LabelFor(m=>m.EId)
+    @Html.TextBoxFor(m=>m.EId,new{@class="mohit"})
+    @Html.LabelFor(m=>m.Name)
+    @Html.TextBoxFor(m=>m.Name)
+    @Html.LabelFor(m=>m.Age)
+    @Html.TextBoxFor(m=>m.Age)
+    @Html.LabelFor(m=>m.MobileNo)
+    @Html.TextBoxFor(m=>m.MobileNo)
+    @Html.LabelFor(m=>m.Salary)
+    @Html.TextBoxFor(m=>m.Salary)
+
+    <input type="submit" value="Register">
+}
+---------------------------------------------------------
+@model Batch12PMMohit.Models.Employee;
+
+
+<h1>Employee Information</h1>
+<table>
+    <tr>
+        <th>EID</th>
+        <th>@Model.EId</th>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>Age</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>Mobile No</th>
+        <th>@Model.MobileNo</th>
+    </tr>
+    <tr>
+        <th>Salary</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+-------------------------------------------------------------------------------------
+4. Tag Helper.
+------------------------------------------------------------------------------------------------------------------------------------
+@model Batch12PMMohit.Models.Employee;
+
+
+<h1>Employee Information</h1>
+<table>
+    <tr>
+        <th>EID</th>
+        <th>@Model.EId</th>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>Age</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>Mobile No</th>
+        <th>@Model.MobileNo</th>
+    </tr>
+    <tr>
+        <th>Salary</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+-------------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        [HttpGet]  
+        public IActionResult Index()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Index(Employee empObj)
+        {
+            return RedirectToAction("GetEmployeedetails",empObj);
+        }
+        public IActionResult GetEmployeedetails(Employee empObj)
+        {
+            return View(empObj);
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
