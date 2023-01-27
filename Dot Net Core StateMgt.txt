@@ -1,0 +1,319 @@
+State Management in Dot Net Core:-
+--------------------------------------------------------------------------------
+http -> StateLess Protocol.
+>> It is used to establish or mantain the relationship between client and server.
+--------------------------------------------------------------------------------------------------------------------------
+1. ViewBag.
+2. ViewData.
+3. TempData.
+4. Session.
+------------------------------------------------------------------------------------------
+1. ViewBag
+------------------
+>> It is a dynamic Property.
+>> It doesn't require type casting for complex data type.
+>> It is used to transfer small amount of information between controller to view.
+>> It doesn't display compile time error,it only shows run time error.
+Syntax:-
+------------------
+ViewBag.VarName/KeyName = Value;
+----------------------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        // Controller
+        public IActionResult Index()
+        {
+            ViewBag.Msg = "Data Come From ViewBag!!";
+            string[] sport = new string[] { "Cricket", "Football", "Tennis", "Batminton", "VolleyBall" };
+            ViewBag.sports = sport;
+            Employee emp = new Employee();
+            emp.EId = 11101;
+            emp.Name = "Mohit";
+            emp.Age = 20;
+            emp.MobileNo = "9879879";
+            emp.Salary = 45000;
+            ViewBag.Emp = emp;
+            return View();
+        }
+    }
+}
+--------------------------------------------------------------------------
+@using Batch12PMMohit.Models;
+
+<h2>  ViewBag = @ViewBag.Msg </h2>
+
+<h1>Following Sports are Listed Below : </h1>
+
+<ul>
+    @foreach (var sp in ViewBag.sports)
+    {
+        <li>@sp</li>
+    }
+
+</ul>
+
+<h2>Show Employee Information</h2>
+
+@{
+    var emp = ViewBag.Emp;
+}
+
+<h2>@emp.EId</h2>
+<h2>@emp.Name</h2>
+<h2>@emp.Age</h2>
+<h2>@emp.MobileNo</h2>
+<h2>@emp.Salary</h2>
+--------------------------------------------------------------------------------------------
+2. ViewData:-
+------------------------------
+>> it is inherited from ViewDataDictionary.
+>> It is used to transfer information between controller to view.
+>> It require type casting for complex data type.
+>> It doesn't display compile time error,it only shows run time error.
+Syntax:-
+-------------------
+ViewData["varname/keyName"]=value;
+---------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        // Controller
+        public IActionResult Index()
+        {
+            ViewData["Msg"] = "Data Come From ViewData!!";
+            string[] sport = new string[] { "Cricket", "Football", "Tennis", "Batminton", "VolleyBall" };
+            ViewData["sports"] = sport;
+            Employee emp = new Employee();
+            emp.EId = 11101;
+            emp.Name = "Mohit";
+            emp.Age = 20;
+            emp.MobileNo = "9879879";
+            emp.Salary = 45000;
+            ViewData["Emp"] = emp;
+            return View();
+        }
+    }
+}
+----------------------------------
+@using Batch12PMMohit.Models;
+
+<h2>  ViewData = @ViewData["Msg"]</h2>
+
+<h1>Following Sports are Listed Below : </h1>
+
+
+<ol>
+    @foreach (var sp in (string[])ViewData["sports"])
+    {
+       <li>@sp</li> 
+    }
+</ol>
+
+
+@{
+    var emp = (Employee)ViewData["Emp"];
+}
+<h2>Following Emloyee Records Given Below: </h2>
+<h3>@emp.EId</h3>
+<h3>@emp.Name</h3>
+<h3>@emp.Age</h3>
+<h3>@emp.MobileNo</h3>
+<h3>@emp.Salary</h3>
+----------------------------------------------------------
+3. TempData:-
+----------------------------
+>> It is inherited from TempDataDictionary.
+>> It is used to transfer information between controller to view and controller to controller.
+>> It require type casting for complex data type.
+>> It doesn't display compile time error,it only shows run time error.
+>> It hold your data only from one subsequent request to another subsequent request.
+>> if you want to keep tempdata value througout request then we use keep() method.
+Syntax:-
+----------------------------------
+TempData.Keep();
+-----------------------------------
+Syntax:-
+-------------------
+TempData["varname/keyName"]=value;
+---------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        // Controller
+        public IActionResult Index()
+        {
+            ViewBag.dat = "Data come From ViewBag";
+            ViewData["Data"] = "Data come form ViewData";
+            List<string> lst = new List<string>() { "Cricket","Hockey","FootBall","Tennis","BasketBall","Batminton" };
+            TempData["sports"] = lst;
+            TempData["Msg"] = "Data come from TempData!!";
+            return View();
+        }
+        public IActionResult About()
+        {
+            if (TempData["Msg"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            if (TempData["Msg"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+        public IActionResult Service()
+        {
+            if (TempData["Msg"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+    }
+}
+---------------------------------------------------------------------------
+
+@{
+    ViewData["Title"] = "About";
+}
+
+<h1>About</h1>
+
+<h2>ViewBag = @ViewBag.dat </h2>
+<h2>ViewData = @ViewData["Data"] </h2>
+<h2>TempData = @TempData["Msg"] </h2>
+
+<h3>We Have Following Games given Below:</h3>
+
+<ol>
+@{
+    foreach (var sp in (IEnumerable<string>)TempData["sports"])
+    {
+     <li>@sp</li>   
+    }
+}
+</ol>
+------------------------------------------------------
+
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<h1>Contact</h1>
+
+<h2>ViewBag = @ViewBag.dat </h2>
+<h2>ViewData = @ViewData["Data"] </h2>
+<h2>TempData = @TempData["Msg"] </h2>
+
+<h3>We Have Following Games given Below:</h3>
+
+<ol>
+    @{
+        foreach (var sp in (IEnumerable<string>)TempData["sports"])
+        {
+             <li>@sp</li>   
+        }
+    }
+</ol>
+--------------------------------------------------------------
+
+@{
+    ViewData["Title"] = "Service";
+}
+
+<h1>Service</h1>
+
+<h2>ViewBag = @ViewBag.dat </h2>
+<h2>ViewData = @ViewData["Data"] </h2>
+<h2>TempData = @TempData["Msg"] </h2>
+
+
+<h3>We Have Following Games given Below:</h3>
+
+<ol>
+    @{
+        foreach (var sp in (IEnumerable<string>)TempData["sports"])
+        {
+             <li>@sp</li>   
+        }
+    }
+</ol>
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
