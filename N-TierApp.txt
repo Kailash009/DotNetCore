@@ -1,0 +1,356 @@
+Database Connectivity using Sql Server (CRUD) (Single Procedure) in Dot net Core:-
+--------------------------------------------------------------------------------------------------------------------
+>> Dot net core uses N-tier Application.
+--------------------------------------------------------------------
+Stored Procedure:-
+--------------------------------
+>> SP is pre-compile database objects.
+>> SP reduces network traffic.
+>> SP performance is very high.
+>> SP protects our database security.
+----------------------------------------------------------------------------
+Syntax:-
+---------------
+create proc proc_name
+(
+@parameter1 datatype,
+@parameter2 datatype(size),
+.
+.
+.
+@parameterN datatype
+)
+as begin
+insert into tablename(col1,col2,col3) values(@parameter1,@parameter2,@parameter3)
+end
+----------------------------------------------------------------------------------------------------------------------------------------
+create database multitierapp
+
+create table tbl_Employee
+(
+eid int primary key identity(1,1),
+ename nvarchar(100),
+age int,
+eaddress nvarchar(100),
+mobileno nvarchar(100),
+post nvarchar(100),
+salary int
+)
+create proc sp_Employee
+(
+@action nvarchar(100),
+@eid int=0,
+@name nvarchar(100)=null,
+@age int=0,
+@address nvarchar(100)=null,
+@mobileno nvarchar(20)=null,
+@post nvarchar(100)=null,
+@salary int=0
+)
+as begin
+if(@action='Select')
+begin
+select * from tbl_Employee
+end
+else if(@action='Select_Single')
+begin
+select * from tbl_Employee where eid=@eid
+end
+else if(@action='Create')
+begin
+insert into tbl_Employee(ename,age,eaddress,mobileno,post,salary)values(@name,@age,@address,@mobileno,@post,@salary)
+select 1 as result
+end
+else if(@action='Update')
+begin
+update tbl_Employee set ename=@name,age=@age,eaddress=@address,mobileno=@mobileno,post=@post,salary=@salary where eid=@eid
+select 1 as result
+end
+else if(@action='Delete')
+begin
+delete from tbl_Employee where eid=@eid
+select 1 as result
+end
+end
+
+select * from tbl_Employee
+exec sp_Employee 'Create',0,'Joshi',23,'preet Vihar','8787979','TL',35000
+exec sp_Employee 'Select'
+exec sp_Employee 'Select_Single',2
+exec sp_Employee 'Update',1,'Shiva Singh',20,'Rajiv Chawk','44330923','Mrkt',15000
+exec sp_Employee 'Delete',2
+--------------------------------------------------------------------------------------------------------------------------
+N-Tier:-
+-------------------
+BAL -> Contract and Services.
+DAL -> Database related Operation Performed Here.
+Common Layer -> It interact with all the layer.
+--------------------------------------------------------------------------
+MultiterApp -> BAL interact with our MultitierApp.
+--------------------------------------------------------------------------
+DI (Dependency Injection):- it is used to create loosely coupled code.
+------------------------------------------------------------------------------------------------------------------------------
+1. Singleton. ->  it create one object for every request.
+2. Scoped. -> it create one object for single request and another http redirection then it creates separate objects.
+3. Transient. -> it create separate object for single request and another http redirection then it creates separate objects.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Common Layer:-
+------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+namespace CommonLayer.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public string ?MobileNo { get; set; }
+        public string ?Post { get; set; }
+        public int Salary { get; set; }
+    }
+}
+---------------------------------------------------------------------------------------------------------
+namespace CommonLayer
+{
+    public class DbConnectionConfig
+    {
+        public static string ConnectionString { get; set; }
+    }
+}
+---------------------------------------------------------------------------------------------------------
+Data Access Layer:-
+-------------------------------------------
+using Microsoft.Data.SqlClient;
+using CommonLayer;
+namespace DataAccessLayer
+{
+    public class DbConnect
+    {
+        public SqlConnection connection;
+        public DbConnect()
+        {
+            connection = new SqlConnection(DbConnectionConfig.ConnectionString);
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CommonLayer.Models;
+using Microsoft.Data.SqlClient;
+
+namespace DataAccessLayer
+{
+    public class EmployeeDbOperation
+    {
+        public DbConnect dbconnect;
+        public EmployeeDbOperation()
+        {
+            dbconnect = new DbConnect();
+        }
+        public List<Employee> getEmployees()
+        {
+            SqlCommand cmd = new SqlCommand("sp_Employee",dbconnect.connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            if (dbconnect.connection.State == ConnectionState.Closed)
+            {
+                dbconnect.connection.Open();
+            }
+            cmd.Parameters.AddWithValue("@action","Select");
+            SqlDataReader dr = cmd.ExecuteReader();
+            List<Employee> empList = new List<Employee>();
+            while (dr.Read())
+            {
+                Employee emp = new Employee();
+                emp.Eid =(int)dr["eid"];
+                emp.Name = dr["ename"].ToString();
+                emp.Age =(int)dr["age"];
+                emp.Address = dr["eaddress"].ToString();
+                emp.MobileNo = dr["mobileno"].ToString();
+                emp.Post = dr["post"].ToString();
+                emp.Salary =(int)dr["salary"];
+                empList.Add(emp);
+            }
+            dbconnect.connection.Close();
+            return empList;
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+BusinessAccessLayer:-
+---------------------------------------------------
+Contract:-
+---------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CommonLayer.Models;
+
+namespace BusinessAccessLayer.Contract
+{
+    public interface IEmployee
+    {
+        List<Employee> getEmployees();
+    }
+}
+---------------------------------------------------------
+Services:-
+-----------------------
+using BusinessAccessLayer.Contract;
+using CommonLayer.Models;
+using DataAccessLayer;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BusinessAccessLayer.Services
+{
+    public class EmployeeService : IEmployee
+    {
+        public EmployeeDbOperation dbOperation;
+        public EmployeeService()
+        {
+            dbOperation = new EmployeeDbOperation();
+        }
+        public List<Employee> getEmployees()
+        {
+            return dbOperation.getEmployees();
+        }
+    }
+}
+-------------------------------------------------------------------------------------
+appsettings.json:-
+----------------------------------
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=multitierapp;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;"
+  },
+---------------------------------------------
+Program.cs:-
+------------------------------
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+DbConnectionConfig.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddTransient<IEmployee, EmployeeService>();
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+-------------------------------------------------------------------------------------------
+Employee Controller:-
+-------------------------------------
+using BusinessAccessLayer.Contract;
+using Microsoft.AspNetCore.Mvc;
+
+namespace MultiTierApp.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private readonly IEmployee _employee;
+        public EmployeeController(IEmployee employee)  //  Dependency Injection (Constructor Injection)
+        {
+            _employee = employee;
+        }
+        public IActionResult Index()
+        {
+            var employees = _employee.getEmployees();
+            return View(employees);
+        }
+    }
+}
+------------------------------------------------------------------------------------
+Index.cshtml:-
+--------------------------
+@model IEnumerable<CommonLayer.Models.Employee>
+
+<h1 class="bg-dark text-white text-center">LIST OF EMPLOYEE RECORDS</h1>
+
+@Html.ActionLink("Add New Employee","Create","Employee",null,new {@class="btn btn-success"})
+
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>ADDRESS</th>
+        <th>MOBILENO</th>
+        <th>POST</th>
+        <th>SALARY</th>
+        <th colspan="2" class="text-center">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.Eid</td>
+            <td>@emp.Name</td>
+            <td>@emp.Age</td>
+            <td>@emp.Address</td>
+            <td>@emp.MobileNo</td>
+            <td>@emp.Post</td>
+            <td>@emp.Salary</td>
+            <td align="center"><a asp-action="Edit" asp-controller="Employee" asp-route-id="@emp.Eid" class="btn btn-warning">EDIT</a></td>
+            <td align="center"><a asp-action="Delete" asp-controller="Employee" asp-route-id="@emp.Eid" class="btn btn-danger" onclick="return confirm('Are you Sure you want to Delete this Record(Y/N)?');">DELETE</a></td>
+        </tr>
+    }
+</table>
+--------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
