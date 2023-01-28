@@ -1,0 +1,66 @@
+C#   +   Dot Net Core MVC
+------------------------------------------------------------
+C#:-
+---------------
+>> C# is a high level,object oriented and type safe programming language.
+In C -> int a="hello"; (At a time it will not show an error). -> Type Unsafe.
+In C# -> int a="hello";(at a time it will show an error). -> Type Safe.
+>> C# was developed by Anders Heljsberg in 2000 by Microsoft.
+----------------------------------------------------------------------------------------------------------------------------------------
+Dot Net Framework -
+------------------------------------
+>> Dot net is not a programming language , It is a framework for building a various kind of application.
+Types of Applications:-
+------------------------------------
+1. CUI. (Command User Interface) -> Command Prompt. -> User should know each and every command. -> Console Based Application.
+2. GUI. (Graphical User Interface) :-
+	a) Desktop App. (Windows Based App.)
+>> An application that runs with the help of O.S. -> word,excel,powerpoint etc. -> It must be installed on O.S.
+	b) Web App.
+>> An Application that runs with the help of WebBrowser.
+>> it follows client-server architecture.
+--------------------------------------------------------------------------------------------
+	c) Mobile App. -> Xamarin.
+	d) Game Developement -> Unity
+	e) AI -> ML.net
+	f) ML -> ML.net
+	g) Data Science -> ML.Net
+--------------------------------------------------------------------------------------------
+Asp.net -
+---------------
+>> asp stands for active server pages.
+>> asp.net is a programming language i.e. used to build web application only.
+>> asp.net is the subset of dot net framework.
+----------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
