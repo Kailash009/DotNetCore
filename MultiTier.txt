@@ -1,0 +1,211 @@
+Session --> Pending.
+--------------------------------------------------------------------------------------------------------------------------------
+DataBase Connectivity using ADO.Net in dot Net Core (N-Tier) (Dependency Injection):-
+---------------------------------------------------------------------------------------------------------------------------------
+Download Sql Server-
+-------------------------------------
+https://www.microsoft.com/en-in/sql-server/sql-server-downloads   -> Express.
+--------------
+Download SSMS (Sql Server Management Studio).
+---------------------------------------------------------------------------------
+https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+MultiTier -
+---------------------
+1. DAL -> connectivity / database related code.
+2. BAL -> contract / services. -> interface/ service.
+3. Common Layer. ->  Models.
+------------------------------
+MultitierMohit -> Dot Net Core App.
+------------------------------------------------------
+Controller ->  BAL
+-----------------------------------------------------
+Stored Procedure:-
+-------------------------------
+>> SP is a pre-compile database objects.
+>> SP increase the performance of our database.
+>> SP reduces network traffic.
+>> Sp is a fast.
+>> high security.
+---------------------------------
+Syntax:-
+---------------
+create procedure/proc proc_name
+(
+@parameter1 datatype1,
+@parameter2 datatype(size),
+.
+.
+.
+@parameterN datatypeN
+)
+as begin
+insert into tablename(col1,col2,col3)values(@parameter1,@parameter2,@parameter3)
+end
+--------------------------------------------------------------------------------------------------------------------------------------------------
+primary key  -> It doesn't allow null and duplicate value.
+eid -> P.K
+--------------------------------------------------------------------
+create database MultiterMohit
+use MultiterMohit
+
+create table tbl_Employee
+(
+eid int primary key identity(1,1),
+ename nvarchar(50),
+age int,
+mobileno nvarchar(20),
+city nvarchar(100),
+salary int
+)
+
+create proc sp_Employee
+(
+@status nvarchar(50)=null,
+@eid int=0,
+@name nvarchar(50)=null,
+@age int=0,
+@mobileno nvarchar(20)=null,
+@city nvarchar(50)=null,
+@salary int=0
+)
+as begin
+if(@status='Select')
+begin
+Select * from tbl_Employee
+end
+else if(@status='Select_Single')
+begin
+Select * from tbl_Employee where eid=@eid
+end
+else if(@status='Create')
+begin
+insert into tbl_Employee(ename,age,mobileno,city,salary)values(@name,@age,@mobileno,@city,@salary)
+select 1 as result
+end
+else if(@status='Update')
+begin
+update tbl_Employee set ename=@name,age=@age,mobileno=@mobileno,city=@city,salary=@salary where eid=@eid
+select 1 as result
+end
+else if(@status='Delete')
+begin
+delete from tbl_Employee where eid=@eid
+select 1 as result
+end
+end
+
+exec sp_Employee 'Select'
+exec sp_Employee 'Select_Single',1
+exec sp_Employee 'Create',0,'Preeti',21,'907897979','Chennai',74000
+exec sp_Employee 'Update',2,'Preeti',18,'11122233344','Hyderabad',40000
+exec sp_Employee 'Delete',2
+---------------------------------------------------------------------------------------------------------------------------------
+appsettings.json:-
+--------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=MultiterMohit;Integrated Security=True;"
+  },
+  "AllowedHosts": "*"
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Dependency Injection:-
+------------------------------------------
+>> Loosly coupled code.
+-----------------------------------------
+1. Singleton. ->  it create only single instance one httpredirection and mutiple httpredirection.
+2. Scope. ->      it create  single instance one httpredirection and mutiple httpredirection create different instance .
+3. Transient. -> it create  different instance one httpredirection and mutiple httpredirection create different instance .
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
