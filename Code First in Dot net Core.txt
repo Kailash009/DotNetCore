@@ -1,0 +1,187 @@
+Entity Framework:-
+-----------------------------
+>> EF is a ORM  (Object Relational Mapping) tool, that allows developers to directly interact with your datatabase without writing of Sql Queries.
+>> EF support LINQ (Language Integarated) Query.
+>> LINQ query used Lambda Expression.
+EF follows two approaches -
+1. Code First Approach.
+2. Data Base First Approach.
+----------------------------------------------------------------------------------------------------------
+1. Code First Approach -
+--------------------------------------
+Step-1 :-
+-----------------
+Install some Packages.
+1. Microsoft.EntityFrameworkCore
+2. Microsoft.EntityFrameworkCore.SqlServer
+3. Microsoft.EntityFrameworkCore.Tools
+----------------------------------------------------------------------------------------
+Step-2:-
+-----------------
+Make Model Class:-
+-----------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace CodeFirstDemo.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int EID { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public int Salary { get; set; }
+    }
+}
+-------------------------------------------------------------
+int ?a=null;
+or
+Nullable<int>a=null
+--------------------------------------------
+Step-3:-
+------------------------------------
+Data Context Class-
+------------------------------------------
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirstDemo.Models
+{
+    public class EmployeeDbContext:DbContext
+    {
+        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options):base(options)
+        {
+
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Course>()
+           .HasIndex(u =>new { u.tname, u.Cname })
+           .IsUnique(true);
+        }
+        public DbSet<Employee> Employees { get; set; }  // ALL CRUD Operation
+        public DbSet<Course> Courses { get; set; }  // ALL CRUD Operation
+
+    }
+}
+-----------------------------------------------------------------------------------------------------------------
+Step-4:
+-------------------
+Create Connection String:-appsettings.json
+-------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=DBAnkit;Integrated Security=True;"
+  },
+  "AllowedHosts": "*"
+}
+------------------------------------------------------------------------------------------------------------------
+Step-5:-
+-----------------
+Register your Service -> program.cs
+---------------------------------------------------
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+-------------------------------------------------------------------------------------------------------------------------
+Step-6:-
+---------------
+Run Migration Command:- Type this command in  Package Manager Console
+--------------------------------------------------------------------------------------------------------------------------
+1. add-migration 'migrationname/anyname'  -> It see you all model classes,and generate ORM Query for you. 
+2. update-database -> it see all your ORM Query and update all tables.
+---------------------------------------------------------------------------------------------------------------
+Step-7:-
+---------------
+Create Controller and perfrom CRUD operation:-
+---------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
