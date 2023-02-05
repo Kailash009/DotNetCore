@@ -1,0 +1,88 @@
+Session -
+---------------------
+>> It is a Global Management Protocol.
+>> Session value can be access throughout the whole application.
+>> Session is a heavy weight.
+>> The default time of Session is 20 Min.
+------------------------------------------------------------------------------------------------------------
+Syntax:-
+---------------------
+HttpContext.Session.SetString("Key","Value")
+HttpContext.Session.GetString("Key")
+-----------------------------------------------------------------------------------------------------------
+Register Session in Program.cs:-
+----------------------------------------------
+builder.Services.AddSession();
+---------------------------------------------
+app.UseSession();
+------------------------------------
+ public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(string username,string password)
+        {
+            HttpContext.Session.SetString("user", username);
+            return RedirectToAction("DashBoard");
+        }
+        public IActionResult DashBoard()
+        {
+            string username=HttpContext.Session.GetString("user");
+            ViewBag.user = username;
+            return View();
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
+--------------------------------------------------------------------------------------------------
+<h2>About Page</h2>
+
+
+
+<h2>ViewBag=   @ViewBag.vw</h2>
+<h2>ViewData = @ViewData["vdt"]</h2>
+<h2>TempData=  @TempData["tmp"]</h2>
+<h2>Session = @ViewBag.user </h2>
+------------------------------------------------------
+<h2>Contact page</h2>
+
+
+
+<h2>ViewBag=   @ViewBag.vw</h2>
+<h2>ViewData = @ViewData["vdt"]</h2>
+<h2>TempData=  @TempData["tmp"]</h2>
+<h2>Session = @ViewBag.user </h2>
+----------------------------------------------------------------------
+<h2>Services Page</h2>
+
+
+
+<h2>ViewBag=   @ViewBag.vw</h2>
+<h2>ViewData = @ViewData["vdt"]</h2>
+<h2>TempData=  @TempData["tmp"]</h2>
+<h2>Session = @ViewBag.user </h2>
+
+-------------------------------------------------------------------------
+
+
+
+<h1>WELCOME TO MY DASHBOARD</h1>
+
+<h2>Welcome ! @ViewBag.user </h2>  
+<h3>@Html.ActionLink("Logout","Logout","StateMgt")</h3>
+
+
+
+
+
+
+
+
+
+
+
+
