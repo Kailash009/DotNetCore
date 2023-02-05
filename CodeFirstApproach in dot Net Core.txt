@@ -1,0 +1,286 @@
+Code First Approach in Dot Net Core:-
+---------------------------------------------------------
+using CodeFirstDemo.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirstDemo.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private readonly EmployeeDbContext _context;
+        public EmployeeController(EmployeeDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var employees = await _context.Employees.ToListAsync();
+            return View(employees);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Employee empObj)
+        {
+            if (ModelState.IsValid)  // Server Side Validation
+            {
+                _context.Add(empObj);
+                int n = await _context.SaveChangesAsync();
+                if (n != 0)
+                {
+                    TempData["insert"] = "<script>alert('Employee Addedd SuccessFully!!');</script>";
+                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error in Model!!");
+            }
+            return View();
+        }
+        public IActionResult Edit(int id)
+        {
+            var employee = _context.Employees.Where(m => m.EID == id).FirstOrDefault();  // LINQ
+            return View(employee);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Employee empobj)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Entry(empobj).State = EntityState.Modified;
+                int n = await _context.SaveChangesAsync();
+                if (n != 0)
+                {
+                    TempData["update"] = "<script>alert('Employee Updated SuccessFully!!');</script>";
+                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error in Model!!");
+            }
+            return View();
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var employee = _context.Employees.Find(id);
+                _context.Remove(employee);
+                int n = await _context.SaveChangesAsync();
+                if (n != 0)
+                {
+                    TempData["delete"] = "<script>alert('Employee Deleted SuccessFully!!');</script>";
+                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error in Model!!");
+            }
+            return View();
+        }
+    }
+}
+------------------------------------------------------------------
+Index.cshtml:-
+----------------------
+@model IEnumerable<CodeFirstDemo.Models.Employee>
+
+
+@Html.Raw(TempData["insert"])
+@Html.Raw(TempData["update"])
+@Html.Raw(TempData["delete"])
+
+<a asp-action="Create" asp-controller="Employee" class="btn btn-success">Add New Employee</a>
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>ADDRESS</th>
+        <th>SALARY</th>
+        <th colspan="2">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.EID</td>
+            <td>@emp.Name</td>
+            <td>@emp.Age</td>
+            <td>@emp.Address</td>
+            <td>@emp.Salary</td>
+            <td align="center"><a asp-action="Edit" asp-controller="Employee" asp-route-id=@emp.EID class="btn btn-warning">EDIT</a>  </td>
+            <td align="center"><a asp-action="Delete" asp-controller="Employee" asp-route-id=@emp.EID class="btn btn-danger" onclick="return confirm('Are you Sure you want to Delete this Item(Y/N)?');">DELETE</a></td>
+        </tr>
+    }
+</table>
+----------------------
+Create.cshtml:-
+---------------------
+@model CodeFirstDemo.Models.Employee
+
+<h1 class="bg-dark text-white text-center">  Add New Employee  </h1>
+<div class="container">
+    <div class=row>
+        <div class="col-6">
+            <form asp-action="Create" asp-controller="Employee" method="post">
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly"></div>
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="text" asp-for="Age" class="form-control" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Salary</label>
+                    <input type="text" asp-for="Salary" class="form-control" />
+                    <span asp-validation-for="Salary" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success mt-3"> Add New Employee </button>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+-----------------------
+Edit.cshtml:-
+--------------------
+@model CodeFirstDemo.Models.Employee
+
+<h1 class="bg-dark text-white text-center">  Edit New Employee  </h1>
+<div class="container">
+    <div class=row>
+        <div class="col-6">
+            <form asp-action="Edit" asp-controller="Employee" method="post" asp-route-id="Eid">
+                
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly"></div>
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="text" asp-for="Age" class="form-control" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Salary</label>
+                    <input type="text" asp-for="Salary" class="form-control" />
+                    <span asp-validation-for="Salary" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success mt-3"> Edit New Employee </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+-----------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace CodeFirstDemo.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int EID { get; set; }
+        [Required(ErrorMessage ="Enter Name!")]
+        public string ?Name { get; set; }
+        [Required(ErrorMessage = "Enter Age!")]
+        public int Age { get; set; }
+
+        [Required(ErrorMessage = "Enter Address!")]
+        public string ?Address { get; set; }
+        
+        [Required(ErrorMessage = "Enter Salary!")]
+        public float Salary { get; set; }
+    }
+}
+--------------------------
+Employee Db Context:-
+---------------------------------
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirstDemo.Models
+{
+    public class EmployeeDbContext:DbContext
+    {
+        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options):base(options)
+        {
+
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Course>()
+           .HasIndex(u =>new { u.tname, u.Cname })
+           .IsUnique(true);
+        }
+        public DbSet<Employee> Employees { get; set; }  // ALL CRUD Operation
+        public DbSet<Course> Courses { get; set; }  // ALL CRUD Operation
+
+    }
+}
+-------------------------------------------------------------------------
+using CodeFirstDemo.Models;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+var app = builder.Build();
+---------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=DBAnkit;Integrated Security=True;"
+  },
+  "AllowedHosts": "*"
+}
+------------------------------------
+
+
+
+
