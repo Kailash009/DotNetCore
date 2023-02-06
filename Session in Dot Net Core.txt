@@ -1,22 +1,35 @@
-Session -
----------------------
+Session in Dot Net Core:-
+---------------------------------------------------------
 >> It is a Global Management Protocol.
->> Session value can be access throughout the whole application.
->> Session is a heavy weight.
->> The default time of Session is 20 Min.
-------------------------------------------------------------------------------------------------------------
+>> It can be access anywhere in a program.
+>> In session you can store any type of data.
+>> The default life time of session is 20 Min.
+--------------------------------------------------------------------------------
 Syntax:-
----------------------
+----------------
+SET:-
 HttpContext.Session.SetString("Key","Value")
-HttpContext.Session.GetString("Key")
------------------------------------------------------------------------------------------------------------
-Register Session in Program.cs:-
-----------------------------------------------
-builder.Services.AddSession();
----------------------------------------------
+GET:-
+HttpContext.Session.GetString("Key");
+-----------------------------------------------------------------------------------
+Register Session in service:-
+----------------------------------------------------
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(60);   // To increase or Decrease Time of Session.
+});
+---------------------------------------------------------------
+// Configure the HTTP request pipeline.  // Middleware
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
 app.UseSession();
-------------------------------------
- public IActionResult Login()
+
+app.UseAuthorization();
+-------------------------------------------------------------------------------------------
+public IActionResult Login()
         {
             return View();
         }
@@ -24,12 +37,16 @@ app.UseSession();
         [HttpPost]
         public IActionResult Login(string username,string password)
         {
-            HttpContext.Session.SetString("user", username);
-            return RedirectToAction("DashBoard");
+            if (username == "Mohit" && password == "123")
+            {
+                HttpContext.Session.SetString("user", username);
+                return RedirectToAction("Dashboard");
+            }
+            return View();
         }
-        public IActionResult DashBoard()
+        public IActionResult Dashboard()
         {
-            string username=HttpContext.Session.GetString("user");
+            string username = HttpContext.Session.GetString("user");
             ViewBag.user = username;
             return View();
         }
@@ -38,42 +55,75 @@ app.UseSession();
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
---------------------------------------------------------------------------------------------------
-<h2>About Page</h2>
+public IActionResult Index()
+        {
+            ViewBag.dat = "Data come From ViewBag";
+            ViewData["Data"] = "Data come form ViewData";
+            List<string> lst = new List<string>() { "Cricket","Hockey","FootBall","Tennis","BasketBall","Batminton" };
+            TempData["sports"] = lst;
+            TempData["Msg"] = "Data come from TempData!!";
+            string username = HttpContext.Session.GetString("user");
+            ViewBag.user = username;
+            return View();
+        }
+public IActionResult About()
+        {
+            if (TempData["Msg"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            string username = HttpContext.Session.GetString("user");
+            ViewBag.user = username;
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            if (TempData["Msg"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            string username = HttpContext.Session.GetString("user");
+            ViewBag.user = username;
+            return View();
+        }
+        public IActionResult Service()
+        {
+            if (TempData["Msg"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            string username = HttpContext.Session.GetString("user");
+            ViewBag.user = username;
+            return View();
+        }
+---------------------------------------------------------------------------------------------------------------------
+Login.cshtml:-
+----------------------------------------------------------------
+<form asp-action="Login" asp-controller="StateMgt" method="post">
+UserName: <input type="text" name="username" />
+Password:  <input type="password" name="password" />
+<input type="submit" value="Login" />
+</form>
+-------------------------------------------------------------------------------------------------------
+Dasboard.cshtml:-
+------------------------------
+<h1>***Welcome to my DashBoard**</h1>        
+
+<h3>Welcome! @ViewBag.user  </h3>
+
+<h4> @Html.ActionLink("Logout","Logout","StateMgt") </h4>
+---------------------------------------------------------------------------------------------------
 
 
 
-<h2>ViewBag=   @ViewBag.vw</h2>
-<h2>ViewData = @ViewData["vdt"]</h2>
-<h2>TempData=  @TempData["tmp"]</h2>
-<h2>Session = @ViewBag.user </h2>
-------------------------------------------------------
-<h2>Contact page</h2>
 
 
 
-<h2>ViewBag=   @ViewBag.vw</h2>
-<h2>ViewData = @ViewData["vdt"]</h2>
-<h2>TempData=  @TempData["tmp"]</h2>
-<h2>Session = @ViewBag.user </h2>
-----------------------------------------------------------------------
-<h2>Services Page</h2>
+    
 
-
-
-<h2>ViewBag=   @ViewBag.vw</h2>
-<h2>ViewData = @ViewData["vdt"]</h2>
-<h2>TempData=  @TempData["tmp"]</h2>
-<h2>Session = @ViewBag.user </h2>
-
--------------------------------------------------------------------------
-
-
-
-<h1>WELCOME TO MY DASHBOARD</h1>
-
-<h2>Welcome ! @ViewBag.user </h2>  
-<h3>@Html.ActionLink("Logout","Logout","StateMgt")</h3>
 
 
 
