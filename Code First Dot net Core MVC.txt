@@ -1,0 +1,171 @@
+Entity Framework:-
+------------------------------------
+>> Entity Framework is very powerful tool for database operation.
+>> It allows developer to directly connect with your database without writing Sql boaring Queries.
+>> it is a ORM  (Object Relational Mapping) tool that directly map your models with your database.
+>> Entity framework uses LINQ queries.
+>> LINQ stands for Language Intergrated Query.
+>> LINQ query used Lambda Expression. (=>)
+>> Linq queries are faster than sql query.
+---------------------------------------------------------------------------------------------------------------------------------------------------
+There are two approaches of Entity Framework which are as follows-
+1. Code First Approach.
+2. Database First Approach.
+--------------------------------------------------------------------------------------------------
+1. Code First Approach :-
+-----------------------------------------------
+Steps to Perform Code First Approach:-
+----------------------------------------------------------------------
+step-1 :    Install Packages- 
+1. Microsoft.EntityFrameworkCore
+2. Microsoft.EntityFrameworkCore.SqlServer
+3. Microsoft.EntityFrameworkCore.Tools
+4. Microsoft.aspnetcore.mvc.razor.runtimecompilation.
+------------------------------------------------------------------------------------------
+step:2-   Create Model Class
+using System.ComponentModel.DataAnnotations;
+
+namespace CodeFirstMohit.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?MobileNo { get; set; }
+        public int Salary { get; set; }
+    }
+}
+--------------------------------------------------------------------------
+step:3- Create Data Context Class.
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirstMohit.Models
+{
+    public class EmployeeDbContext:DbContext
+    {
+        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options):base(options)
+        {
+            
+        }
+        public DbSet<Employee> Employees { get; set; }  // All CRUD Operation
+    }
+}
+-----------------------------------------------------------------------------------------------------------------
+step-4 : create connection string and register in service.
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=DbMohit;Integrated Security=True;"
+  },
+  "AllowedHosts": "*"
+}
+------------------------------------
+program.cs:-
+-----------------------
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+----------------------------------------------------------------------------------------------------------------------------------------------
+step-5:-
+-------------------
+Run Migration Command:-
+--------------------------------------------------------------------------------
+1. add-migration 'migrationname' -> This command see your model classes and generate LINQ query for creating Table.
+2. update-database -> This command see all your generated LINQ Query  and create database and tables in Sql Server.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
