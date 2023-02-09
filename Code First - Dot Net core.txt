@@ -1,0 +1,165 @@
+Code First Approach:-
+----------------------------------
+Step-6:- Add DI in Controller.
+------------------------------------------------------------------------------------------------------------
+public class EmployeeController : Controller
+    {
+        private EmployeeDbContext _dbContext;
+        public EmployeeController(EmployeeDbContext dbContext)  // DI (Constructor DI)
+        {
+            _dbContext = dbContext;
+        }
+--------------------------------------------------------------------------
+using CodeFirstMohit.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirstMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private EmployeeDbContext _dbContext;
+        public EmployeeController(EmployeeDbContext dbContext)  // DI (Constructor DI)
+        {
+            _dbContext = dbContext;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var employees = await _dbContext.Employees.ToListAsync();
+            return View(employees);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(Employee empObj)
+        {
+            if (ModelState.IsValid)
+            {
+                _dbContext.Employees.Add(empObj);
+                int n = await _dbContext.SaveChangesAsync();
+                if (n != 0)
+                {
+                    TempData["insert"] = "<script>alert('Employee Added SuccessFully!!');</script>";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["insert"] = "<script>alert('Employee Failed!!');</script>";
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error in Employee Model!!");
+            }
+            return View();
+        }
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Index.cshtml:-
+------------------------
+@model IEnumerable<CodeFirstMohit.Models.Employee>
+
+@Html.Raw(TempData["insert"])
+<h1 class="bg-dark text-white text-center">SHOW ALL EMPLOYEE</h1>
+<a asp-action="Create" asp-asp-controller="Employee" class="btn btn-success">Add New Employee</a>
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>MOBILE NO</th>
+        <th>SALARY</th>
+        <th colspan="2" class="text-center">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.Eid</td>
+            <td>@emp.Name</td>
+            <td>@emp.Age</td>
+            <td>@emp.MobileNo</td>
+            <td>@emp.Salary</td>
+            <td align="center"><a asp-action="Edit" asp-controller="Employee" class="btn btn-warning" asp-route-id="@emp.Eid">EDIT</a></td>
+            <td align="center"><a asp-action="Delete" asp-controller="Employee" class="btn btn-danger" asp-route-id="@emp.Eid" onclick="return confirm('Are you Sure you want to Delete this Item(Y/N)?');">DELETE</a></td>
+        </tr>
+    }
+</table>
+---------------------------------------------------------------
+create.cshtml-
+------------------------
+@model CodeFirstMohit.Models.Employee
+
+<h1 class="bg-dark text-white text-center"> Add New Employee </h1>
+<div class="row">
+    <div class="col-6">
+        <form asp-action="Create" asp-controller="Employee" method="post">
+            <div class="form-group">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+              <div class="form-group">
+                <label>Age</label>
+                <input type="text" asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Mobile NO</label>
+                <input type="text" asp-for="MobileNo" class="form-control" />
+                <span asp-validation-for="MobileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Salary</label>
+                <input type="text" asp-for="Salary" class="form-control" />
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+              <div class="form-group">
+                <input type="submit" value="Create" class="form-control btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+--------------------------------------------------------------------------------
+Assignment Question:- Code First Approach. -> 13 Feb.
+---------------------------------------------------------------------------------
+CMS:-
+--------------------------------------
+1. List of Location
+-------------------------------------
+name    ViewDetails
+-------------------------------------
+cityname  Click
+Agra   viewDetails
+Delhi   View Details
+Noida
+Banglore
+Hyderabad
+----------------------------------------
+List of Customer Location wise:- agra two customer
+-------------------------------------------
+name    viewDetails
+aryan      Viewdetails   -> then it show full details of aryan.
+neeraj   Viewdetails
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
