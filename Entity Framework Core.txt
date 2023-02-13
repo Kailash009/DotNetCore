@@ -1,0 +1,412 @@
+Soft Delete:-
+--------------------------------
+Code First Approach:-
+---------------------------------
+using CodeFirstMohit.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirstMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private EmployeeDbContext _dbContext;
+        public EmployeeController(EmployeeDbContext dbContext)  // DI (Constructor DI)
+        {
+            _dbContext = dbContext;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var employees =await (from m in _dbContext.Employees.Where(m => m.is_del == false) select m).ToListAsync();
+            return View(employees);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(Employee empObj)
+        {
+            if (ModelState.IsValid)
+            {
+                _dbContext.Employees.Add(empObj);
+                int n = await _dbContext.SaveChangesAsync();
+                if (n != 0)
+                {
+                    TempData["insert"] = "<script>alert('Employee Added SuccessFully!!');</script>";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["insert"] = "<script>alert('Employee Failed!!');</script>";
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error in Employee Model!!");
+            }
+            return View();
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var employee =await _dbContext.Employees.Where(m => m.Eid == id).FirstOrDefaultAsync();
+            return View(employee);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Employee empObj)
+        {
+            if (ModelState.IsValid)
+            {
+                _dbContext.Entry(empObj).State = EntityState.Modified;
+                int n = await _dbContext.SaveChangesAsync();
+                if (n != 0)
+                {
+                    TempData["update"] = "<script>alert('Employee Updated SuccessFully!!');</script>";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["update"] = "<script>alert('Employee Failed!!');</script>";
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error in Employee Model!!");
+            }
+            return View();
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                Employee emp =await _dbContext.Employees.Where(m => m.Eid == id).FirstOrDefaultAsync();
+                if (emp != null)
+                {
+                     emp.is_del = true;
+                    _dbContext.Entry(emp).State = EntityState.Modified;
+                    int n = await _dbContext.SaveChangesAsync();
+                    if (n != 0)
+                    {
+                        TempData["delete"] = "<script>alert('Employee Deleted SuccessFully!!');</script>";
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        TempData["delete"] = "<script>alert('Employee Failed!!');</script>";
+                    }
+                }
+                else
+                {
+                    TempData["delete"] = "<script>alert('Employee Not Found!!');</script>";
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error in Employee Model!!");
+            }
+            return View();
+            }
+        }
+    }
+-----------------------------------------------------------------------------------------------------
+@model IEnumerable<CodeFirstMohit.Models.Employee>
+
+@Html.Raw(TempData["insert"])
+@Html.Raw(TempData["update"])
+@Html.Raw(TempData["delete"])
+<h1 class="bg-dark text-white text-center">SHOW ALL EMPLOYEE</h1>
+<a asp-action="Create" asp-asp-controller="Employee" class="btn btn-success">Add New Employee</a>
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>MOBILE NO</th>
+        <th>SALARY</th>
+        <th colspan="2" class="text-center">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.Eid</td>
+            <td>@emp.Name</td>
+            <td>@emp.Age</td>
+            <td>@emp.MobileNo</td>
+            <td>@emp.Salary</td>
+            <td align="center"><a asp-action="Edit" asp-controller="Employee" class="btn btn-warning" asp-route-id="@emp.Eid">EDIT</a></td>
+            <td align="center"><a asp-action="Delete" asp-controller="Employee" class="btn btn-danger" asp-route-id="@emp.Eid" onclick="return confirm('Are you Sure you want to Delete this Item(Y/N)?');">DELETE</a></td>
+        </tr>
+    }
+</table>
+---------------------------------------------------------
+@model CodeFirstMohit.Models.Employee
+
+<h1 class="bg-dark text-white text-center"> Add New Employee </h1>
+<div class="row">
+    <div class="col-6">
+        <form asp-action="Create" asp-controller="Employee" method="post">
+            <div class="form-group">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+              <div class="form-group">
+                <label>Age</label>
+                <input type="text" asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Mobile NO</label>
+                <input type="text" asp-for="MobileNo" class="form-control" />
+                <span asp-validation-for="MobileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Salary</label>
+                <input type="text" asp-for="Salary" class="form-control" />
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+              <div class="form-group">
+                <input type="submit" value="Create" class="form-control btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+-----------------------------------------------------------------
+@model CodeFirstMohit.Models.Employee
+
+<h1 class="bg-dark text-white text-center">  Edit Employee </h1>
+<div class="row">
+    <div class="col-6">
+        <form asp-action="Edit" asp-controller="Employee" method="post">
+            <div class="form-group">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Eid" />
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <input type="text" asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Mobile NO</label>
+                <input type="text" asp-for="MobileNo" class="form-control" />
+                <span asp-validation-for="MobileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Salary</label>
+                <input type="text" asp-for="Salary" class="form-control" />
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="form-control btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+-----------------------------------------------------------------------------
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirstMohit.Models
+{
+    public class EmployeeDbContext:DbContext
+    {
+        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options):base(options)
+        {
+            
+        }
+        public DbSet<Employee> Employees { get; set; }  // All CRUD Operation
+    }
+}
+--------------------------------------------------------------------------
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+----------------------------------------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=DbMohit;Integrated Security=True;"
+  },
+  "AllowedHosts": "*"
+}
+--------------------------------------------------------------------------------------------------------
+Database First Approach:-
+---------------------------------------
+>> In this approach we have existing database and tables.
+---------------------------------------------------------------------------------
+step-1 :- Install Entity Framework Package.
+--------------------------------------------------------------
+step-2:-
+-------------------------
+Run Migration Command:- Package Manager Console.
+--------------------------------------------
+Scaffold-DbContext "server=servername;database=dbname;trusted_connection=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+-Context 'EmployeeDbContext'
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Scaffold-DbContext "server=MAHADEV\SQLEXPRESS;database=DbMohit;trusted_connection=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context 'EmployeeDbContext'
+---------------------------------------------------------------------------------------------------------------------------------
+step-3:
+---------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "server=MAHADEV\\SQLEXPRESS;database=DbMohit;trusted_connection=true;"
+  },
+  "AllowedHosts": "*"
+}
+---------------------------
+step-4 (add this connection string in container)
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+var app = builder.Build();
+------------------------------------------------------------------------------------------------------
+Create Controller and inject service:-
+--------------------------------------------------------------
+using DatabaseFirstCoreMohit.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace DatabaseFirstCoreMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private EmployeeDbContext _dbContext;
+        public EmployeeController(EmployeeDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var employees = await (from m in _dbContext.Employees.Where(m => m.IsDel == false) select m).ToListAsync();
+            return View(employees);
+        }
+    }
+}
+
+-----------------------------------------------------------------------------------------------------
+@model IEnumerable<DatabaseFirstCoreMohit.Models.Employee>
+
+@Html.Raw(TempData["insert"])
+@Html.Raw(TempData["update"])
+@Html.Raw(TempData["delete"])
+<h1 class="bg-dark text-white text-center">SHOW ALL EMPLOYEE</h1>
+<a asp-action="Create" asp-asp-controller="Employee" class="btn btn-success">Add New Employee</a>
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>MOBILE NO</th>
+        <th>SALARY</th>
+        <th colspan="2" class="text-center">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.Eid</td>
+            <td>@emp.Name</td>
+            <td>@emp.Age</td>
+            <td>@emp.MobileNo</td>
+            <td>@emp.Salary</td>
+            <td align="center"><a asp-action="Edit" asp-controller="Employee" class="btn btn-warning" asp-route-id="@emp.Eid">EDIT</a></td>
+            <td align="center"><a asp-action="Delete" asp-controller="Employee" class="btn btn-danger" asp-route-id="@emp.Eid" onclick="return confirm('Are you Sure you want to Delete this Item(Y/N)?');">DELETE</a></td>
+        </tr>
+    }
+</table>
+-------------------------------------------------------------------------------------------------
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
