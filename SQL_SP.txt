@@ -1,0 +1,355 @@
+Stored Procedure:-
+--------------------------------------
+SELEct * from tbl_Employee
+create proc sp_insert
+(
+@name nvarchar(50),
+@age int,
+@address nvarchar(50),
+@salary int,
+@post nvarchar(50)
+)
+as begin
+insert into tbl_Employee(ename,age,eaddress,salary,post) values(@name,@age,@address,@salary,@post)
+end
+exec sp_insert 'raj',34,'rajendra nagar',776868,'SE'
+
+create proc sp_getemp
+as begin
+select * from tbl_Employee order by eid desc
+end
+exec sp_getemp
+create proc sp_updatemp
+(
+@eid int,
+@name nvarchar(50),
+@age int,
+@address nvarchar(50),
+@salary int,
+@post nvarchar(50)
+)
+as begin
+update tbl_Employee set ename=@name,age=@age,eaddress=@address,salary=@salary,post=@post where eid=@eid
+end
+sp_getemp
+exec sp_updatemp 7,'rahul singh',45,'New ASHOk Nagar',111222,'CA' 
+
+create proc sp_delemp
+(
+@eid int
+)
+as begin
+delete from tbl_Employee where eid=@eid
+end
+sp_getemp
+exec sp_delemp 8
+
+create proc get_singleemp
+(
+@eid int
+)
+as begin
+Select * from tbl_Employee where eid=@eid
+end
+exec get_singleemp 9
+----------------------------------------------
+Create single procedure and perform all the operations:-
+---------------------------------------------------------------------------
+alter proc sp_Employee
+(
+@action nvarchar(50)=null,
+@eid int=0,
+@name nvarchar(50)=null,
+@age int=0,
+@address nvarchar(50)=null,
+@salary int=0,
+@post nvarchar(50)=null
+)
+as begin
+if @action='Insert'
+begin
+insert into tbl_Employee(ename,age,eaddress,salary,post)values(@name,@age,@address,@salary,@post)
+select 1 as result
+end
+else if @action='SelectAll'
+begin 
+select * from tbl_Employee
+end
+else if @action='Select_Single'
+begin
+select * from tbl_Employee where eid=@eid
+end
+else if @action='Update'
+begin
+update tbl_Employee set ename=@name,age=@age,eaddress=@address,salary=@salary,post=@post where eid=@eid
+select 1 as result
+end
+else if @action='Delete'
+begin
+delete from tbl_Employee where eid=@eid
+select 1 as result
+end
+end
+--- Test your Procedure
+exec sp_Employee 'SelectAll'
+exec sp_Employee 'Insert',0,'pushpendra',12,'noida sec-37',786768,'TL'
+exec sp_Employee 'Update',3,'RAKESH',23,'Paratap Nagar',343434,'SE'
+exec sp_Employee 'Select_Single',9
+exec sp_Employee 'Delete',11
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Function:-
+-------------------
+User Defined Function:-
+-------------------------------------------------
+create function function_name(@parameter1 datatype(size),@parameter2 datatype)
+returns datatype
+as begin
+<Sql Statments/Logic of program>
+return final_Value
+end
+------------------------------------------------------------------------------------------------------------------------
+wap to perform sum of three no.
+wap to find the avg of five no.
+--------------------------------------------------
+Assignment Question:-
+----------------------------------------
+1. what is key? explain different types of keys in sql server.
+2. ddl,dml,dcl,tcl,dql
+3. what is normalization? explain all.
+4. difference between primary key , foreign key and unique key.
+5. difference between stored procedure and function.
+6. difference between drop,delete and truncate.
+7. difference between union and union all.
+8. What is views.
+9. what is trigger.
+10. difference between char,varchar and nvarchar()
+------------------------------------------------------------------------------------
+Views:-
+----------------
+>> In view we used only Select Command.
+>> view is fast as compare to table.
+>> view hold temporarily data.
+-----------------------------------------------------------------------------------
+how to create view:-
+--------------------------------
+create view view_name as select * from table_name
+------------------------------------------------------------------------------------
+create view vw_emp as select * from tbl_Employee
+-----------------------------------------------------------------------------------
+select getdate()
+
+select year('2012-02-16 12:30:52.303')
+
+create function addition(@a int,@b int,@c int)
+returns int
+as begin
+declare @res int
+set @res=@a+@b+@c
+return @res
+end
+
+select dbo.addition(10,20,30) as 'Addition'
+
+select * from tbl_Employee
+-- create a function that accecpt id of an employee and calculate gross salary of an employee.
+-- BS ->
+-- DA -> 10% of bs
+-- TA -> 15% of bs
+-- HRA -> 5% of bs
+-- GS =>  bs+da+ta+hra -> 44,200
+
+create function gross_salary(@eid int)
+returns money
+as begin
+declare @bs money,@da money,@ta money,@hra money,@gs money
+select @bs=salary from tbl_Employee where eid=@eid
+set @da=0.1*@bs
+set @ta=0.15*@bs
+set @hra=0.05*@bs
+set @gs=@bs+@da+@ta+@hra
+return @gs
+end
+select * from tbl_Employee
+select dbo.gross_salary(7) as 'Gross_Salary'
+select * from tbl_Employee
+create view vw_emp as select * from tbl_Employee
+select * from vw_emp
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
