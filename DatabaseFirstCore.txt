@@ -1,0 +1,369 @@
+Database First Approach - EntityFrameworkCore:-
+------------------------------------------------------------------------------------------
+>> When database is already given.
+>> In database first approach, first we create database and table and according to our database it generates Model class and data context class.
+>> This approach used where database is already given.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step-1 - Install EntityFramework Packages
+------------------------------------------------------------
+1. Microsoft.entityframeworkCore.
+2. Microsoft.entityframeworkCore.SqlServer
+3. Microsoft.entityframeworkCore.Tools
+------------------------------------------------------------------------------
+Step-2:-
+-----------------
+Create Database and Tables-
+-----------------------------------------
+create database DBShiva
+use DBShiva
+create table Employees
+(
+eid int primary key identity(1,1),
+ename nvarchar(50),
+age int,
+mobileno nvarchar(20),
+eaddress nvarchar(50)
+)
+select * from Employees
+insert into Employees values('Rajiv',23,'8978979','New Ashok Nagar')
+create database DBShiva
+use DBShiva
+create table Employees
+(
+eid int primary key identity(1,1),
+ename nvarchar(50),
+age int,
+mobileno nvarchar(20),
+eaddress nvarchar(50)
+)
+select * from Employees
+insert into Employees values('Rajiv',23,'8978979','New Ashok Nagar')
+create proc sp_Employees
+as begin
+select * from Employees
+end
+---------------------------------------------------------------------------------------------------
+Step-3:-
+---------------------
+Run Migration Command-
+-----------------------------------------------
+Scaffold-DbContext "server=MAHADEV\SQLEXPRESS;database=DBShiva;trusted_connection=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context EmployeeDbContext
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step-4: Make Connection String-
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection":"server=MAHADEV\\SQLEXPRESS;database=DBShiva;trusted_connection=true;"
+  },
+  "AllowedHosts": "*"
+}
+------------------------------------
+Step-5:- Register your CS in program.cs:-
+-------------------------------------------------------------------------
+using DatabaseFirstDemoWE10AM.Models;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+--------------
+Step-6:-
+--------------
+Create Controller and Inject Service-
+-----------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using DatabaseFirstDemoWE10AM.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace DatabaseFirstDemoWE10AM.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private readonly EmployeeDbContext _dbContext;
+        public EmployeeController(EmployeeDbContext dbContext)  // Service Inject EmployeeDbContext.
+        {
+            _dbContext = dbContext;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var employees =await _dbContext.Employees.ToListAsync();
+            return View(employees);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Employee empObj)
+        {
+            _dbContext.Employees.Add(empObj);
+            int n = await _dbContext.SaveChangesAsync();
+            if (n != 0)
+            {
+                TempData["insert"] = "<script>alert('Employee Added SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["insert"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+        public IActionResult Edit(int id)
+        {
+            var employee = _dbContext.Employees.Where(m => m.Eid == id).FirstOrDefault();
+            return View(employee);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Employee empObj)
+        {
+            _dbContext.Entry(empObj).State = EntityState.Modified;
+            int n = await _dbContext.SaveChangesAsync();
+            if (n != 0)
+            {
+                TempData["update"] = "<script>alert('Employee Updated SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["update"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var employee = _dbContext.Employees.Where(m => m.Eid == id).FirstOrDefault();
+            _dbContext.Employees.Remove(employee);
+            int n = await _dbContext.SaveChangesAsync();
+            if (n != 0)
+            {
+                TempData["delete"] = "<script>alert('Employee Deleted SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["delete"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+    }
+}
+---------------------------------------------------------------------------------------
+@model IEnumerable<DatabaseFirstDemoWE10AM.Models.Employee>
+
+
+<h1 class="bg-dark text-white text-center">Show Employee Record</h1>
+@Html.Raw(TempData["insert"])
+@Html.Raw(TempData["update"])
+@Html.Raw(TempData["delete"])
+<a asp-action="Create" asp-controller="Employee" class="btn btn-success">Add New Employee</a>
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>MOBILENO</th>
+        <th>ADDRESS</th>
+        <th colspan="2" class="text-center">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+    <tr>
+        <td>@emp.Eid</td>
+        <td>@emp.Ename</td>
+        <td>@emp.Age</td>
+        <td>@emp.Mobileno</td>
+        <td>@emp.Eaddress</td>
+        <td align="center"><a asp-action="Edit" asp-controller="Employee" asp-route-id="@emp.Eid" class="btn btn-warning">EDIT</a>  </td>
+            <td align="center"><a asp-action="Delete" asp-controller="Employee" asp-route-id="@emp.Eid" class="btn btn-danger" onclick="return confirm('Are you Sure you want to Delete this Item(y/N)?');">DELETE</a>  </td>
+    </tr>
+    }
+</table>
+-------------------------------------------------
+@model DatabaseFirstDemoWE10AM.Models.Employee
+
+<h1 class="bg-dark text-center text-white">Add New Employee</h1>
+<div class="container">
+    <div class="row">
+        <div class=col-6>
+            <form asp-action="Create" asp-controller="Employee" method="post">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" asp-for="Ename" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="text" asp-for="Age" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Mobile No</label>
+                    <input type="text" asp-for="Mobileno" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" asp-for="Eaddress" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="form-control btn btn-success mt-3" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+-----------------------------------------------
+@model DatabaseFirstDemoWE10AM.Models.Employee
+
+<h1 class="bg-dark text-center text-white">Edit New Employee</h1>
+<div class="container">
+    <div class="row">
+        <div class=col-6>
+            <form asp-action="Edit" asp-controller="Employee" method="post">
+                <div class="form-group">
+                    <input type="hidden" asp-for="Eid" />
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" asp-for="Ename" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="text" asp-for="Age" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Mobile No</label>
+                    <input type="text" asp-for="Mobileno" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Salary</label>
+                    <input type="text" asp-for="Eaddress" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Edit" class="form-control btn btn-dark mt-3" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+------------------------------------------------------------------------------------------------------------------------------------------  
+public async Task<IActionResult> Index()
+        {
+            var employees = await _dbContext.Employees.FromSqlRaw("sp_Employees").ToListAsync();
+            return View(employees);
+        }
+--------------------------------------------------------------------------------------------------
+Assignment Task:- (Code/Database)
+----------------------------------------------------------------------
+See all Customer Location Customer Location -
+-----------------------------------------------------------------------
+Agra -> Link -> show agra no. of customer -> 
+amit  viewdetails -> show all detail of amit.
+vijay  viewdetails ->
+Luknow
+Punjab
+-------------------------------------------------------------------------------------
+Area in Dot Net Core - Pending
+--------------------------------------------------- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
