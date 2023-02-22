@@ -1,0 +1,622 @@
+Repository Pattern:-
+------------------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace RepositoryPatternMohit.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public int  Salary { get; set; }
+    }
+}
+-------------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace RepositoryPatternMohit.Models
+{
+    public class Department
+    {
+        [Key]
+        public int Did { get; set; }
+        public string ?DName { get; set; }
+    }
+}
+---------------------------------------------------------------
+using RepositoryPatternMohit.Models;
+
+namespace RepositoryPatternMohit.Repository.Contract
+{
+
+    // Service
+    public interface IEmployee
+    {
+        List<Employee> getEmployees();
+        bool addEmployee(Employee empObj);
+        Employee getEmployeeId(int id);
+        bool updateEmployee(Employee empObj);
+        bool deleteEmployee(int id);
+
+    }
+}
+---------------------------------------------------------
+using RepositoryPatternMohit.Models;
+
+namespace RepositoryPatternMohit.Repository.Contract
+{
+
+    // Service
+    public interface IDepartment
+    {
+        List<Department> GetDepartments();
+        bool addDepartment(Department empObj);
+        Department getDepartmentById(int id);
+        bool updateDepartment(Department empObj);
+        bool deleteDepartment(int id);
+
+    }
+}
+------------------------------------------------------------------------------------
+using Microsoft.EntityFrameworkCore;
+using RepositoryPatternMohit.Models;
+using RepositoryPatternMohit.Repository.Contract;
+
+namespace RepositoryPatternMohit.Repository.Services
+{
+    public class EmployeeService : IEmployee
+    {
+        private EmployeeDbContext _dbContext;
+        public EmployeeService(EmployeeDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public List<Employee> getEmployees()
+        {
+            return _dbContext.Employees.ToList();
+        }
+        public bool addEmployee(Employee empObj)
+        {
+            _dbContext.Employees.Add(empObj);
+            int n=_dbContext.SaveChanges();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public Employee getEmployeeId(int id)
+        {
+           var employee= _dbContext.Employees.Where(m => m.Eid == id).FirstOrDefault();
+           return employee;
+        }
+        public bool updateEmployee(Employee empObj)
+        {
+            _dbContext.Entry(empObj).State = EntityState.Modified;
+            int n=_dbContext.SaveChanges();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool deleteEmployee(int id)
+        {
+            var employee = _dbContext.Employees.Where(m => m.Eid == id).FirstOrDefault();
+            _dbContext.Remove(employee);
+            int n = _dbContext.SaveChanges();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+-----------------------------------------------------------------------------
+using Microsoft.EntityFrameworkCore;
+using RepositoryPatternMohit.Models;
+using RepositoryPatternMohit.Repository.Contract;
+
+namespace RepositoryPatternMohit.Repository.Services
+{
+    public class DepartmentService : IDepartment
+    {
+        private EmployeeDbContext _dbContext;
+        public DepartmentService(EmployeeDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public bool addDepartment(Department dpObj)
+        {
+            _dbContext.Departments.Add(dpObj);
+            int n = _dbContext.SaveChanges();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool deleteDepartment(int id)
+        {
+            var department = _dbContext.Departments.Where(m => m.Did == id).FirstOrDefault();
+            _dbContext.Remove(department);
+            int n = _dbContext.SaveChanges();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Department getDepartmentById(int id)
+        {
+            var department = _dbContext.Departments.Where(m => m.Did == id).FirstOrDefault();
+            return department;
+        }
+
+        public List<Department> GetDepartments()
+        {
+            return _dbContext.Departments.ToList();
+        }
+
+        public bool updateDepartment(Department dbObj)
+        {
+            _dbContext.Entry(dbObj).State = EntityState.Modified;
+            int n = _dbContext.SaveChanges();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+--------------------------------------------------------------------------------
+using Microsoft.EntityFrameworkCore;
+using RepositoryPatternMohit.Models;
+
+namespace RepositoryPatternMohit.Repository.Services
+{
+    public class EmployeeDbContext:DbContext
+    {
+        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
+        {
+            
+        }
+
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Department> Departments { get; set; }
+    }
+}
+----------------------------------------------------------------------------------------------------------
+@model IEnumerable<RepositoryPatternMohit.Models.Employee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@Html.Raw(TempData["insert"])
+@Html.Raw(TempData["update"])
+@Html.Raw(TempData["delete"])
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Salary)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Salary)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Eid">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Eid">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Eid" onclick="return confirm('Are you Sure you want to Delete');">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+-----------------------------------------------------------------------
+@model RepositoryPatternMohit.Models.Employee
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Employee</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Salary" class="control-label"></label>
+                <input asp-for="Salary" class="form-control" />
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+--------------------------------------------------------------------------------------------------------
+@model RepositoryPatternMohit.Models.Employee
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Employee</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Eid" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Salary" class="control-label"></label>
+                <input asp-for="Salary" class="form-control" />
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+---------------------------------------------------------------------------------------------------------------
+@model RepositoryPatternMohit.Models.Employee
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Employee</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Age)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Age)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salary)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salary)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Eid">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+----------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using RepositoryPatternMohit.Repository.Contract;
+using RepositoryPatternMohit.Models;
+
+namespace RepositoryPatternMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private IEmployee _employee;
+        public EmployeeController(IEmployee employee)
+        {
+            _employee = employee;   // Inject Service
+        }
+        public IActionResult Index()
+        {
+            var employees = _employee.getEmployees();
+            return View(employees);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Employee empObj)
+        {
+           bool b= _employee.addEmployee(empObj);
+            if (b == true)
+            {
+                TempData["insert"] = "<script>alert('Employee Added SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["insert"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+        public IActionResult Edit(int id)
+        {
+          Employee employee=_employee.getEmployeeId(id);
+            return View(employee);   
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Employee empObj)
+        {
+            bool b=_employee.updateEmployee(empObj);
+            if (b == true)
+            {
+                TempData["update"] = "<script>alert('Employee Updated SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["update"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+        public IActionResult Details(int id)
+        {
+            Employee employee = _employee.getEmployeeId(id);
+            return View(employee);
+        }
+        public IActionResult Delete(int id)
+        {
+            bool b=_employee.deleteEmployee(id);
+            if (b == true)
+            {
+                TempData["delete"] = "<script>alert('Employee Deleted SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["delete"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+    }
+}
+-----------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using RepositoryPatternMohit.Repository.Contract;
+using RepositoryPatternMohit.Models;
+
+namespace RepositoryPatternMohit.Controllers
+{
+    public class DepartmentController : Controller
+    {
+        private IDepartment _dp;
+        public DepartmentController(IDepartment dp)
+        {
+            _dp = dp;
+        }
+        public IActionResult Index()
+        {
+            var departments = _dp.GetDepartments();
+            return View(departments);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Department dptObj)
+        {
+            bool b=_dp.addDepartment(dptObj);
+            if (b == true)
+            {
+                TempData["insert"] = "<script>alert('Department Added SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["insert"] = "<script>alert('Department Failed!!');</script>";
+            }
+            return View();
+        }
+        public IActionResult Edit(int id)
+        {
+            var dept = _dp.getDepartmentById(id);
+            return View(dept);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Department dptObj)
+        {
+            bool b = _dp.updateDepartment(dptObj);
+            if (b == true)
+            {
+                TempData["update"] = "<script>alert('Department Updated SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["update"] = "<script>alert('Department Failed!!');</script>";
+            }
+            return View();
+        }
+        public IActionResult Details(int id)
+        {
+            var dept = _dp.getDepartmentById(id);
+            return View(dept);
+        }
+        public IActionResult Delete(int id)
+        {
+            bool b = _dp.deleteDepartment(id);
+            if (b == true)
+            {
+                TempData["delete"] = "<script>alert('Department Deleted SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["delete"] = "<script>alert('Department Failed!!');</script>";
+            }
+            return View();
+        }
+
+    }
+}
+----------------------------------------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=DbMohit;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;" 
+  },
+  "AllowedHosts": "*"
+}
+-------------------------------------------------------------------------------
+using Microsoft.EntityFrameworkCore;
+using RepositoryPatternMohit.Repository.Contract;
+using RepositoryPatternMohit.Repository.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddScoped<IEmployee, EmployeeService>();  // Register your Service Here...
+builder.Services.AddScoped<IDepartment, DepartmentService>();
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+--------------------------------------------------------------
+Generic Repository Pattern:- Pending
+--------------------------------------------------------------
+>> It is the powerful concept in dot net core in which we can work with any Model.
+Student,Teacher,School.
+>>  Basic Repository, you need to create separate repositories for each and every entity present in your application.
+>> For example, if you have three entities such as Employee, Product, and Customer, then you need to create three repositories as EmployeeRepository, ProductRepository, and CustomerRepository.
+>> This is actually boring and repeating work, especially if all the repositories are going to do the same kind of work (i.e. typically database CRUD operations) and this is against the DRY (Don’t Repeat Yourself) principle as you are repeating the same code again and again in each repository. To solve the above problem Generic Repository Pattern comes into the picture.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
