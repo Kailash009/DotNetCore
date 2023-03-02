@@ -1,0 +1,444 @@
+JSON:-
+----------------------------
+>> JSON stands for JavaScript Object Notation.
+>> JSON is a text format for storing and transporting data.
+>> JSON is "self-describing" and easy to understand.
+>> JSON is a lightweight data-interchange format.
+>> JSON is used to send data between computers.
+>> JSON is language independent *
+>> The JSON format was originally specified by Douglas Crockford.
+------------------------------------------------------------------------------------------------------------------
+<body>
+    <script>
+        let data={"name":"kailash","age":20,"address":"New Ashok Nagar"};
+        console.log(data);
+        console.log(data.name);
+        console.log(data.age);
+        console.log(data.address);
+        console.log(data["name"]);
+        console.log(data["age"])
+    </script>
+</body>
+----------------------------------------------------------------------------------------------------------------
+Why use JSON?
+--------------------------------
+>> The JSON format is syntactically similar to the code for creating JavaScript objects. Because of this, a JavaScript program can easily convert JSON data into JavaScript objects.
+>> JSON makes it possible to store JavaScript objects as text.
+>> Since the format is text only, JSON data can easily be sent between computers, and used by any programming language.
+>> JavaScript has a built in function for converting JSON strings into JavaScript objects:
+	JSON.parse()
+>> JavaScript also has a built in function for converting an object into a JSON string:
+	JSON.stringify()
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+JSON Syntax:-
+----------------------------
+>> The JSON syntax is a subset of the JavaScript syntax.
+-------------------------------------
+JSON Syntax Rules:-
+-------------------------------------
+>> JSON syntax is derived from JavaScript object notation syntax:
+1. Data is in name/value pairs.
+2. Data is separated by commas.
+3. Curly braces hold objects.
+4. Square brackets hold arrays.
+>> JSON data is written as name/value pairs (aka key/value pairs).
+>> A name/value pair consists of a field name (in double quotes), followed by a colon, followed by a value:
+----------------------------------------------------------------------------------------------------------------------------------------
+Note:- JSON  key/names require double quotes.
+------------------------------------------------------------------------------------------------
+>> The JSON format is almost identical to JavaScript objects.
+>> In JSON, keys must be strings, written with double quotes:
+{"name":"John"}
+-----------------------------------------------------------------------------------------
+JSON Values:-
+---------------------------
+In JSON, values must be one of the following data types:
+>> a string
+>> a number
+>> an object
+>> an array
+>> a boolean
+>> null
+-----------------------------------------------------------------------------
+let data={"name":"kailash","age":20,"address":"New Ashok Nagar","IsActive":true,"city":null};
+--------------------------------------------------------------------------------------------------------------------------
+In JavaScript values can be all of the above, plus any other valid JavaScript expression, including:
+>> a function
+>> a date
+>> undefined
+-----------------------------------------------------------------------------------
+>> The file type for JSON files is ".json"
+>> The MIME type for JSON text is "application/json".
+-----------------------------------------------------------------------------------
+JSON is Unlike XML Because:-
+-----------------------------------------------
+>> JSON doesn't use end tag.
+>> JSON is shorter.
+>> JSON is quicker to read and write.
+>> JSON can use arrays.
+---------------------------------------------------
+Why JSON is Better Than XML
+---------------------------------------------------
+>> XML is much more difficult to parse than JSON.
+>> JSON is parsed into a ready-to-use JavaScript object.
+For AJAX applications, JSON is faster and easier than XML:
+Using XML:-
+------------------------------
+>> Fetch an XML document.
+>> Use the XML DOM to loop through the document.
+>> Extract values and store in variables.
+-----------------------------------------------------
+Using JSON:-
+------------------------------------------------------
+>> Fetch a JSON string.
+>> JSON.Parse the JSON string.
+-----------------------------------------------------
+JSON Data Types:-
+---------------------------------
+Valid Data Types:-
+--------------------------------
+In JSON, values must be one of the following data types:
+>> a string
+>> a number
+>> an object (JSON object)
+>> an array
+>> a boolean
+>> null
+----------------------------------------------------------------
+JSON values cannot be one of the following data types:
+>> a function
+>> a date
+>> undefined
+--------------------------------------------------------------------
+JSON.parse() :-
+--------------------------------------------------------------------
+>> JSON string into JavaScript Objects
+>> A common use of JSON is to exchange data to/from a web server.
+>> When receiving data from a web server, the data is always a string.
+>> Parse the data with JSON.parse(), and the data becomes a JavaScript object.
+----------------------------------------------------------------------------------------------------------------------------------
+<body>
+    <script>
+        let data='{"name":"Kriti","age":20,"address":"New Ashok Nagar","IsActive":true,"city":null}';
+        let Jsobj=JSON.parse(data);
+        console.log(Jsobj);
+        console.log(Jsobj.name);
+    </script>
+</body>
+---------------------------------------------------
+Array As JSON:-
+--------------------------------------------------
+<body>
+    <script>
+        let data='["kriti",19,"New Ashok Nagar"]';
+        let Jsobj=JSON.parse(data);
+        console.log(Jsobj);
+        console.log(Jsobj[1]);
+    </script>
+</body>
+---------------------------------------------------
+JSON.stringify():-
+-------------------------------
+>> JavaScript Objects into JSON string.
+>> A common use of JSON is to exchange data to/from a web server.
+>> When sending data to a web server, the data has to be a string.
+>> Convert a JavaScript object into a string with JSON.stringify().
+------------------------------------------------------------------------------------------------
+<body>
+    <script>
+        let obj={name:"Kriti",age:12,city:"Goa"};
+        let myJson=JSON.stringify(obj);
+        console.log(myJson);
+    </script>
+</body>
+--------------------------------------------------------------------------------------------
+Stringify a JavaScript Array:-
+-----------------------------------------
+<body>
+    <script>
+        let arr=["Kriti",34,"New Ashok Nagar"];
+        let myJson=JSON.stringify(arr);
+        console.log(myJson);
+    </script>
+</body>
+-----------------------------------------------
+JSON Object Literals:-
+--------------------------------------------
+>> JSON object literals are surrounded by curly braces {}.
+>> JSON object literals contains key/value pairs.
+>> Keys and values are separated by a colon.
+>> Keys must be strings, and values must be a valid JSON data type:
+a) string
+b) number
+c) object
+d) array
+e) boolean
+f)  null
+---------------------------------------------------------------------------------------------------------------------------------------------
+>>  Each key/value pair is separated by a comma.
+>>  It is a common mistake to call a JSON object literal "a JSON object".
+>> JSON cannot be an object. JSON is a string format.
+>> The data is only JSON when it is in a string format. When it is converted to a JavaScript variable, it becomes a JavaScript object.
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Looping an Object:-
+----------------------------------
+>> You can loop through object properties with a for-in loop.
+<body>
+    <script>
+        let myJson='{"name":"Kriti","age":20,"address":"New Ashok Nagar"}';
+        let myObj=JSON.parse(myJson);
+        for(let x in myObj)
+        {
+            console.log(x);
+            console.log(myObj[x]);
+        }
+    </script>
+</body>
+--------------------------------------------------------------------------
+JSON Array Literals:-
+------------------------------------
+>> Arrays in JSON are almost the same as arrays in JavaScript.
+>> In JSON, array values must be of type string, number, object, array, boolean or null.
+>> In JavaScript, array values can be all of the above, plus any other valid JavaScript expression, including functions, dates, and undefined.
+Creating an Array from JSON:-
+------------------------------------------------
+<body>
+    <script>
+        let myJSON='["Kriti","Deepa","Joshi"]';
+        let myArray=JSON.parse(myJSON);
+        console.log(myArray);
+    </script>
+</body>
+----------------------------------------------------------------
+Through Loop:-
+-------------------------------
+<body>
+    <script>
+        let myJSON='["Kriti","Deepa","Joshi"]';
+        let myArray=JSON.parse(myJSON);
+        console.log(myArray);
+        for(let x in myArray)
+        {
+            console.log(myArray[x]);
+        }
+    </script>
+</body>
+------------------------------------------------------------------
+Arrays in Objects:-
+------------------------------------------
+<body>
+    <script>
+        let myJSON='{"name":"kriti","age":12,"programs":["java","php","dot net","python"]}';
+        let myObj=JSON.parse(myJSON);
+        console.log(myObj);
+        console.log(myObj.programs[1]);
+    </script>
+</body>
+--------------------------------------------
+Looping through an Array:-
+--------------------------------------------
+<body>
+    <script>
+        let myJSON='{"name":"kriti","age":12,"programs":["java","php","dot net","python"]}';
+        let myObj=JSON.parse(myJSON);
+        console.log(myObj);
+        for(x in myObj.programs)
+        {
+        console.log(myObj.programs[x]);
+        }
+    </script>
+</body>
+-----------------------------------------------------
+JSONP stands for JSON with Padding.
+-----------------------------------------------------
+HttpStatus Code:-
+---------------------------
+200 -> OK
+201 -> Created
+202 -> Accepted
+204 -> No Content.
+400 -> Bad Request.
+401 -> Unauthorized.
+403 -> Forbidden.
+404 -> Not Found.
+415 -> Unsupported Media Type.
+422 -> Unprocessable Entity.
+405 -> Method Not Allowed.
+409 -> Conflict.
+500 -> Internal Server Error.
+503 -> Service Unavailable.
+----------------------------------------------------------
+REST Architecture:-
+-----------------------------------
+REST stands for representational state transfer and is a software architecture style that defines a pattern for client and server communications over a network. REST provides a set of constraints for software architecture to promote performance, scalability, simplicity, and reliability in the system.
+GET	Retrieve an existing resource.
+POST	Create a new resource.
+PUT	Update an existing resource.
+PATCH	Partially update an existing resource.
+DELETE	Delete a resource.
+OPTIONS To get information on permitted operations
+TRACE	For diagnosing purposes
+HEAD	To get metadata of the endpoint
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
