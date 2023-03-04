@@ -1,0 +1,265 @@
+Web API CRUD N-Tier Using Code First:-
+--------------------------------------------------------------------
+>> API stands for Application Programming Interface.
+>> API is used to communicate over cross platform.
+>> Api is just like a function.
+>> API always returns JSON Format.
+>> JSON stands for java script object notation.
+>> json is a light weight.
+>> json is very fast.
+---------------------------------------------------------------------------------
+{
+"name":"joshi",
+"age":23,
+"address":"New Ashok Nagar"
+}  ->> JSON  Format.
+--------------------------------------------------------------------
+CRUD operation in API using EF(Code First):-
+-----------------------------------------------------------------------
+[{"date":"2023-03-05T10:49:34.3837621+05:30","temperatureC":-20,"temperatureF":-3,"summary":"Balmy"},{"date":"2023-03-06T10:49:34.3847785+05:30","temperatureC":16,"temperatureF":60,"summary":"Hot"},{"date":"2023-03-07T10:49:34.384786+05:30","temperatureC":9,"temperatureF":48,"summary":"Mild"},{"date":"2023-03-08T10:49:34.3847866+05:30","temperatureC":39,"temperatureF":102,"summary":"Scorching"},{"date":"2023-03-09T10:49:34.3847869+05:30","temperatureC":35,"temperatureF":94,"summary":"Warm"}]  ->> JSON FORMAT.
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+C -> Create -> Api  -> POST
+R -> Read -> APi  ->  GET
+U -> Update -> APi -> PUT
+D -> Delete -> api -> DELETE
+------------------------------------------------------------
+you need to know following three things:-
+1. Create API.  -- Done.
+2. Test API.  -> To test an api we use "POSTMAN" tool.
+3. Consume API.
+-----------------------------------------------------------------------------
+Employee Controller:-
+----------------------------------------
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using ShivaWebAPI.Contract;
+using ShivaWebAPI.Models;
+
+namespace ShivaWebAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmployeeController : ControllerBase
+    {
+        private IEmployee _employee;
+        public EmployeeController(IEmployee employee)
+        {
+            _employee = employee;
+        }
+        [HttpGet]
+        public List<Employee> GetALL()
+        {
+            return _employee.getEmployees();
+        }
+        [HttpGet("{id}")]
+        public Employee Get(int id)
+        {
+            return _employee.GetEmpoyeebyId(id);
+        }
+        [HttpPost]
+        public void Add(Employee empObj)
+        {
+            _employee.AddEmployee(empObj);
+        }
+        [HttpPut]
+        public void Update(Employee empObj)
+        {
+            _employee.UpdateEmployee(empObj);
+        }
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            _employee.DeleteEmployee(id);
+        }
+    }
+}
+-------------------------------------------------------------------------------
+Contract:-
+---------------------
+using ShivaWebAPI.Models;
+
+namespace ShivaWebAPI.Contract
+{
+    public interface IEmployee
+    {
+        List<Employee> getEmployees();
+        Employee GetEmpoyeebyId(int id);
+        void AddEmployee(Employee empObj);
+        void UpdateEmployee(Employee empObj);
+        void DeleteEmployee(int id);
+    }
+}
+-----------------------------------
+Services:-
+---------------------
+using ShivaWebAPI.Contract;
+using ShivaWebAPI.Models;
+
+namespace ShivaWebAPI.Services
+{
+    public class EmployeeService : IEmployee
+    {
+        private EmployeeDbOperation _empDbOperation;
+        public EmployeeService(EmployeeDbOperation empDbOperation)
+        {
+            _empDbOperation = empDbOperation;
+        }
+        public List<Employee> getEmployees()
+        {
+            return _empDbOperation.getEmployees();
+        }
+        public Employee GetEmpoyeebyId(int id)
+        {
+            return _empDbOperation.getEmployee(id);
+        }
+        public void AddEmployee(Employee empObj)
+        {
+            _empDbOperation.AddEmployee(empObj);
+        }
+        public void UpdateEmployee(Employee empObj)
+        {
+            _empDbOperation.UpdateEmployee(empObj);
+        }
+
+        public void DeleteEmployee(int id)
+        {
+            _empDbOperation.DeleteEmployee(id);
+        }
+    }
+}
+------------------------------------------------------------------------------------
+Models:-
+-------------------------
+Employee:-
+---------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace ShivaWebAPI.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string ?Ename { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public int Salary { get; set; }
+
+    }
+}
+------------------------------------------------------------------------
+EmployeeDbContext:-
+-------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace ShivaWebAPI.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string ?Ename { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public int Salary { get; set; }
+
+    }
+}
+---------------------------------------------------------------------------------
+EmployeeDbOperation:-
+-----------------------------------------------------
+using Microsoft.EntityFrameworkCore;
+namespace ShivaWebAPI.Models
+{
+    public class EmployeeDbOperation
+    {
+        private EmployeeDbContext _empContext;
+        public EmployeeDbOperation(EmployeeDbContext empContext)
+        {
+            _empContext = empContext;
+        }
+        public List<Employee> getEmployees()
+        {
+            return _empContext.Employees.ToList();
+        }
+        public Employee getEmployee(int id)
+        {
+            return _empContext.Employees.Find(id);
+        }
+        public void AddEmployee(Employee empObj)
+        {
+            _empContext.Add(empObj);
+            _empContext.SaveChanges();
+        }
+        public void UpdateEmployee(Employee empObj)
+        {
+            _empContext.Entry(empObj).State =EntityState.Modified;
+            _empContext.SaveChanges();
+        }
+        public void DeleteEmployee(int id)
+        {
+            var emp = _empContext.Employees.Find(id);
+            if (emp != null)
+            {
+                _empContext.Employees.Remove(emp);
+                _empContext.SaveChanges();
+            }
+
+        }
+    }
+}
+---------------------------------------------------------------------------------------
+Program.cs:-
+------------------------
+using Microsoft.EntityFrameworkCore;
+using ShivaWebAPI.Contract;
+using ShivaWebAPI.Models;
+using ShivaWebAPI.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddTransient<EmployeeDbOperation>();
+builder.Services.AddTransient<IEmployee, EmployeeService>();
+
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+------------------------------------------------------------------------------------------------------------
+appsettings.json:-
+-----------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=DBShivaAPI;Integrated Security=True;"
+  },
+  "AllowedHosts": "*"
+}
+-----------------------------------------------------
+
+
+
+
+
+
+
