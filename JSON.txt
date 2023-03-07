@@ -1,330 +1,141 @@
-Data Formats:-
--------------------------------------------
-1. XML.(Extensible Markup Language).  
-2. HTML
-3. SGML.
-4. .xls (Excel Format)
-5. docx (Documnet Format)
-6. accdb (Access Database Format)
-7. csv(Comma Separated value)
-----------------------------------------------------------------
 JSON:-
--------------------------
->> JSON is very powerful tools for exchanging data from client to server and vice-versa.
->> JSON is very light weight. (Light weight means it takes less memory and execute very fast.)
->> JSON is a language Independent.
-Language Independent -> It can communicate with any programming language.
-Let's Suppose:-
------------------------------
-Python - >>   E-Commerce  -> getallproducts,addproducts,search products,delete products,add to cart,payment etc.
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-Dot net Developer:-  E-Commerce -> C#   -> ??????????  No.
-----------------------------------------------------------------------------------------------------
-Importance of JSON:-
-------------------------------------
->> JSON is used to communicate cross platform.
-------------------------------------------------------------------------------
-Before JSON we commonly used XML :-
----------------------------------------------------------------
-XML -> Extensible Markup Language.
->> User defined tags.
->> <address>
-</address>
->> with the help of xml we can't send large amout of data.
->> It is a heavy weight.
------------------------------------------------------------------------------------------------
-To overcome this XML Problem we introduce JSON
->> JSON stands for "JAVA SCRIPT OBJECT NOTATON".
->> JSON is the subset of Java Script.
->> Json is self-describing.
->> It syntax is very simple and easy to write.
----------------------------------------------------------------------------------------------
-IDE : (Integrated Development Enviornment)
-----------------------------------------------------------------
-1. Pycharm.
-2. Jyputer
-3.  VS Code. 
->> How to install VS Code- Go to google and type download visual studio code
------------------------------------------------------------------------------------------------------------------------
-JSON Syntax:-
 ------------------------------------------
->> In Json we used Key/Value Pairs (Like a Dictionary)
->> Key must be in "String".
->> Value can be any type. -> int,string,boolean,object,array,null etc.
->> In between "Key-value" , It must be associated with : (Colon) Symbol.
-----------------------------------------------------------------------------------------------------------
-{
-"name":"Satish",
-"age":20,
-"city":"Noida"
-}  -> JSON Format.
-----------------------------------------------------------------------------------------------------------------------------
-https://jsonlint.com/  -> This website is used to check whether your JSON is valid or not.
----------------------------------------------------------------------------------------------------------------------------
-How to Open folder in Vs Code Shortcuts:-
-----------------------------------------------------------------------------------------------------------------------
-1. First of all Create one Folder name as 'anyFolderName'  --- Demo_JSON
-2. Now Open this Folder with cmd.
-3. Type code .  command in cmd , and now your Folder will open in Vs Code.
-------------------------------------------------------------------------------------------------------------------------------------------
-HTML : Hyper Text Markup Language.
------------------------------------------------------------------------------
-JS  / Output :-
----------------------------
-1. alert()
-2. document.write()
-3.  console.log() // Prefer.
------------------------------------------------------
+>> JSON Objects.
+>> JSON Arrays.
+-----------------------------------------
+JSON Objects:-
+--------------------------
+>> JSON object contains key/value pairs.
+>> key must in string.
+>> value can be any type like -> number,string,boolean,object,array.
+>>  we use {} curly braces.
+-----------------------------------------------------------------------------------------------------
+Example of JSON Objects:-
+------------------------------------------
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON DEMO </title>
+    <title> Example of JSON Objects </title>
 </head>
 <body>
     <script>
-    let data={"name":"Satish","age":20,"city":"Noida","IsActive":true};  // jSON FORMAT
-    console.log(data);
-    console.log(data.name);  // Satish
-    console.log(data.age);
-    console.log(data.city);
-    console.log(data["name"]); // another way to access values
-    console.log(data["age"]);
-    console.log(data["city"]);
-    console.log(data.nam);  // Undefined. if you pass any Wrong Key the it will show you Undefined.
-    console.log(data.IsActive);
-    </script>
-</body>
-</html>
----------------------------------------------------------------------------------------------------------------------------------------
-JSON Data types:-
---------------------------------------
-1. int/number.
-2. string.
-3. boolean.
-4. Array/Object.
---------------------------------------
-Note:- To check the type of any value we use "typeof()" function i.e in-built function in JS.
-----------------------------------------------------------------------------------------------------------------------
-For Example:-
-----------------------------
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Data Types</title>
-</head>
-<body>
-    <script>
-        let myData=
+        let jsonStr='{"name":"Satish","age":19,"address":"New Ashok Nagar","mobile":979879,"date":"06/03/2023","language":["Java","PHP","Python","Django","React"]}';
+        let jsonObj=JSON.parse(jsonStr);
+        console.log(jsonObj);
+        console.log(jsonObj.date);
+        console.log(jsonObj.mobile);
+        console.log(jsonObj.age)
+        console.log(jsonObj.language);
+        console.log(typeof(jsonObj.language));
+        console.log(jsonObj.language[2])
+        for(x in jsonObj.language)
         {
-            "name":"Satish",
-            "age":23,
-            "isActive":true,
-            "Salary":74567.567,   // Number
-            "Interest":["Java","Dot Net","Php","Python"]
-        }
-        console.log(myData);
-        console.log(myData.name);
-        console.log(typeof(myData.name));
-        console.log(myData.age);
-        console.log(typeof(myData.age));
-        console.log(myData.isActive);
-        console.log(typeof(myData.isActive));
-        console.log(myData.Salary);
-        console.log(typeof(myData.Salary));
-        console.log(myData.Interest);
-        console.log(typeof(myData.Interest));
-        console.log(myData.Interest[2]); // Php // To access particular value of array.
-        console.log(myData.Interest[0]); // JAVA
-        for(x in myData.Interest) // x=0,x=1,x=2,x=3 // To access all values of array. 
-        {
-            console.log(x+"="+myData.Interest[x]);   // myData.Interest[0] // Java,Dot Net,Php,Python
+                console.log(jsonObj.language[x]);            
         }
     </script>
 </body>
 </html>
---------------------------------------------------------------------------------------------------------------------------------------------
-JSON Parse:-
---------------------------------
->> parse() method is used to change the type.
->> parse() is used to convert  "JSON String into Object".
---------------------------------------------------------------------------------------------------------------
->> parse() accept json string not json.
--------------------------------------------------------------------------------------
-name:"Satish",
-age:24,
-address:"Noida",
-isActive:true; -> Object
--------------------------------------------
-JSON String  -> Object  ????
-----------------------------------------------------------------------------------------------
-Ctrl + /  -> To comment or uncomment line of code in VS Code.
----------------------------------------------------------------------------------------------
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example of JSON Parse</title>
-</head>
-<body>
-    <script>
-        let myJSON='{"name":"Satish","age":20,"address":"Noida","isActive":true}';  // JSON STRING
-        console.log(myJSON);
-        let myObj=JSON.parse(myJSON);  // JSON String to Object.
-        console.log(myObj);
-        for(x in myObj)
-        {
-            console.log(x+"="+myObj[x]);            
-        }
-    </script>
-</body>
-</html>
---------------------------------------------------------------------------------------------------------------------------------------------------------------
-JSON Stringify:-
-------------------------------------------------------------------------------------
->> To Convert  JSON Object into JSON String.
-------------------------------------------------------------------------------------
-https://dummyjson.com/   --->>>  To get Dummy JSON.
-----------------------------------------------------------------------------------------
-https://www.postman.com/downloads/  -> To Download Postman.
+----------------------------------------------------------------------------------------------------------------------------------------------
+POSTMAN -> It is used to test your API.
+------------------------------------------------------------
+https://www.postman.com/downloads/  -> To Download POSTMAN.
 -----------------------------------------------------------------------------------------
+[{"eid":1,"name":"Ashish","age":19,"mobileNo":"987979","city":"Noida","post":"SE","salary":987979},
+{"eid":3,"name":"Preeti","age":21,"mobileNo":"34887979","city":"Banaras","post":"PO","salary":2487979}
+]  -> JSON
+-----------------------------------------------------------------------------------------------------------------------------------------
+How to call an API using AJAX:-
+-----------------------------------------------------
+AJAX :-
+-------------------
+>> AJAX stands for Asynchronous Java Script and XML.
+>> It is used for partial post back.
+>> Ajax is a powerful tool by which you can send the data to the server without reloading the whole page again and again.
+>> It can increase our response time.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+The keystone of AJAX is the XMLHttpRequest object.
+>> Create an XMLHttpRequest object.
+>> Define a callback function.
+>> Open the XMLHttpRequest object.  -->> open(method(get/post),url,async(T)/sync(F),username,password(Optional))
+>> Send a Request to a server.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+readyState -> Holds the status of the XMLHttpRequest.
+0: request not initialized
+1: server connection established
+2: request received
+3: processing request
+4: request finished and response is ready
+-------------------------------------------------------------------------------------
+status -> Returns the status-number of a request
+200: "OK"
+403: "Forbidden"
+404: "Not Found"
+-----------------------------------------------
+https://www.w3schools.com/js/js_ajax_intro.asp   -> To Learn AJAX Concept.
+---------------------------------------------------------------------------------------------------------
+JS Function:-
+------------------------
+Syntax:-
+----------------
+function function_name()
+{
+// Logic of Code.
+}
+----------------------------------------------
+Calling API through AJAX:-
+-----------------------------------------------
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example of JSON Stringfy</title>
+    <title>AJAX -  Calling API</title>
+    <script>
+    function CallAPI(url)  // Formal Paramter
+    {
+    let xmlHttp = new XMLHttpRequest();  // Create an Object of XML HTTP Request Class.
+    xmlHttp.onreadystatechange = function()   // Call Back Function
+    {      
+    if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("data").innerHTML=this.responseText;
+    }
+  };
+  xmlHttp.open("GET",url,true);
+  xmlHttp.send();
+}
+        function Products()  // User Defined Function
+        {
+            CallAPI("https://dummyjson.com/products"); // Actual Parameter
+            //alert('Hello API');
+        }
+    </script>
 </head>
 <body>
-    <script>
-        let myJSONObj={
-            name:"Satish",
-            age:22,
-            address:"Noida",
-            salary:345677.98
-        }  // JSON Object
-        console.log(myJSONObj);
-        let myJsonStr=JSON.stringify(myJSONObj); // To Convert JsonObject to Json String.
-        console.log(myJsonStr);
-    </script>
+    <button onclick="Products()"> CALL API </button>
+    <div id="data"></div>
 </body>
 </html>
------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IDE -> Integrated Development Enviornment.
+1. when you successFully install python in your pc then python provide you one default IDE that IDE name is -   IDLE (Integrated Development and Learning Enviornment).
+----------------------------------------------------------------------------------------------------------------------------------------------------
+How to call API through Python:-
+-----------------------------------------------
+1. First install one package requests.
+Type this command in cmd  -->   pip install requests
+-------------------------------------------------------------------------------------------------
+2. Command to see how many python packages you install in your PC - 
+pip freeze
+------------------------------------------------------------------------------------------------------
+https://www.w3schools.com/html/    -> To Learn HTML
+https://www.w3schools.com/css/default.asp   -> To Learn CSS
+-----------------------------------------------------------------------------------------------------
+https://www.w3schools.com/js/default.asp  -> To Learn Java Script.
+-----------------------------------------------------------------------------------------------------
 
 
 
