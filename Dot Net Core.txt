@@ -1,0 +1,235 @@
+Dot Net Core:-
+-----------------------------------------
+1. Custom Tag Helper.
+Custom Tag Helpers:- you can create your own tag-helper just follow these steps:-
+------------------------------
+Create one folder-> CustomHelper-> Inside it create one class EmployeeDetailTagHelper.
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+-----------------------------------------------------------------------------------------
+[HtmlTargetElement("emp-detail")]
+    public class EmployeeDetailTagHelper:TagHelper
+    {
+      [HtmlAttributeName("for-name")]
+      public ModelExpression EmployeeName { get; set; }
+
+        [HtmlAttributeName("for-post")]
+        public ModelExpression Designation { get; set; }
+
+        public override void Process(TagHelperContext context,TagHelperOutput output)
+        {
+            output.TagName = "emp-detail";
+            output.TagMode = TagMode.StartTagAndEndTag;
+            var sb = new StringBuilder();
+            sb.AppendFormat("<span>Name:{0}</span><br/>", this.EmployeeName.Model);
+            sb.AppendFormat("<span>Designation:{0}</span><br/>", this.Designation.Model);
+            output.PreContent.SetHtmlContent(sb.ToString());
+        }
+    }
+-----------------------------------------------------------------------------
+Register your tag Helper in:-  _ViewImports.cshtml
+@addTagHelper *,DotNetCoreJoshi
+-----------------------------------------------------------------------------
+Home Controller->
+public IActionResult Index()
+        {
+            Employee emp = new Employee();
+            emp.ename = "Kailash";
+            emp.post = "Team Leader";
+            return View(emp);
+       }
+-----------------------------------------------------
+Index.cshtml:-
+---------------------
+@model DotNetCoreJoshi.Models.Employee
+<div>
+<h1>My Custom Tag Helper</h1>
+    <emp-detail for-name="@Model.ename" for-post="@Model.post"></emp-detail>
+</div>
+-------------------------------------------------------------------------------------------
+2. Custom Validation.
+3. Unit of work.
+>> Unit of Work is the concept related to the effective implementation of the Repository Pattern. To understand this concept in better it is important to understand the concept of the Repository Pattern. 
+>> The unit of work in C# implementation manages in-memory database CRUD operations on entities as one transaction.
+>> Unit of Work in C# is the concept that is related to the effective implementation of the Repository Design Pattern.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+4. Design Pattern.
+>> Design pattern in software engineering is a general, reusable solution to a commonly occurring problem in software design.
+>> Design patterns provide solutions to common problems which occur in software design. Design patterns are about reusable designs and interactions of objects.
+>> Developers face some problems while developing applications or in the software application Lifecycle which are common and repeated, for example, creation and disposal of objects, interaction between objects, the structure of classes that enhance cohesion and loose coupling, fixing of bugs in a way that minimize changing of source codes, etc.
+>> Design patterns are used to solve these commonly occurring problems in the development phase so that we can minimize the problems after deployment. A design pattern suggests a specific implementation for the specific object-oriented programming problem. For example, if you want to ensure that only a single instance of a class exists, then you can use the Singleton design pattern which suggests the best way to create a class that can only have one object.
+Types of Design Patterns:-
+--------------------------------------------
+These can be organized in 4 separate pattern groups depending on the nature of the design problem they intend to solve.
+1. Gang of Four Patterns (GOF - 23).
+2. Enterprise Patterns.
+3. SOA and Messaging Patterns.
+4. Model-View Patterns.
+---------------------------------------------------------------------------------
+Types of GOF (23) Patterns:-
+----------------------------------------------------------------------------------------------------------------------------------------
+>> The 23 Gang of Four (GoF) patterns are generally considered the foundation for all other patterns. 
+>> Design patterns are categorized into three groups: 
+1. Creational.
+2. Structural.
+3. Behavioral. 
+--------------------------------------------------------------------------------
+1. Creational Design Patterns:-
+Creational design patterns solve the problems related to object creation. They help to abstract away object creation processes that spread across multiple classes.
+The following five patterns are creational design patterns:
+1. Singleton
+2. Abstract Factory
+3. Builder
+4. Factory Method
+5. Prototype
+-----------------------------------------------------------------------------------------------------------------------------------------------
+2. Structural Design Patterns
+>> The structural design patterns suggest implementing relationships between classes and objects.
+The following seven patterns are structural design patterns:
+1. Adapter
+2. Bridge
+3. Composite
+4. Decorator
+5. Facade
+6. Flyweight
+7. Proxy
+----------------------------------------------
+3. Behavioral Design Pattern
+>> The behavioral design patterns suggest ways of communication between classes and objects.
+The following seven patterns are behavioral design patterns:
+1. Chain of Responsibility
+2. Command
+3. Interpreter
+4. Iterator
+5. Mediator
+6. Memento
+7. Observer
+8. State
+9. Strategy
+10. Template Method
+11. Visitor
+5+7+11 => (23 GOF)
+--------------------------------------------------------------------------------------------------------
+5. Url Helpers. <a>
+6. View Components.
+>> ViewComponent was introduced in ASP.NET Core MVC. It can do everything that a partial view can and can do even more. ViewComponents are completely self-contained objects that consistently render html from a razor view. ViewComponents are very powerful UI building blocks of the areas of application which are not directly accessible for controller actions. Let's suppose we have a page of social icons and we display icons dynamically. We have separate settings for color, urls and names of social icons and we have to render icons dynamically.
+ >> Previously this kind of thing was achieved by HtmlHelpers and child actions but now it is very easy to use ViewComponent for this purpose. It is very easy to create your dynamic elements in a ViewCompnent and render in a view.
+7. Query Strings.
+8. Cookies.
+9. Defining Mapping using Fluent API.
+>> Fluent API is another way to configure your domain classes.
+>> The Code First Fluent API is most commonly accessed by overriding the OnModelCreating method on your derived DbContext.
+>> Fluent API provides more functionality for configuration than DataAnnotations.
+>> Entity Framework Fluent API is used to configure domain classes to override conventions. EF Fluent API is based on a Fluent API design pattern (a.k.a Fluent Interface) where the result is formulated by method chaining.
+>> In Entity Framework Core, the ModelBuilder class acts as a Fluent API. By using it, we can configure many different things, as it provides more configuration options than data annotation attributes.
+Entity Framework Core Fluent API configures the following aspects of a model:
+1. Model Configuration: Configures an EF model to database mappings. Configures the default Schema, DB functions, additional data annotation attributes and entities to be excluded from mapping.
+2. Entity Configuration: Configures entity to table and relationships mapping e.g. PrimaryKey, AlternateKey, Index, table name, one-to-one, one-to-many, many-to-many relationships etc.
+3. Property Configuration: Configures property to column mapping e.g. column name, default value, nullability, Foreignkey, data type, concurrency column etc.
+Note: Fluent API configurations have higher precedence than data annotation attributes.
+public class CustomerDBContext: DbContext   
+{  
+    public DbSet<Customer> Customers { get; set; }  
+          
+    public DbSet<Product> Products { get; set; }  
+  
+    protected override void OnModelCreating(ModelBuilder modelBuilder)  
+    {  
+        //Write Fluent API configurations here..
+        modelBuilder.Entity<Customer>()  
+                .Property(c => c.Name)  
+                .IsRequired()  
+                .HasMaxLength(255);  
+    }  
+}  
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Fluent API provides a number of important methods to configure entities and its properties to override various Code First conventions. Below are some of them.
+1. ComplexType<TComplexType>
+2. Entity<TEntityType>
+3. HasKey<TKey>
+4. HasMany<TTargetEntity>
+5. HasOptional<TTargetEntity>
+6. HasRequired<TTargetEntity>
+7. Ignore<TProperty>
+8. Property<T>
+9. ToTable(String)
+Fluent API lets you configure your entities or their properties, whether you want to change something about how they map to the database or how they relate to one another. There's a huge variety of mappings and modeling that you can impact using the configurations. Following are the main types of mapping which Fluent API supports −
+1. Entity Mapping.
+2. Properties Mapping. 
+--------------------------------------------------------------------------------------------------------------------------------------------------
+10. Understanding Repository and UOW(Unit of Work) Design Pattern.  -- Done
+11. Understanding TDD(Test Driven Development).  -> Just Create API and Test.
+12. Unit Testing Frameworks.
+13. Writing Unit Test Cases.
+---------------------------------------------------------------------------------------------------------------------------------------
+14. Securing Web API.
+>> Security is an important part in any software development and APIs are no exception. Even for a public API, having control over who can access your service is a usual business requirement.
+>> As Web APIs are stateless in nature, the security context cannot depend on server session. Each request made to the API must attach some form of credentials which has to be validated on the server.
+The three security methods which are as follows:-
+1. HMAC Authentication.
+2. Digital Signature.
+3. OAuth.
+-----------------------------------------------------------------------------------------------------------
+HMAC Authentication is common for securing public APIs whereas Digital Signature is suitable for server-to-server two way communication. OAuth on the other hand is useful when you need to restrict parts of your API to authenticated users only.
+--------------------------------------------------------------------------------------------------------------------------------------
+15. Understanding Token based Security 
+16. Implementing Token based Security
+17. Implementing Authorization
+18. Implementing Identity.
+19. Remote Validation.
+20. Authentication and Authorization.
+21. Seeding Users and Roles.
+22. OAuth Implmentation.
+23. IFormCollection.
+24. Caching.
+25. AJAX implementation using JQuery.
+---------------------------------------------------------------------------------------------------------------------
+26. Life Cycle of asp.net core.
+27. Middleware.
+28. Actioners Object.
+29. Custom Action Filter.
+30. Asynchronous Action Method.
+31. Binding to Complex Classes.
+32. Bind Attribute.
+33. Try Update Model Async.
+34. Custom Server Side Validation.
+35. Anti-Forgery Tokens.
+36. Routing Constraints.
+37. Data Transfer Object. (DTO).
+38. Auto Mapper.
+39. Media Types.
+40. Types of Views.
+41. Url Helpers.
+42. Tag Helpers.
+43. Inline Helpers.
+44. Types of HTML Helpers.
+45. Server Side Data Recieving Ways.
+46. Query String
+47. Script Migration.
+48. Db First using EF Core Power Tool.
+49. Dependency Injection.
+50. Understanding TDD Approach.
+51. Implementing Content Negotiation.
+52. Web API Versioning.
+53. ASP.NET Core MVC Filters
+54. Important Nuget Packages
+55. Tips to optimize application performance 
+56. Understanding Bundling & Minification 
+57. Minimize number of static files requests 
+58. Understanding Error Logging Options 
+59. Configuring Error logging provider
+60. Preparing code for deployment
+61. Dapper ORM in Dot Net Core.
+62. Deployment on Cloud/IIS.
+-------------------------------------------------------------------------------------------------------
+63. Asp.Net Core Features.
+64. Understanding Action Selector. 
+65. Model Level Validation using IValidateObject.
+66. Social Sites Login. 
+---------------------------------------------------------------------------------------
+
+
+
+
+
+
