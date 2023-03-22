@@ -1,0 +1,434 @@
+JQuery:-
+----------------------
+>> It is the library of J.S.
+>> JQuery means 'Write Less do More'.
+>> It makes programmer life simpler and easier.
+>> In it, we make anonymous function. ( a function without name)
+------------------------------------------------------------------------------------------------------------------------
+Syntax:-
+-----------------
+$(document).ready(function(){
+// Logic of Code.
+});
+-----------------------------------------------------------------------------------------------
+How to Configure JQuery in project:- "jquery.com"
+-------------------------------------------------------------
+1. CDN. (Content Delivery Network)  ->>> Online. (Internet must be there in your PC.)
+2. Local Installation.
+-----------------------------------------------------------------------------------------------------------------
+Selector in JQuery:-
+------------------------------
+>> with the help of jquery selector you can select a particular element.
+--------------------------------------------------------------------------------------------------
+1. Element Selector.
+Syntax:-
+-----------------
+$('selectorname').eventName(function(){
+// write logic here.
+});
+--------------------------------------------
+2. ID Selector.  (#)Hash
+3. Class Selector. (.) Dot
+------------------------------
+Hide() -> it is used to hide a particular element according to the selector.
+-----------------------------------------------------------------------------------------------------
+JQuery Events:-
+------------------------------
+click,dbclick,keyup,keydown,keypress,submit,change,blur,focus,mousemove,mousedown,mouseenter and many more.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+            $('h1').hide();
+            $('p').mouseover(function(){
+                $('h1').show();
+        });
+    });
+    </script>
+<p>This is my First Paragraph.</p>
+<h1>Hello Paragraph</h1>
+</body>
+</html>
+------------------------------------------------------------------------
+Element Selector:-
+----------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+            $('p').click(function(){
+            $('p').hide();
+        });
+    });
+    </script>
+
+
+<p>This is my First Paragraph.</p>
+<p>This is my Second Paragraph.</p>
+<p>This is my Third Paragraph.</p>
+<p>This is my Fourth Paragraph.</p>
+<p>This is my Fivth Paragraph.</p>
+</body>
+</html>
+----------------------------------------------------------------------------------------------------------------------
+ID Selector:-
+------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+            $('p').click(function(){
+            $('.p1').hide();
+            $('.p2').hide();
+        });
+    });
+    </script>
+
+
+<p class="p1">This is my First Paragraph.</p>
+<p class="p2">This is my Second Paragraph.</p>
+<p>This is my Third Paragraph.</p>
+<p>This is my Fourth Paragraph.</p>
+<p>This is my Fivth Paragraph.</p>
+</body>
+</html>
+----------------------------------------------------------------------------------
+wap to print hello jquery on button click:-
+-----------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+            $('button').mousemove(function(){
+           alert('Hello JQuery');
+        });
+    });
+    </script>
+<button>Click</button>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------
+wap to show and hide on button click:-
+-----------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+            $('h3').hide();
+            $('h4').hide();
+            $('#show').click(function(){
+           $('h3').show();
+           $('#hide').click(function(){
+                $('h3').hide();
+                $('h4').hide();
+                $('#ang').mousemove(function(){
+                    $('h4').show();
+                });
+                $('#ang').mouseout(function(){
+                    $('h4').hide();
+                })
+           });
+        });
+    });
+    </script>
+<button id="show">SHOW</button>
+<button id="hide">HIDE</button>
+<h3>Hello Jquery</h3>
+<h3 id="ang">Hello Angular</h3>
+<h4>Hello Angular1.1</h4>
+<h4>Hello Angular1.2</h4>
+<h3>Hello React</h3>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------------------
+wap to change dynamic content on click:-
+-----------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+          $('h1').click(function(){
+               $('h1').html("Hello JQuery"); 
+          });
+    });
+    </script>
+<button>SHOW Date/Time </button>
+<h1>Hello JAVA SCRIPT</h1>
+</body>
+</html>
+-------------------------------------------------------------------------------------------------------
+wap to show date and time on button click:-
+-----------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+          $('button').click(function(){
+               $('h1').html(Date()); 
+          });
+    });
+    </script>
+<button>SHOW Date/Time </button>
+<h1>Hello JAVA SCRIPT</h1>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------
+How to change (CSS) color ,background color dynamically using Jquery:-
+----------------------------------------------------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+          $('button').click(function(){
+            $('button').addClass('abc');
+                 $('p').addClass('abc');
+            //    $('p').css('color','white');
+            //    $('p').css('background-color','black');
+            //    $('p').css('font-size','40px');
+          });
+    });
+    </script>
+<button>Change Color and Background Color</button>
+<p>I am Learning JQuery.......</p>
+</body>
+</html>
+--------------------------------------------------------------------------------------------------------
+wap to change background color of different button.
+RED    YELLOW      PINK
+------------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+         $('#red').click(function(){
+         $('body').css('background-color','red');
+         });
+         $('#yellow').click(function(){
+         $('body').css('background-color','yellow');
+         });
+         $('#pink').click(function(){
+         $('body').css('background-color','pink');
+         });
+         $('#red').mouseover(function(){
+               $('#red').css('background-color','#7FFFD4');
+               $('#red').css('font-size','20px');
+         });
+         $('#red').mouseout(function(){
+               $('#red').css('background-color','#A52A2A');
+         });
+         $('#yellow').mouseover(function(){
+               $('#yellow').css('background-color','#FF7F50');
+               $('#yellow').css('font-size','20px');
+         });
+         $('#yellow').mouseout(function(){
+               $('#yellow').css('background-color','#7CFC00');
+         });
+         $('#pink').mouseover(function(){
+               $('#pink').css('background-color','#FFFFF0');
+               $('#pink').css('font-size','20px');
+         });
+         $('#pink').mouseout(function(){
+               $('#pink').css('background-color','#FF00FF');
+         });
+    });
+    </script>
+<button id="red">RED</button>
+<button id="yellow">YELLOW</button>
+<button id="pink">PINK</button>
+</body>
+</html>
+-------------------------------------------------------------------------------------------------------
+How to remove css:-
+---------------------------------
+we use removeAttr().
+------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
