@@ -1,0 +1,397 @@
+Events in JQuery:-
+--------------------------------------
+Focus and Blur:-
+------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body style="background-color: aqua;">
+    <script>
+        $(document).ready(function(){
+         $('#txtname').blur(function(){
+                  alert('Hello JQuery');
+         })         
+        });
+    </script>
+Enter your Name= <input type="text" id="txtname">
+</body>
+</html>
+----------------------------------------------------------------------------------------------------
+How to take input in JQuery:-
+----------------------------------------------------
+>> wap to input two no. in textbox and find sum.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body style="background-color: aqua;">
+    <script>
+        $(document).ready(function(){
+        $('button').click(function(){
+        let a=parseInt($('#txtfirst').val());
+        let b=parseInt($('#txtsecond').val());
+        console.log(a);       
+        console.log(typeof(a));
+        console.log(b);
+        console.log(typeof(b));
+        c=a+b;
+        $('h1').html(c);
+        });
+      });
+    </script>
+Enter First Number= <input type="text" id="txtfirst">
+Enter Second Number= <input type="text" id="txtsecond">
+<button>ADDITION</button>
+<h1 style="color:red;"></h1>
+</body>
+</html>
+---------------------------------------------------------------------------------------------------
+wap to make calculator in JQuery.
+--------------------------------------------------------
+wap to enter value in one textbox and copy into another textbox.
+---------------------------------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body style="background-color: aqua;">
+    <script>
+        $(document).ready(function(){
+            $('#txtfirst').keyup(function(){
+            let a=$('#txtfirst').val();
+            $('#txtsecond').val(a);
+            });
+        });
+    </script>
+Enter anything= <input type="text" id="txtfirst">
+Copy = <input type="text" id="txtsecond">
+
+</body>
+</html>
+--------------------------------------------------------------------------
+Conditional Statements:-
+-------------------------------------------------
+==  -> it doesn't check type. it checks only value.
+=== -> it checks both type and value.
+-----------------------------------------------------------------------------
+===
+------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body style="background-color: aqua;">
+    <script>
+        $(document).ready(function(){
+            $('button').click(function(){
+                  let a=12,b="12";
+                  console.log(a)
+                  console.log(typeof(a));
+                  console.log(b)
+                  console.log(typeof(b));
+                  if(a===b)  // value and type
+                  {
+                        console.log("TRUE");
+                  }
+                  else
+                  {
+                  console.log("FALSE");
+                  }
+            });
+        });
+    </script>
+
+<button>CHECK</button>
+</body>
+</html>
+---------------------------------------------------------------------------------
+== 
+-------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body style="background-color: aqua;">
+    <script>
+        $(document).ready(function(){
+            $('button').click(function(){
+                  let a=12,b="12";
+                  console.log(a)
+                  console.log(typeof(a));
+                  console.log(b)
+                  console.log(typeof(b));
+                  if(a==b)  // check value only and don't check type.
+                  {
+                  console.log("TRUE");
+                  }
+                  else
+                  {
+                  console.log("FALSE");
+                  }
+            });
+        });
+    </script>
+
+<button>CHECK</button>
+</body>
+</html>
+-------------------------------------------------------------------------------------------------------------------------------
+Loop:-
+-------------------
+wap to print no. between 1 to 10.
+-------------------------------------------------------------
+Break:-
+--------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body style="background-color: aqua;">
+    <script>
+        $(document).ready(function(){
+            $('button').click(function(){
+              for(let i=1;i<=10;i++)
+              {
+                  if(i==4)  // 1==4  2==4 3==4 4==4 -> TRUE
+                  {
+                  break;
+                  }
+                  console.log(i);  // 1 2 3
+              }
+               console.log("End of Loop")
+            });
+        });
+    </script>
+
+<button>PRINT</button>
+</body>
+</html>
+----------------------------------------------------------------------------------
+Continue:-
+--------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery-DEMO</title>
+    <script src="JQuery/jquery-3.6.4.js"></script>
+    <style>
+        .abc
+        {
+            background-color: black;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;            
+        }
+    </style>
+</head>
+<body style="background-color: aqua;">
+    <script>
+        $(document).ready(function(){
+            $('button').click(function(){
+              for(let i=1;i<=10;i++)
+              {
+                  if(i==4 || i==7 || i==10) 
+                  {
+                  continue;
+                  }
+                  console.log(i);
+              }
+               console.log("End of Loop")
+            });
+        });
+    </script>
+
+<button>PRINT</button>
+</body>
+</html>
+--------------------------------------------------------------------------------------------------------------------------------------
+Assignment Question:-
+----------------------------------
+1. wap to input a no. and print the table.
+2. wap to input a no. and find the factorial.
+3. wap to input a no. and find armstrong no.
+4. wap to input a no. and find the prime no. or not.
+5. wap to input a no. and reverse them.
+6. wap to input a no. and find sumofdigit.
+7. wap to input two. no. and find swap.
+---------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
