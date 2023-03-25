@@ -1,0 +1,468 @@
+Param Parameter:-
+-----------------------------------
+>> In  params you can pass N number of argument at the time of function calling.
+>> Till now no. of argument  of function defination and function calling must be same.
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+
+namespace Batch3PMConsoleWE
+{
+    class ParamDemo
+    {
+        public int display(params int[] num)
+        {
+            int sm = 0;
+            for (int i = 0; i < num.Length; i++)
+            {
+                sm += num[i];
+            }
+            return sm;
+        }
+    }
+    class Employee
+    {
+        static void Main()
+        {
+            ParamDemo pd = new ParamDemo();
+            int res=pd.display(2,3,4,5,6,7,8,9,1);
+            Console.WriteLine("Result="+res);
+        }
+    }
+}
+-----------------------------------------------------------------------------------
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+
+namespace Batch3PMConsoleWE
+{
+    class ParamDemo
+    {
+        public void display(params object[] value)
+        {
+            foreach (object item in value)
+            {
+                Console.WriteLine(item);
+            }
+        }
+    }
+    class Employee
+    {
+        static void Main()
+        {
+            ParamDemo pd = new ParamDemo();
+            pd.display("Avinash",19,"New Ashok Nagar",34.56);
+            
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------
+Tuple:-
+-----------------------
+>> Tuple is a collection of multiple elements.
+>> Tuple is a data structure concept.
+>> In tuple we can retrieve values through items.
+-----------------------------------------------------------------------------------------
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+
+namespace Batch3PMConsoleWE
+{ 
+    class Employee
+    {
+        static void Main()
+        {
+            var tup=Tuple.Create(101, "Avinash", 23, "New Ashok Nagar");
+            Console.WriteLine(tup.Item1);
+            Console.WriteLine(tup.Item2);
+            Console.WriteLine(tup.Item3);
+            Console.WriteLine(tup.Item4);
+        }
+    }
+}
+--------------------------------------------------------------------------------------
+Dictionary:-
+--------------------------
+>> In it we store value in key-value pair.
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Collections.Generic;
+
+namespace Batch3PMConsoleWE
+{ 
+    class Employee
+    {
+        static void Main()
+        {
+            Dictionary<int, string> dict = new Dictionary<int, string>();
+            dict.Add(1, "Cricket");
+            dict.Add(2, "FootBall");
+            dict.Add(3, "Tennis");
+            dict.Add(4, "BasketBall");
+            dict.Add(5, "Polo");
+            foreach (KeyValuePair<int,string> res in dict)
+            {
+                Console.WriteLine(res.Key+"="+res.Value);
+            }
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------
+Lambda Expression:-
+------------------------------------
+>> It uses Linq Query.
+>> It is used to retreive data from collection.
+>> Its performance is very high.
+>> The representation of Linq Query is (=>) Lambda Operator.
+-----------------------------------------------------------------------------------------------------
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Collections.Generic;
+
+namespace Batch3PMConsoleWE
+{ 
+    class Employee
+    {
+        // wap to print only even numbers.
+        static void Main()
+        {
+            List<int> val = new List<int> { 12, 34, 56, 78, 90, 55, 33, 13, 17, 16 };
+            var result = val.FindAll(x => (x % 2) == 0);  // Lambda Expression
+            foreach (int res in result)
+            {
+                Console.WriteLine("Even Numbers=" + res);
+            }
+            
+        }
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------
+Second Example:-
+----------------------------------
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Collections.Generic;
+using System.Security.Principal;
+
+namespace Batch3PMConsoleWE
+{
+    class Customer
+    {
+        public int Cid { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?City { get; set; }
+
+        public List<Customer> GetAllCustomer()
+        {
+            List<Customer> lstCust = new List<Customer>()
+            {
+                new Customer{Cid=101,Name="Baseem",Age=19,City="Noida"},
+                new Customer{Cid=102,Name="Ram",Age=12,City="Delhi"},
+                new Customer{Cid=103,Name="Shyam",Age=13,City="Chennai"},
+                new Customer{Cid=104,Name="hari",Age=44,City="Hyderabad"},
+                new Customer{Cid=105,Name="Krishna",Age=15,City="Banglore"},
+            };
+            return lstCust;
+        }
+        public void readCustomer()
+        {
+            var customers = GetAllCustomer();
+            var custName = customers.Select(m => m.Name);
+            var custCity = from m in customers.Where(m => m.City == "Chennai") select m;
+        }
+    }
+    class Employee
+    {
+        // wap to print only even numbers.
+        static void Main()
+        {
+
+            Customer c = new Customer();
+            c.GetAllCustomer();
+            c.readCustomer();
+        }
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------------------
+Partial Class and Partial Method:-
+----------------------------------------------------
+>> when we don't need to write all logic in one class then we implement the concept of partial class.
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Collections.Generic;
+using System.Security.Principal;
+
+namespace Batch3PMConsoleWE
+{
+    partial class Customer  // Senior Developer
+    {
+        public int CID { get; set; }
+        public void display()
+        {
+            
+        }
+    }
+   partial class Customer
+    {
+        public int guid { get; set; }
+        public void test()
+        {
+
+        }
+    }
+    partial class Customer
+    {
+        public int tid { get; set; }
+    }
+    class Employee
+    {     
+        static void Main()
+        {
+          
+        }
+    }
+}
+-----------------------------------------------------------------------------------------------------
+Partial Method:-
+--------------------------
+>> Don't give any Implementation.
+>> partial method must inside partial class.
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Collections.Generic;
+using System.Security.Principal;
+using System.Transactions;
+
+namespace Batch3PMConsoleWE
+{
+    partial class Customer   // SENIOR DEVELOPER
+    {
+        partial void EncyptionTech(int id);
+        void test()
+        {
+            Console.WriteLine("Hello Test");
+        }
+    }
+    class ABC:Customer
+    {
+        public void EncyptionTech(int id)
+        {
+            Console.WriteLine("Hello="+id);
+        }
+    }
+    class BCD : Customer
+    {
+        public void EncyptionTech(int id)
+        {
+            Console.WriteLine("Hello=" + id);
+        }
+    }
+    class GCD:Customer
+    {
+        public void EncyptionTech(int id)
+        {
+            Console.WriteLine("Hello=" + id);
+        }
+    }
+
+    class Employee
+    {
+        static void Main()
+        {
+            GCD ob = new GCD();
+            ob.EncyptionTech(101);
+        }
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------
+Partial Method:-
+-----------------------------
+using ExtensionMethod;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Collections.Generic;
+using System.Security.Principal;
+using System.Transactions;
+
+namespace Batch3PMConsoleWE
+{
+    partial class Customer   // SENIOR DEVELOPER
+    {
+        partial void EncyptionTech(int id);
+        void test()
+        {
+            Console.WriteLine("Hello Test");
+        }
+    }
+    class ABC:Customer
+    {
+        public void EncyptionTech(int id)
+        {
+            Console.WriteLine("Hello ABC="+id);
+        }
+    }
+    class BCD:Customer
+    {
+        public void EncyptionTech(int id)
+        {
+            Console.WriteLine("Hello BCD=" + id);
+        }
+    }
+    class GCD : Customer
+    {
+        public void EncyptionTech(int id)
+        {
+            Console.WriteLine("Hello GCD=" + id);
+        }
+    }
+    class Employee
+    {
+        static void Main()
+        {
+            GCD gd = new GCD();
+            gd.EncyptionTech(101);
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
