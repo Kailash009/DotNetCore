@@ -1,0 +1,97 @@
+AJAX implementation using JQuery:-
+--------------------------------------------------
+AJAX is a developer's dream, because you can:
+>> Read data from a web server - after a web page has loaded.
+>> Update a web page without reloading the page.
+>> Send data to a web server - in the background.
+Ajax is an acronym for Asynchronous Javascript and XML. It is used to communicate with the server without refreshing the web page and thus increasing the user experience and better performance.Ajax is not a technology, but rather a programming concept.
+--------------------------------------------------------------------------------------------
+VS-2022
+----------------------
+namespace JQueryCoreAjax.Models
+{
+    public class EmployeeData
+    {
+        public string ? name { get; set; }
+        public int age { get; set; }
+        public string ?address { get; set; }
+        public string ?datetime { get; set; }
+    }
+}
+--------------------------------------------------------
+using JQueryCoreAjax.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace JQueryCoreAjax.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult GetEmployee(string name, int age,string address)
+        {
+            EmployeeData emp = new EmployeeData
+            {
+                name = name,
+                age = age,
+                address=address,
+                datetime = DateTime.Now.ToString()
+            };
+            return Json(emp);
+        }
+    }
+}
+------------------------------------------------------------------------------
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Ajax-JQuery Implementation</title>
+</head>
+<body>
+    Enter Name
+    <input type="text" id="txtName" />
+    <br />
+    Enter Age
+    <input type="text" id="txtAge" />
+    <br />
+    Enter Address
+    <input type="text" id="txtAddress" />
+    <br />
+    <input type="button" id="btnGet" value="Show Detail" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#btnGet").click(function () {
+                debugger;
+                var data = {};  // Empty Dictionary
+                $.ajax({
+                    type: "POST",
+                    url: "/Employee/GetEmployee",
+                    data: { "name": $("#txtName").val(), "age": $("#txtAge").val(), "address":$("#txtAddress").val() },  // Action Parameter
+                    success: function (response) {
+                        alert("Hello: " + response.name + response.age + response.address + " .\nCurrent Date and Time: " + response.datetime); // Model Class
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+----------------------------------------------------------------
+
+
+
+
+
+
+
