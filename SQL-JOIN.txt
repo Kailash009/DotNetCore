@@ -1,0 +1,256 @@
+Operator:-
+----------------------
+1. Arithmetic Operator-  +,-,*,/
+2. Relational Operator
+> >= < <= <>
+3. Logical Operator -> and , or , not
+and -> both condition must be true.
+or -> Either one of the condition is true then condition is true. 
+not  -> if true then return False and vice-versa.
+----------------------------------------------------------------------------------
+Special Operator:-
+-----------------------------
+1. Between
+2. Not Between.
+3. in
+4. not in
+5. Top
+6. Order by  ->> it is used to perform ascending or descending order.  By Default - asc
+7. Like.  -> it is used for pattern matching.
+In like we use two symbol.
+Underscore _ -> it read one character at a time.
+Percentage %  -> it read whole character at once.
+--------------------------------------------------------------------------------------
+JOIN IN SQL SERVER:-
+----------------------------------------
+>> Join is used to combine two or more table records.
+----------------------------------------------------------------------------------------
+1 S -> many Courses
+1 C -> Many Student
+--------------------------------------------------
+Student 
+----------------
+sid  sname     age    address  
+1      kuldeep  12       noida      
+----------------------------------------------------
+Course:-
+--------------------
+cid cname
+----------------------------
+Rules for creating F.K (Foreign Key):-  Parent Table P.K work as F.K in another table.
+------------------------------------------------------
+>> Column name must be same from Parent Table.
+>> Data type must be same from Parent Table.
+--------------------------------------------------------------------------
+Types of JOIN:-
+----------------------
+1. inner JOIN. 
+>> It returns matching records from the tables.
+Syntax:-
+----------------
+select <List of Column> from <TN1> inner join <TN2> on <Joining Condition>
+--------------------------------------------------------------------------------------------------------------------------- 
+2. Outer JOIN.  -- Pending.
+3. Cross Join.
+4. Natural Join.
+--------------------------------------------------
+create database Batch3PMWE
+use Batch3PMWE
+
+create table tbl_Employee
+(
+eid int primary key identity(1,1),
+ename nvarchar(50),
+age int,
+eaddress nvarchar(50),
+post  nvarchar(50),
+salary int
+)
+select * from tbl_Employee
+
+select 10+4
+select 10-4
+select 10*4
+select 10/4
+
+select ename+' '+post from tbl_Employee
+-- WAQ to get all the employee whose salary is less than 40000.
+select * from tbl_Employee where salary<40000
+-- waq to get all the employee whose salary is less than 50000 and greater than 10000.
+select * from tbl_Employee where salary<50000 and salary>10000
+-- Logical Operator
+select * from tbl_Employee
+select * from tbl_Employee where salary=34000 and ename='Kuldeep'
+select * from tbl_Employee where salary=34000 or ename='Kuldeep'
+select * from tbl_Employee where not ename='kuldeep'
+
+-- waq to get the employee whose salary is between 20000 and 50000.
+select * from tbl_Employee where salary between 20000 and 50000
+select * from tbl_Employee where salary not between 20000 and 50000
+
+-- waq to get all the employee whose name is RituRaj,Tahuid,Arun
+select * from tbl_Employee where ename='RituRaj' or ename='Tahuid' or ename='Arun'
+--or 
+select * from tbl_Employee where ename in('RituRaj','Tahuid','arun')
+select * from tbl_Employee where ename not in('RituRaj','Tahuid','arun')
+
+-- waq to get top 4 records of employee
+select top 4* from tbl_Employee
+-- waq to get top 4 latest records of employee
+select top 4 * from tbl_Employee order by eid desc
+-- waq to get all the employee in ascending order.
+select * from tbl_Employee order by ename asc
+-- waq to get all the employee in descending order.
+select * from tbl_Employee order by ename desc
+select * from tbl_Employee
+select * from tbl_Employee where ename like 'a_u_'
+
+-- Like Case
+-- waq to get all the employee whose name start from s.
+select * from tbl_Employee where ename like 's%'
+-- waq to get all the employee whose name ends from u.
+select * from tbl_Employee where ename like '%u'
+-- waq to get all the employee whose name contains i.
+select * from tbl_Employee where ename like '%i%'
+------------------------------------------------------------------
+create table tbl_Course  -- Parent Table
+(
+cid int primary key identity(1,1),
+cname nvarchar(50)
+)
+create table tbl_Student  -- CHild Table
+(
+sid int primary key identity(1,1),
+sname nvarchar(50),
+sage int,
+saddress nvarchar(50),
+smobileno nvarchar(50),
+cid int foreign key references tbl_Course(cid)
+)
+select * from tbl_Course
+select * from tbl_Student
+-- waq to get all the student who enrolled in ML course.
+--select <List of Column> from <TN1> inner join <TN2> on <Joining Condition>
+select sname,sage,smobileno,cname  from tbl_Student inner join tbl_Course on tbl_Student.cid=tbl_Course.cid and cname='ML'
+--or
+select s1.sname,s1.sage,s1.smobileno,c1.cname from tbl_Student s1 inner join tbl_Course c1 on s1.cid=c1.cid  and c1.cname='ML'
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
