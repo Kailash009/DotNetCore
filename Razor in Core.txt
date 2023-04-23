@@ -1,0 +1,247 @@
+Dot Net Core:-
+----------------------------------
+Model :-
+-----------------------
+>> It is DAL(Data Access Layer)
+>> All database related operation work on this layer.
+---------------------------------------------------------------------------
+Show one Record of an Employee:-
+--------------------------------------------------------
+namespace Batch3PMWECORE.Models
+{
+    public class Employee
+    {
+        public int Eid { get; set; }
+        public string ?Ename { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public int Salary { get; set; }
+    }
+}
+------------------------------------------------------
+
+        public IActionResult Index()
+        {
+           Employee employee=EmployeeDbOperation.getEmployee();
+            return View(employee);
+        }
+------------------
+using Batch3PMWECORE.Models;
+
+namespace Batch3PMWECORE.EmployeeData
+{
+    public class EmployeeDbOperation
+    {
+        public static Employee getEmployee()
+        {
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Ename = "Shiva";
+            emp.Age = 19;
+            emp.Address = "New Ashok Nagar";
+            emp.Salary = 23000;
+            return emp;
+        }
+    }
+}
+---------------
+@model Batch3PMWECORE.Models.Employee
+
+<h1 class="text-center bg-dark text-white"> **SHOW SINGLE EMPLOYEE RECORD** </h1>
+
+
+<table class="table table-bordered">
+    <tr>
+        <th>EID</th>
+        <th>@Model.Eid</th>
+    </tr>
+    <tr>
+        <th>NAME</th>
+        <th>@Model.Ename</th>
+    </tr>
+    <tr>
+        <th>AGE</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>ADDRESS</th>
+        <th>@Model.Address</th>
+    </tr>
+    <tr>
+        <th>SALARY</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+-----------------------------------------------------------------------------------
+Show multiple Records of an Employee:-
+-------------------------------------------------------------------------
+  public class EmployeeController : Controller
+    {
+        public IActionResult Index()
+        {
+            List<Employee> employees=EmployeeDbOperation.getAllEmployee();
+            return View(employees);
+        }
+-----------------------------------------------------------
+  public static List<Employee> getAllEmployee()
+        {
+            List<Employee> empList = new List<Employee>();
+
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Ename = "Shiva";
+            emp.Age = 19;
+            emp.Address = "New Ashok Nagar";
+            emp.Salary = 23000;
+            empList.Add(emp);  // First Employee Added.
+
+            emp = new Employee();
+            emp.Eid = 102;
+            emp.Ename = "Ram";
+            emp.Age = 20;
+            emp.Address = "Noida Sec - 37";
+            emp.Salary = 25000;
+            empList.Add(emp);  // Second Employee Added.
+
+            emp = new Employee();
+            emp.Eid = 103;
+            emp.Ename = "Manoj";
+            emp.Age = 24;
+            emp.Address = "Noida Sec - 12";
+            emp.Salary = 290000;
+            empList.Add(emp);  // Third Employee Added.
+
+
+            emp = new Employee();
+            emp.Eid = 104;
+            emp.Ename = "Sudarshan";
+            emp.Age = 23;
+            emp.Address = "Kriti Nagar";
+            emp.Salary = 21000;
+            empList.Add(emp);  // Fourth Employee Added.
+
+
+            emp = new Employee();
+            emp.Eid = 105;
+            emp.Ename = "Prateek";
+            emp.Age = 26;
+            emp.Address = "Noida Sec - 54";
+            emp.Salary = 12000;
+            empList.Add(emp);  // Fivth Employee Added.
+
+            return empList;
+
+        }
+-----------------------------------------------------------------------------------
+@model IEnumerable<Batch3PMWECORE.Models.Employee>
+
+<h1 class="bg-dark text-white text-center">SHOW ALL EMPLOYEE RECORDS</h1>
+
+<a asp-action="Create" asp-controller="Employee" class="btn btn-success">Add New Employee</a>
+<table class="table table-bordered mt-3 bg-info">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>ADDRESS</th>
+        <th>SALARY</th>
+        <th colspan="2" class="text-center">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+    <tr>
+        <td>@emp.Eid</td>
+        <td>@emp.Ename</td>
+        <td>@emp.Age</td>
+        <td>@emp.Address</td>
+        <td>@emp.Salary</td>
+        <td align="center"><a asp-action="Edit" asp-controller="Employee" class="btn btn-warning">EDIT</a></td>
+        <td align="center"><a asp-action="Delete" asp-controller="Employee" class="btn btn-danger" onclick="return confirm('Are you Sure you want to Delete(Y/N)?');">DELETE</a></td>
+    </tr>
+    }
+</table>
+----------------------------------------------------------------------------------------------------------------------
+Razor Syntax in Core:-
+--------------------------------------
+>> Razor syntax is generally used in .cshtml file.
+>> In .cshtml file you can write html code as well as c# Code.
+>> if you want to write C# code in .cshtml file then use @ { } symbol.
+----------------------------------------------------------------------------------------------------------------------------
+Variable:-
+-------------------
+<h1 align="center">Example of Razor Syntax</h1>
+@{
+    int a = 34;
+    int b = 45;
+    int res = a + b;
+    var datetime = DateTime.Now.ToString();
+}
+<h2>@a</h2>
+<h2>@datetime</h2>
+<h2>Sum=@res</h2>
+----------------------------------------
+Assignment Question of Razor:-
+------------------------------------------
+1. wap to input two no. and swap without using third var.
+2. wap to input the length and breath of rectange and find its area,perimeter and diagonal.
+3. wap to input the radius of circle and find the area and circumference.
+-------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
