@@ -1,0 +1,292 @@
+State Management in Core:-
+-----------------------------------------------
+1. ViewBag.
+2. ViewData.
+3. TempData.
+4. Session.
+-------------------------------------------------------
+1. ViewBag:-
+------------------------
+>> It is a dynamic property.
+>> ViewBag is used to transfer data from controller to view.
+>> View Bag doesn't require type casting for complex data type.
+>> The life time of viewbag is http single redirection only.
+>> ViewBag doesn't show compile time error, it only show error at runtime.
+--------------------------------------------------------------------------------------------------------------------------
+Syntax:-
+-----------------------
+ViewBag.varname/KeyName=value;
+------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace Batch3PMWECORE.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        public IActionResult Index()  
+        {
+            ViewBag.Demo = "This is My First ViewBag";  // Controller to View.
+            List<string> sports = new List<string> 
+            { 
+                "Cricket", "FootBall", "Hockey", "Tennis", "BasketBall", "Pollo" 
+            };
+            ViewBag.Sport = sports;
+            return View();
+        }
+    }
+}
+----------------------
+<h2> @ViewBag.Demo</h2>
+
+<h2>Sports Information</h2>
+
+<ul>
+@{
+        foreach (var spt in ViewBag.Sports)
+        {
+            <li>@spt</li>
+        }
+
+}
+</ul>
+-------------
+2. ViewData:-
+------------------------
+>> It inherits form ViewDataDictionary.
+>> ViewData is used to transfer data from controller to view.
+>> ViewData require type casting for complex data type.
+>> The life time of viewData is single http redirection only.
+>> ViewData doesn't show compile time error, it only show error at runtime.
+--------------------------------------------------------------------------------------------------------------------------
+Syntax:-
+-----------------------
+ViewData["Key"]=value;
+---------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace Batch3PMWECORE.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        public IActionResult Index()  
+        {
+            ViewData["data"] = "This is My First ViewData";  // Controller to View.
+            List<string> sports = new List<string>
+            {
+                "Cricket", "FootBall", "Hockey", "Tennis", "BasketBall", "Pollo"
+            };
+            ViewData["Sport"] = sports;
+            return View();
+        }
+    }
+}
+<h2> @ViewData["data"]</h2>
+
+<h2>Sports Information</h2>
+
+<ul>
+@{
+        foreach (var spt in (List<string>)ViewData["Sport"])
+        {
+            <li>@spt</li>
+        }
+}
+</ul>
+-----------------------------------------------------------------------------------
+3. TempData
+>> It inherits form TempDataDictionary.
+>> TempData is used to transfer data from controller to view and controller to controller.
+>> TempData require type casting for complex data type.
+>> The life time of TempData is from one subsequent request to another subsequent request.
+>> TempData doesn't show compile time error, it only show error at runtime.
+>> If you want to send data from one subsequent request to another and then more request then we use keep() method.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Syntax:-
+-----------------------
+TempData["Key"]=value;
+-------------------------------------------------------------------------------------------
+home  |  about  |  services   | contact
+-----------------------------------------------------------------------------------
+Comparsion between ViewBag,ViewData,TempData:-
+-------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace Batch3PMWECORE.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        public IActionResult Index()  
+        {
+            ViewBag.dat = "This is My First ViewBag";
+            ViewData["dt"] = "This is MY First ViewData";
+            TempData["data"] = "This is My First TempData";  // Controller to View.
+            return View();
+        }
+        public IActionResult About()
+        {
+            if (TempData["data"]!=null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+        public IActionResult Services()
+        {
+            if (TempData["data"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            if (TempData["data"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+    }
+}
+----------------------------
+
+@{
+    ViewData["Title"] = "About";
+}
+
+<h1>About Page</h1>
+
+<h2>ViewBag = @ViewBag.dat</h2>
+<h2>ViewData = @ViewData["dt"]</h2>
+<h2>TempData = @TempData["data"]</h2>
+--------------------------------------------------------
+
+@{
+    ViewData["Title"] = "Services";
+}
+
+<h1>Services</h1>
+
+<h2>ViewBag = @ViewBag.dat</h2>
+<h2>ViewData = @ViewData["dt"]</h2>
+<h2>TempData = @TempData["data"]</h2>
+-------------------------------------
+
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<h1>Contact</h1>
+
+<h2>ViewBag = @ViewBag.dat</h2>
+<h2>ViewData = @ViewData["dt"]</h2>
+<h2>TempData = @TempData["data"]</h2>
+-------------------------------------------------------------------
+4. Session:-
+---------------------------
+>> It is Global Management Protocol.
+>> It is a heavy weight.
+>> Session can accessible througout the whole application.
+>> The default time of session is 20 Min.
+-------------------------------------------------------------------------------------------------------------------
+How to set Session Value:-
+----------------------------------------------
+HttpContext.Session.SetString(Key,Value); // Session.
+------------------------------------------------------------------------------------
+How to Get Session Value:-
+---------------------------------------------
+HttpContext.Session.GetString("Key");
+---------------------------------------------------------------
+How to set Session time:-
+----------------------------------------------
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(1); // Set Session Time for 1 Minute.  
+});
+----------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace Batch3PMWECORE.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        public IActionResult Index()  
+        {
+            ViewBag.dat = "This is My First ViewBag";
+            ViewData["dt"] = "This is MY First ViewData";
+            TempData["data"] = "This is My First TempData";  // Controller to View.
+            HttpContext.Session.SetString("username", "manoj@gmail.com"); // Session.
+            return View();
+        }
+        public IActionResult About()
+        {
+            string email = HttpContext.Session.GetString("username");
+            if (TempData["data"]!=null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+        public IActionResult Services()
+        {
+            string email = HttpContext.Session.GetString("username");
+            if (TempData["data"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            string email = HttpContext.Session.GetString("username");
+            if (TempData["data"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
