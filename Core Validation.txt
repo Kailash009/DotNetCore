@@ -1,0 +1,108 @@
+Validation in Dot Net core:-
+-----------------------------------------------
+All the validations are defined into this namespace -  "using System.ComponentModel.DataAnnotations;"
+>> Validation check all the necessary condition that must be fullfilled before submitting data to the server.
+Types of Validation:-
+There are two types of validation:-
+a) Client side validation.
+>> Check all the condition before sending data to the server.
+b) Server side validation.
+>> After submitting data to the server, server check all the necessary condition which is filled by the user.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch3PMWECORE.Models;
+namespace Batch3PMWECORE.Controllers
+{
+    public class ValidationExController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Register() => View();
+
+        [HttpPost]
+        public IActionResult Register(Employee empObj)
+        {
+            if(ModelState.IsValid)  // Server Side Validation.
+            {
+
+            }
+            else
+            {
+
+            }
+            return View();
+        }
+    }
+}
+-------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+namespace Batch3PMWECORE.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }   // Properties.
+
+        [Required(ErrorMessage ="Enter your Name!")]
+        public string ?Ename { get; set; }
+        
+        [Required(ErrorMessage = "Enter your Age!")]
+        [RegularExpression("[0-9]{2}",ErrorMessage ="Age must be 2 Digit only!!")]
+        public int ?Age { get; set; }
+        
+        [Required(ErrorMessage = "Enter your Address!")]
+        public string ?Address { get; set; }
+
+        [Required(ErrorMessage = "Enter your Salary!")]
+        public int ?Salary { get; set; }
+
+        [Required(ErrorMessage = "Enter your Email!"),RegularExpression("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")]
+        public string ?Email { get; set; }
+
+        [Required(ErrorMessage = "Enter your Password!")]
+        [DataType(DataType.Password)]
+        public int ?password { get; set; }
+
+        [Compare("password")]
+        [DataType(DataType.Password)]
+        public int? confirmpassword { get; set; }
+    }
+}
+------------------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+namespace Batch3PMWECORE.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }   // Properties.
+
+        [Required(ErrorMessage ="Enter your Name!")]
+        public string ?Ename { get; set; }
+        
+        [Required(ErrorMessage = "Enter your Age!")]
+        [RegularExpression("[0-9]{2}",ErrorMessage ="Age must be 2 Digit only!!")]
+        public int ?Age { get; set; }
+        
+        [Required(ErrorMessage = "Enter your Address!")]
+        public string ?Address { get; set; }
+
+        [Required(ErrorMessage = "Enter your Salary!")]
+        public int ?Salary { get; set; }
+
+        [Required(ErrorMessage = "Enter your Email!"),RegularExpression("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")]
+        public string ?Email { get; set; }
+
+        [Required(ErrorMessage = "Enter your Password!")]
+        [DataType(DataType.Password)]
+        public int ?password { get; set; }
+
+        [Compare("password")]
+        [DataType(DataType.Password)]
+        public int? confirmpassword { get; set; }
+    }
+}
+------------------------------
