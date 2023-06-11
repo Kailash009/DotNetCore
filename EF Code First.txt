@@ -1,0 +1,189 @@
+Entity Framework:-
+---------------------------------------
+>> EF is a ORM  (Object Relational Mapping )tool.
+>> EF is responsible to map your model classes into database.
+>> No need to write sql query,here we write LINQ Query.
+>> LINQ (Language Integrated Query) we pass Lambda Expression.
+>> EF is fast as compared to ado.net classes.
+---------------------------------------------------------------------------------------------------
+Types of EF approaches -
+-------------------------------------------------------------
+1. Code First Approach.
+2. Database First Approach.
+------------------------------------------------------------------------
+Connectivity using  EF Code First Approach.
+---------------------------------------------------------------------
+Step-1:-
+----------------------
+Install Packages.
+1. Microsoft.Entityframeworkcore.
+2.Microsoft.Entityframeworkcore.sqlserver.
+3. Microsoft.Entityframeworkcore.tools.
+4. razor runtime.
+--------------------------------------------------------------------------
+step:-2
+-------------------
+Create Model Class.
+using System.ComponentModel.DataAnnotations;
+
+namespace CodeFirst3PMWE.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int EID { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?MobileNo { get; set; }
+        public string ?Post { get; set; }
+        public int Salary { get; set; }
+    }
+}
+----------------------------
+step-3  -- Create DataContextClass
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirst3PMWE.Models
+{
+    public class EmployeeDbContext:DbContext
+    {
+        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options):base(options)
+        {
+            
+        }
+        public DbSet<Employee> Employees { get; set; }
+    }
+}
+------------------------------------------------------------------------------------------------------
+step-4:- 
+----------------------------
+Write connection String - appsettings.json
+-----------------------------------------------------------------------------------
+},
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=DBRituRaj;Integrated Security=True;"
+  },
+--------------------------------------------------
+step-5:-
+------------------
+Add this in Service -
+---------------------------------------
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+---------------------------------------------------
+step-6:-
+-------------------
+Run Migration Command:-   Type this command in  Package Manager Console.
+---------------------------------------------
+1. add-migration 'migrationName'  -> This command see your model classes and generate ORM Query.
+2. update-database -> This command see your ORM Query and generate tables automatically in database.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using CodeFirst3PMWE.Models;
+
+namespace CodeFirst3PMWE.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private EmployeeDbContext _dbcontext;
+        public EmployeeController(EmployeeDbContext dbContext)
+        {
+            _dbcontext = dbContext;   // DI (Dependency Injection)
+        }
+        public IActionResult Index()
+        {
+            var employees = _dbcontext.Employees.ToList();
+            return View(employees);
+        }
+    }
+}
+------------------------------
+@model List<CodeFirst3PMWE.Models.Employee>
+
+    <h1 class="text-center bg-dark text-white">SHOW EMPLOYEE RECORDS</h1>
+<a asp-action="Create" asp-asp-controller="Employee" class="btn btn-success">Add New Employee</a>
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Mobile No</th>
+        <th>Post</th>
+        <th>Salary</th>
+        <th colspan="2" class="text-center">Action</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+    <tr>
+        <td>@emp.Name</td>
+        <td>@emp.Age</td>
+        <td>@emp.MobileNo</td>
+        <td>@emp.Post</td>
+        <td>@emp.Salary</td>
+        <td align="center"><a asp-action="Edit" asp-route-id="@emp.EID" asp-asp-controller="Employee" class="btn btn-warning">Edit</a></td>
+            <td align="center"><a asp-action="Delete" asp-route-id="@emp.EID" asp-asp-controller="Employee" class="btn btn-danger" onclick="return confirm('Are you Sure you want to Delete item(Y/N)?');">Delete</a></td>
+    </tr>
+    }
+</table>
+------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
