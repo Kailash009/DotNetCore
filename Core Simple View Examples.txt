@@ -1,0 +1,283 @@
+Model:-
+-------------------------
+>> Models are the special classes i.e used to perform database related operations.
+-------------------------------------------------------------------------------------------------------------------------------------
+1. Employee Single Record.
+namespace Batch12PMMohit.Models
+{
+    public class Employee
+    {
+        public int Eid { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public long Salary { get; set; }
+    }
+}
+----------
+namespace Batch12PMMohit.Models
+{
+    public class EmployeeOperation
+    {
+        public Employee GetEmployee()
+        {
+            Employee emp = new Employee();
+            emp.Eid = 10001;
+            emp.Name = "Shiva Ram";
+            emp.Age = 15;
+            emp.Address = "New Ashok Nagar";
+            emp.Salary = 45489;
+            return emp;
+        }
+    }
+}
+--------------
+public IActionResult Index()
+        {
+            EmployeeOperation empop = new EmployeeOperation();
+            var employee=empop.GetEmployee();
+            return View(employee);
+        }
+------------------
+@model Batch12PMMohit.Models.Employee
+
+@*@{
+    Layout = null;
+}*@
+
+
+<h1 class="text-center bg-dark text-white">Welcome to My Employee Home Page</h1>
+<table class="table table-bordered bg-info">
+    <tr>
+        <th>EID</th>
+        <th>@Model.Eid</th>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>Age</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <th>@Model.Address</th>
+        </tr>
+    <tr>
+        <th>Salary</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+@*<a asp-action="Index" asp-controller="Home">Back to Home Page</a>*@
+==========================================================================
+2. Employee Multiple Record:-
+------------------------------------------------------------------------------
+namespace Batch12PMMohit.Models
+{
+    public class EmployeeOperation
+    {
+        //public Employee GetEmployee()
+        //{
+        //    Employee emp = new Employee();
+        //    emp.Eid = 10001;
+        //    emp.Name = "Shiva Ram";
+        //    emp.Age = 15;
+        //    emp.Address = "New Ashok Nagar";
+        //    emp.Salary = 45489;
+        //    return emp;
+        //}
+
+        public static List<Employee> GetEmployees()
+        {
+            List<Employee> empList = new List<Employee>();
+            
+            Employee emp1 = new Employee();
+            emp1.Eid = 1001;
+            emp1.Name = "Ravi";
+            emp1.Age = 13;
+            emp1.Address = "Mayur Vihar";
+            emp1.Salary = 34000;
+            empList.Add(emp1); // First Employee has been Added.
+
+            emp1 = new Employee();
+            emp1.Eid = 1002;
+            emp1.Name = "Piyush";
+            emp1.Age = 23;
+            emp1.Address = "Rashmi Vihar";
+            emp1.Salary = 44000;
+            empList.Add(emp1); // Second Employee has been Added.
+
+            Employee emp2 = new();
+            emp2.Eid = 1003;
+            emp2.Name = "Subham";
+            emp2.Age = 26;
+            emp2.Address = "Sadarpur";
+            emp2.Salary = 54000;
+            empList.Add(emp2); // Third Employee has been Added.
+
+            emp1 = new Employee();
+            emp1.Eid = 1004;
+            emp1.Name = "Amir";
+            emp1.Age = 21;
+            emp1.Address = "Tilak Nagar";
+            emp1.Salary = 14000;
+            empList.Add(emp1); // Fourth Employee has been Added.
+
+            emp1 = new Employee();
+            emp1.Eid = 1005;
+            emp1.Name = "Tikam";
+            emp1.Age = 19;
+            emp1.Address = "Ashok Nagar";
+            emp1.Salary = 23400;
+            empList.Add(emp1); // Fifth Employee has been Added.
+
+            return empList;
+        }
+    }
+}
+-------------------
+namespace Batch12PMMohit.Models
+{
+    public class Employee
+    { 
+        public int Eid { set; get; }
+
+        //public void setvalue()
+        //{
+        //    Eid = 100;
+        //}
+        //public int getvalue()
+        //{
+        //    return Eid;
+        //}
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public long Salary { get; set; }
+    }
+}
+---------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        public IActionResult Index()
+        {
+            List<Employee> employees=EmployeeOperation.GetEmployees();
+            return View(employees);
+
+            //EmployeeOperation empop = new EmployeeOperation();
+            //var employee=empop.GetEmployee();
+
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+        public string Welcome()
+        {
+            return "Welcome to my Dot Net Core";
+        }
+        public int EmployeeID(int id)
+        {
+            if(id==0)
+            {
+                return 500;
+            }
+            else
+            {
+                return id;
+            }
+        }
+        public string getEmployeeDetails(string name,string address,string city)
+        {
+            return name + address + city;
+        }
+    }
+}
+---------------------------------
+@model IEnumerable<Batch12PMMohit.Models.Employee>
+
+@*@model Batch12PMMohit.Models.Employee
+*@
+@*@{
+    Layout = null;
+}*@
+
+<h1 class="bg-dark text-white text-center">SHOW ALL EMPLOYEE</h1>
+<a asp-action="Create" asp-controller="Employee" class="btn btn-primary">Add New Employee</a>
+<table class="table table-bordered bg-info mt-3">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>ADDRESS</th>
+        <th>SALARY</th>
+        <th colspan="2" class="text-center">Action</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+    <tr>
+        <td>@emp.Eid</td>
+        <td>@emp.Name</td>
+        <td>@emp.Age</td>
+        <td>@emp.Address</td>
+        <td>@emp.Salary</td>
+        <td align="center"> <a asp-action="Edit" class="btn btn-warning" asp-controller="Employee">EDIT</a> </td>
+        <td align="center"><a asp-action="Edit" class="btn btn-danger" asp-controller="Employee">DELETE</a></td>
+    </tr>
+    }
+</table>
+
+
+
+
+
+
+
+
+@*
+<h1 class="text-center bg-dark text-white">Welcome to My Employee Home Page</h1>
+<table class="table table-bordered bg-info">
+    <tr>
+        <th>EID</th>
+        <th>@Model.Eid</th>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>Age</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <th>@Model.Address</th>
+        </tr>
+    <tr>
+        <th>Salary</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>*@
+@*<a asp-action="Index" asp-controller="Home">Back to Home Page</a>*@
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
