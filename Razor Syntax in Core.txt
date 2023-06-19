@@ -1,0 +1,451 @@
+Razor in Core:-
+-----------------------------------
+>> It is used to implement to perform/write C# code in your .cshtml File.
+---------------------------------------------------------------------------------------------------------------------
+Razor Syntax:-
+----------------------------
+>> It used @ { } symbol to write razor syntax.
+-----------------------------------------------------------------------
+@
+{
+Expression;
+}
+--------------------------
+@{
+    int a = 34;
+    string msg = "Hello Razor Syntax";
+    var date = DateTime.Now.ToLongDateString();
+    var time = DateTime.Now.ToLongTimeString();
+}
+
+<h2>The value of a is = @a </h2>
+<h2>The Message is= @msg </h2>
+<h2>The Current Date is: @date</h2>
+<h2>The Current Time is: @time</h2>
+--------------------------------------------------------------------
+1. Variable.
+--------------------------
+>> wap to find the avg of three no. using razor.
+@{
+    int a = 10;
+    int b = 20;
+    int c = 30;
+    int avg = (a + b + c) / 3;
+}
+<h2>The Average of (a+b+c) is : @avg</h2>
+-----------------------------------------------------------------------------------------
+2. wap to find the area,perimeter and diagonal of rectangle.
+
+@{
+    int l = 3;
+    int b = 4;
+    int ar = l * b;
+    int per=2*(l+b);
+    int diag =Convert.ToInt32(Math.Sqrt(l * l + b * b));
+}
+
+<h2>The Area is = @ar</h2>
+<h2>The Perimeter is = @per</h2>
+<h2>The Diag is = @diag</h2>
+-----------------------------------------------------------------------------------------
+Operator:-
+-------------------
+1. arithmetic -> + , - , * /
+wap to find two no. add,sub,mult,div.
+
+@{
+    int a = 200;
+    int b = 40;
+    int Add = a + b;
+    int Sub=a-b;
+    int Mult = a * b;
+    int Div = a / b;
+}
+
+<h2>Sum = @Add</h2>
+<h2>Sub = @Sub</h2>
+<h2>Mult = @Mult</h2>
+<h2>Div = @Div</h2>
+-------------------------------------------------------------------
+2. relational > < >= <=
+3. logical -> not,and,or.
+---------------------------------------------------------
+Conditional Statements:-
+----------------------------------------------
+1. if-else:-
+
+@{
+    int age = 19;
+    if(age>=18)
+    {
+        <h2>Valid for Vote</h2>
+    }
+    else
+    {
+        <h2>Not Valid for Vote</h2>
+    }
+}
+-------------------------------------------------------------------------
+wap to check character is vowel or consonant.
+--------------------------------------------------------------------------
+@{
+    char ch='o';
+    if(ch=='a' || ch=='e' || ch=='i' || ch=='o' || ch=='u')
+    {
+        <h2>@ch is Vowel</h2>
+    }
+    else
+    {
+        <h2>@ch is Consonant</h2>
+    }
+}
+----------------------------------------------
+wap to check leap year or not.
+-----------------------------------------------
+@{
+    int year = 2024;
+    if (year % 4 == 0)
+    {
+        <h2>@year is Leap Year</h2>
+    }
+    else
+    {
+        <h2>@year is not Leap Year</h2>
+    }
+}
+--------------------------------------------------------------
+2. if-else-if:-
+-----------------------
+@{
+    int a = 5, b = 4, c = 3;
+    if(a<b && a!=c)
+    {
+        <h1>Hello Java</h1>
+    }
+    else if(c>a && c<b)
+    {
+        <h2>Hello C#</h2>
+    }
+    else
+    {
+        <h2>PHP</h2>
+    }
+}
+------------------------------------------------------------
+Find the smallest in three no.
+--------------------------------------------------------
+@{
+    int a = 5, b = 4, c = 3;
+    if(a<b && a<c)
+    {
+        <h1>@a is Smallest</h1>
+    }
+    else if(b<a && b<c)
+    {
+        <h2>@b is Smallest </h2>
+    }
+    else
+    {
+        <h2>@c is Smallest</h2>
+    }
+}
+------------------------------------------------------------
+3. switch.
+--------------------------------
+@{
+    string str = "banan";
+    switch (str)
+    {
+        case "banana":
+            <h1>Banana</h1>
+            break;
+        case "apple":
+            <h1>Apple</h1>
+            break;
+        default:
+            <h1>Not Found</h1>
+            break;
+    }
+}
+-------------------------------------------------------
+4. Loop:-
+------------------
+while 
+@{
+    int i = 1;
+    while(i<=10)
+    {
+        <h1>@i</h1>
+        i++;
+    }
+}
+do-while
+--------------------
+@{
+    int i = 10;
+    do
+    {
+        <h1>@i</h1>
+        i--;
+    }
+    while (i >= 1);
+}
+for
+@{
+    for(int i=1;i<=10;i++)
+    {
+        <h1>@i</h1>
+    }
+-------------------
+foreach
+------------------
+@{
+    List<string> spt = new List<string>();
+    spt.Add("Cricket");
+    spt.Add("Football");
+    spt.Add("Polo");
+    spt.Add("BasketBall");
+    spt.Add("Hockey");
+    <ul>
+    @foreach (string sport in spt)
+    {
+       <li>@sport</li>
+    }
+    </ul>
+}
+----------------------------------------------------------------
+Model:-
+------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+namespace Batch12PMMohit.Controllers
+{
+    public class RazorExController : Controller
+    {
+        public static List<Employee> GetEmployees()
+        {
+            List<Employee> empList = new List<Employee>();
+            Employee emp1 = new Employee()
+            {
+                Eid = 101,
+                Name = "Shiva",
+                Age = 19,
+                Address = "New Ashok Nagar",
+                Salary = 340045,
+            };
+            empList.Add(emp1);  // First Employee Added
+            Employee emp2 = new Employee()
+            {
+                Eid = 102,
+                Name = "Avinash",
+                Age = 20,
+                Address = "Uttam Nagar",
+                Salary = 34045,
+            };
+            empList.Add(emp2);
+            return empList;
+        }
+        public IActionResult Index()
+        {
+            //Employee emp1 = new Employee()
+            //{
+            //    Eid = 101,
+            //    Name = "Shiva",
+            //    Age = 19,
+            //    Address = "New Ashok Nagar",
+            //    Salary = 340045,  
+            //};
+            return View(GetEmployees());
+        }
+    }
+}
+---------------------
+@model IEnumerable<Employee>
+
+<table>
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>ADDRESS</th>
+        <th>SALARY</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+    <tr>
+        <td>@emp.Eid</td>
+        <td>@emp.Name</td>
+        <td>@emp.Age</td>
+        <td>@emp.Address</td>
+        <td>@emp.Salary</td>
+    </tr>
+    }
+</table>
+
+
+
+@*@model Employee
+
+<table>
+    <tr>
+        <th>EID</th>
+        <th>@Model.Eid</th>
+    </tr>
+    <tr>
+        <th>NAME</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>AGE</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>ADDRESS</th>
+        <th>@Model.Address</th>
+    </tr>
+    <tr>
+        <th>SALARY</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+*@
+-------------------------------
+@model IEnumerable<Employee>
+
+@{
+    List<Employee> empList = new List<Employee>();
+    Employee emp1 = new Employee()
+            {
+                Eid = 101,
+                Name = "Shiva",
+                Age = 19,
+                Address = "New Ashok Nagar",
+                Salary = 340045,
+            };
+    empList.Add(emp1);  // First Employee Added
+    Employee emp2 = new Employee()
+            {
+                Eid = 102,
+                Name = "Avinash",
+                Age = 20,
+                Address = "Uttam Nagar",
+                Salary = 34045,
+            };
+    empList.Add(emp2);
+}
+<table>
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>ADDRESS</th>
+        <th>SALARY</th>
+    </tr>
+    @foreach (var emp in empList)
+    {
+    <tr>
+        <td>@emp.Eid</td>
+        <td>@emp.Name</td>
+        <td>@emp.Age</td>
+        <td>@emp.Address</td>
+        <td>@emp.Salary</td>
+    </tr>
+    }
+</table>
+------------------
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.Models;
+namespace Batch12PMMohit.Controllers
+{
+    public class RazorExController : Controller
+    {
+        //public static List<Employee> GetEmployees()
+        //{
+        //    List<Employee> empList = new List<Employee>();
+        //    Employee emp1 = new Employee()
+        //    {
+        //        Eid = 101,
+        //        Name = "Shiva",
+        //        Age = 19,
+        //        Address = "New Ashok Nagar",
+        //        Salary = 340045,
+        //    };
+        //    empList.Add(emp1);  // First Employee Added
+        //    Employee emp2 = new Employee()
+        //    {
+        //        Eid = 102,
+        //        Name = "Avinash",
+        //        Age = 20,
+        //        Address = "Uttam Nagar",
+        //        Salary = 34045,
+        //    };
+        //    empList.Add(emp2);
+        //    return empList;
+        //}
+        public IActionResult Index()
+        {
+            //Employee emp1 = new Employee()
+            //{
+            //    Eid = 101,
+            //    Name = "Shiva",
+            //    Age = 19,
+            //    Address = "New Ashok Nagar",
+            //    Salary = 340045,  
+            //};
+            return View();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
