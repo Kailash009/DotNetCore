@@ -1,0 +1,89 @@
+Java Script:-
+----------------------------------------------
+History of J.S
+------------------------------
+MOCHA -> LIVE SCRIPT -> JS
+--------------------------------------------------------------
+>> Initially JS named was Mocha.
+>> After that it named was 'Live Script' and later on now it become Java Script.
+>> JS was developed by 'Brendan Eich'.
+---------------------------------------------------------------------------------------------------------------------------
+Types of website:-
+-------------------------------
+1. static -> These website content will be fixed. (read only.) -> html,css,js,jquery.
+2. dynamic -> These website whose content will be changed timely. -> java,php,dot net,python
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Java Script:-
+-----------------------------------
+>> JS is client side scripting language.
+>> Js is used with html and css.
+>> Js is a case sensitive language. -> age,Age,AGE,aGe,aGE -> these are different names.(Both upper case and lower case are treated
+as differently).
+>> Js is used to change the behaviour of a webpage.
+>> JS make you page dynamic.
+>> JS code will be written inside <script></script> tag.
+>> script tag will be placed at body or head. The recommendation is used script tag in body tag.
+>> JS is a dynamic type language.
+>> JS doesn't compile.
+>> JS directly run on webBrowser.
+JS CODE  =========>>>> RUN (Execute).
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+JS Variable/Identifier:-   
+-------------------------------------
+>> with the help of variable we can store value on which we perform some operation.
+>> var,let,const keyword is used to declare a variable.
+>> Variable is like a container that hold value.
+a = 5; // ; it is an optional  // 5 value is assign into variable a.
+-------------------------------------
+Display Result:-
+-----------------------------
+1. alert()
+2. console.log()
+3. document.write()
+---------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS DEMO</title>
+</head>
+<body>
+    
+    <!-- HTML Tag Write here -->
+
+    <script>
+        var a=5;
+        console.log('Result='+a); // you can see your Output in Web Browser Console.
+        alert('a='+a);
+        document.write('a='+a); //
+        </script>
+</body>
+</html>
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
