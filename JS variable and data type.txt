@@ -1,0 +1,234 @@
+JS:-
+-----------------------
+Variable:-
+--------------------
+variable Initialization-
+------------------------------------------
+var a=100; // To assign value into a variable.
+console.log(a);  // 100
+---------------------------------------------------------------------------
+Variable Declaration:-
+---------------------------------------
+var a,b; // don't provide any value into a variable.
+-----------------------------------------------------------------------------
+Data type in JS:-
+-------------------------------------------
+>> JS is lossely typed language.
+There are two types of  languages-
+1. Strongly typed. 
+>> Whatever the datatype of a variable, you can store only that value. (java, C# (dot net),php).
+2. Loosely Typed / dynamic typed language. (JS,Python).
+>> No need to define the type of a variable.
+>> Whatever the value you assigned to the variable at runtime it become its type.  
+>> typeof() to check the type of a variable.
+JS Data types - number,bool,string,undefined,null etc.
+--------------------------------------------------------------------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variable</title>
+</head>
+<body>
+    <h1>JS DATA TYPES</h1>
+    <script>
+    var a=100;
+    console.log(a);
+    console.log(typeof(a))
+    var a='hello js';
+    console.log(a);
+    console.log(typeof(a));
+    var a=true;
+    console.log(a);
+    console.log(typeof(a));
+    var a=45.678;
+    console.log(a);
+    console.log(typeof(a));
+</script>
+</body>
+</html>
+--------------------------------------------------------------------------------------------------------------
+Type casting in JS:-
+--------------------------------------
+>> To convert one data type value into another data type.
+>> Here we have two types of function to perform type casting-
+----------------------------------------------------
+How to take input from the user:-
+------------------------------------------------------
+wap to find the sum of two number.
+------------------------------------------------------
+>> To take input from the user in js we have prompt().
+>> prompt() by default return type is string.
+-------------------------------------------------------------------------------------
+"12" + "34"  =>>>> "1234" -> Concatenate.
+12+34 ===>> 46 ans
+--------------------------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYPE CASTING</title>
+</head>
+<body>
+    <h1>Type Casting in JS</h1>
+    
+    <script>
+        var a,b,c; // Variable Declaration
+        a=parseInt(prompt("Enter First Number","First Number"));
+        console.log(a);
+        console.log(typeof(a)); // string
+        b=parseInt(prompt("Enter Second Number","Second Number"));
+        console.log(b);
+        console.log(typeof(b)); // string
+        c=a+b;
+        console.log(c);
+        console.log(typeof(c));
+    </script>
+</body>
+</html>
+------------------------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYPE CASTING</title>
+</head>
+<body>
+    <h1>Type Casting in JS</h1>
+    
+    <script>
+        var a,b,c; // Variable Declaration
+        a=parseFloat(prompt("Enter First Number","First Number"));
+        console.log(a);
+        console.log(typeof(a)); // string
+        b=parseFloat(prompt("Enter Second Number","Second Number"));
+        console.log(b);
+        console.log(typeof(b)); // string
+        c=a+b;
+        console.log(c);
+        console.log(typeof(c));
+    </script>
+</body>
+</html>
+------------------------------------------------------------------------------------------------
+Operator in JS:-
+----------------------------
+>> It is a special symbol that is used to perform some operation on operands(variable).
+1. Arithmetic Operator - 
++
+-
+*
+/
+%
+-----------------------------------------------
+wap to perform add,sub,mult,div,rem.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYPE CASTING</title>
+</head>
+<body>
+    <h1>Type Casting in JS</h1>
+    
+    <script>
+        var a,b,c,s,m,d,r; // Variable Declaration
+        a=parseFloat(prompt("Enter First Number","First Number"));
+        b=parseFloat(prompt("Enter Second Number","Second Number"));
+        c=a+b;
+        s=a-b;
+        m=a*b;
+        d=a/b;
+        r=a%b;
+        console.log('Sum='+c);
+        console.log('Sub='+s);
+        console.log('Mult='+m);
+        console.log('Div='+d);
+        console.log('Rem='+r);
+    </script>
+</body>
+</html>
+-----------------------------------------------------------------------------------------
+2. Relational Operator.
+>
+>=
+<
+<=
+!=
+==
+===
+--------------------------------------------------------------------------
+Boxes in JS:-
+------------------------
+1. alert(). -> To display the message.
+2. prompt(). -> To take input from the user.
+3. confirm(). -> To confirm whether you are going to delete an item or not.
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
