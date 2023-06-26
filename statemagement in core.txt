@@ -1,0 +1,169 @@
+Comparison between ViewBag,ViewData and Tempdata:-
+--------------------------------------------------------------------------------------------------------
+Note:-
+Tempdata can be access only one subsequent request to another subsequent request only. But if you want to access tempdata value another action methods then we use one method i.e.
+keep() -> This method keep tempdata value across different action methods.
+------------------------------------------------------------------------------------------------------------------------------------
+Cookies:-
+-------------------
+>> Cookies is used to store small amount of information at client side.
+>> It store only string data.upto 4k (depend browser to browser.)
+>> The default time of cookie is 30 Min.
+--------------------------------------------------------------------------------------------------------------------------
+Types of cookies:-
+-------------------------------
+1. Non-Persistent.
+>> It store cookie information on a temporarily basis.
+>> As soon as when we close browser or turn off our computer then cookie information automatically gets deleted from the browser.
+-------------------------------------------------------------------------------------------------------------------------
+2. Persistent.
+>> It store cookie information on a permanent basis.
+>> As soon as when we close browser or turn off our computer then cookie information remain persist in our browser.
+>> In this we have to set the cookie time.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. How to write cookie. 
+2. How to read cookie.
+----------------------------------------------------------------------------------
+using Batch12PMMohit.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        public IActionResult WriteCookie()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult WriteCookie(Employee empObj)
+        {
+            CookieOptions cookie = new CookieOptions();
+            cookie.Expires = DateTime.Now.AddDays(2);  // Persistent Cookie.
+            Response.Cookies.Append("name", empObj.Name, cookie);
+            ViewBag.cook = "Cookie Saved!!";
+            return View();
+        }
+        public IActionResult ReadCookie()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ReadCookie(Employee empobj)
+        {
+            try
+            {
+                string empname = Request.Cookies["name"].ToString();
+                if (empname != null)
+                {
+                    ViewBag.res = empname;
+                }
+                else
+                {
+                    ViewBag.res = "Cookies Not Found!!";
+                }
+            }
+            catch(Exception ex)
+            {
+                ViewBag.res = ex.Message;
+            }
+            return View();
+        }
+        public IActionResult Index()  // controller action method
+        {
+            ViewBag.data = "Hello ViewBag";
+            ViewData["dt"] = "Hello ViewData";
+            TempData["td"] = "Hello TempData";
+            //string str = "Hello TempData!!";
+            //TempData["ram"] = str;
+            ////string[] progm = { "Java", "Php", "Python", "Dot Net", "Angular" };
+            ////TempData["data"] = progm;
+            //Employee emp = new Employee();
+            //emp.Eid = 101;
+            //emp.Name = "Avinash";
+            //emp.Age = 23;
+            //emp.Address = "Noida";
+            //emp.Salary = 34000;
+            //TempData["employee"] = emp;
+            //TempData["ram"] = str;
+            return View();
+            //return RedirectToAction("Index","Employee");
+        }
+        public IActionResult About()
+        {
+            if(TempData["td"]!=null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            if (TempData["td"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+
+            return View();
+        }
+        public IActionResult Services()
+        {
+            if (TempData["td"] != null)
+            {
+                TempData.ToString();
+            }
+            TempData.Keep();
+            return View();
+        }
+    }
+}
+---------------------------------------------------------------------
+@model Employee
+
+<h1>**Write Cookie**</h1>
+
+<h2>@ViewBag.cook</h2>
+
+<form asp-controller="StateMgt" asp-action="WriteCookie" method="post">
+    <label>Enter your Name</label>
+    <input type="text" asp-for="Name" />
+    <button type="submit">Write Cookie Data</button>
+</form>
+---------------------
+
+<h1>**Read Cookie**</h1>
+
+<form asp-controller="StateMgt" asp-action="ReadCookie" method="post">
+    <label>Read your Name</label>
+    <input type="text" value="@ViewBag.res" />
+    <button type="submit">Read from Cookie</button>
+</form>
+--------------------------------------------------------------
+app.MapControllerRoute(     // ROUTING.
+    name: "default",
+    pattern: "{controller=StateMgt}/{action=WriteCookie}/{id?}");
+app.Run();
+-------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
