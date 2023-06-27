@@ -1,0 +1,207 @@
+Session:-
+-----------------------------
+>> Session is a Global Mangement protocol.
+>> The default time of session is 20 Min.
+>> It can store any type of value.
+>> The accessibility of session is throughout the whole application.
+>> It is a heavy weight.
+------------------------------------------------------------------------------------------------------------
+[HttpPost]
+        public IActionResult WriteCookie(Employee empObj)
+        {
+            string name = empObj.Name;
+            HttpContext.Session.SetString("shiv",name);
+            CookieOptions cookie = new CookieOptions();
+            cookie.Expires = DateTime.Now.AddDays(2);  // Persistent Cookie.
+            Response.Cookies.Append("name", empObj.Name, cookie);
+            ViewBag.cook = "Cookie Saved!!";
+            return View();
+        }
+        public IActionResult ReadCookie()
+        {
+            ViewBag.shv=HttpContext.Session.GetString("shiv");
+            return View();
+        }
+-----------------------------------------------------------------------------------------------------------------
+program.cs:-
+----------------------------
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(50);  // To increase session time
+});
+----------------------------------------------------------------
+app.UseAuthorization();
+app.UseSession();
+--------------------------------------------------------------------------
+HTML HELPER:-
+--------------------------------
+>> It is used to render html pages.
+-------------------------------------------------------
+we have different types of html helper which are as follows -
+1. Basic Html Helper.
+2. Standard html helper. 
+3. Strongly Typed. 
+4. Tag Helper.
+-------------------------------------------------------------
+1. Basic Html Helper:-
+-----------------------------------------------
+TextBox -> <input type="text"/>
+-------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class HelperExController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(string name,int age,string city)
+        {
+            return View();
+        }
+    }
+}
+---------------
+<form action="/" method="post">
+Name: <input type="text" name="name" />  <br/>
+Age: <input type="number" name="age"/> <br/>
+City: <input type="text" name="city"/>
+<button type="submit">Register</button>
+</form>
+--------------------------------------------------------------------------------
+2. Standard Html Helper:-
+-----------------------------------------
+@Html.BeginForm()
+@Html.Textbox()
+@Html.TextArea()
+@Html.checkbox()
+@Html.Email()
+@Html.display()
+@Html.password()
+@Html.RadioButton()
+@Html.dropdown()
+----------------------------------------------------------
+<style>
+.abc
+{
+    background-color:aqua;
+}
+</style>
+@using(Html.BeginForm("Index","HelperEx",FormMethod.Post))
+{
+    @Html.Label("Name") 
+    @Html.TextBox("name",null,null,new{@class="abc"})
+    @Html.Label("Age")
+    @Html.TextBox("age",null,null,new{@class="abc"})
+    @Html.Label("City")
+    @Html.TextBox("city",null,null,new{@class="abc"})
+    <button type="submit">Register</button>
+}
+---------------------------------------------------------------------------------------------
+3. Strongly Typed:-
+----------------------------------------
+@Html.BeginForm()
+@Html.TextboxFor()
+@Html.TextAreaFor()
+@Html.checkboxFor()
+@Html.EmailFor()
+@Html.displayFor()
+@Html.passwordFor()
+@Html.RadioButtonFor()
+@Html.dropdownFor()
+---------------------------------------------------------
+@model Employee
+
+<style>
+    .abc {
+        background-color: aqua;
+    }
+</style>
+
+@using(Html.BeginForm("Index","HelperEx",FormMethod.Post))
+{
+   @Html.LabelFor(ram=>ram.Eid)
+   @Html.TextBoxFor(m=>m.Eid,null,new{@class="abc"})
+    
+    @Html.LabelFor(m=>m.Name)
+    @Html.TextBoxFor(m=>m.Name)
+
+    @Html.LabelFor(m=>m.Age)
+    @Html.TextBoxFor(m=>m.Age)
+
+    @Html.LabelFor(m=>m.Address)
+    @Html.TextAreaFor(m=>m.Address)
+
+    @Html.LabelFor(m=>m.Salary)
+    @Html.TextBoxFor(m=>m.Salary)
+    <button type="submit">Register</button>
+}
+ public class Employee
+    {
+        [Display(Name ="Employee ID")]
+        public int Eid { set; get; }
+        public string ?Name { get; set; }
+}
+----------------------------------------------------------
+4. Tag Helper.   --->> Pending
+----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
