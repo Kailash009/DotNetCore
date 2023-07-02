@@ -1,0 +1,166 @@
+API
+-----------------
+>> API stands for 'Application Programming Interface.'
+>> API is used for communication between different environments.(java,dotnet,php,python).
+>> API is neither technology nor framework.
+>> API is concept.
+------------------------------------------------------------------------------------------------------------------------------------
+SMS -> mobile -> Dot Net. (Normal method) -> SMS method we can't use any other technologies.
+--------------------------------------------------------------------------
+SMS API -> dotnet,php,java,python,node etc.
+--------------------------------------------------------------------------
+REST_API:-
+-----------------------------
+>> REST + API
+----------------------------
+REST :-
+-------------
+>> It stands for Representational State Transfer.
+>> REST is protocol under which our API will Run.
+-------------------------------------------------------------------------------------------------------
+Webservices -> http,soap,xml,uddi etc.
+-------------------------------------------------------------------------------------
+API CRUD:-
+----------------------
+C -> Create  -> api ->  POST
+R -> Read   ->  api ->  GET
+U -> Update -> api ->  PUT
+D -> Delete  -> api -> DELETE
+----------------------------------------------------
+[
+{"date":"2023-07-03T15:49:55.1037948+05:30","temperatureC":5,"temperatureF":40,"summary":"Bracing"},
+{"date":"2023-07-04T15:49:55.1050073+05:30","temperatureC":-5,"temperatureF":24,"summary":"Balmy"},
+{"date":"2023-07-05T15:49:55.1050142+05:30","temperatureC":-15,"temperatureF":6,"summary":"Sweltering"},
+{"date":"2023-07-06T15:49:55.1050146+05:30","temperatureC":-7,"temperatureF":20,"summary":"Chilly"},
+{"date":"2023-07-07T15:49:55.1050149+05:30","temperatureC":28,"temperatureF":82,"summary":"Warm"}
+]  -> JSON FORMAT.
+------------------------------------------------------------------------------------
+{
+"Id":101,
+"Name":"Manoj",
+"Age":19,
+"City":"Noida"
+}  --> JSON FORMAT.
+-----------------------------------------------------------------------------------------
+[
+{"eid":101,"name":"Manoj","age":19,"city":"Noida","salary":45000},
+{"eid":101,"name":"Shivam","age":29,"city":"Delhi","salary":15000},
+{"eid":101,"name":"Rajesh","age":39,"city":"Banglore","salary":25000},{"eid":101,"name":"Sachin","age":49,"city":"Hyderabad","salary":35000},
+{"eid":101,"name":"Arun","age":59,"city":"Shimla","salary":17000}
+]  -> JSON FORMAT.
+-------------------------------------------------------------------------------------------------------
+To Test an api we have following two tools:-
+1. POSTMAN.
+2. Swagger.
+-----------------------------------------------------------------------------------------
+[
+    {
+        "eid": 101,
+        "name": "Manoj",
+        "age": 19,
+        "city": "Noida",
+        "salary": 45000
+    },
+    {
+        "eid": 101,
+        "name": "Shivam",
+        "age": 29,
+        "city": "Delhi",
+        "salary": 15000
+    },
+    {
+        "eid": 101,
+        "name": "Rajesh",
+        "age": 39,
+        "city": "Banglore",
+        "salary": 25000
+    },
+    {
+        "eid": 101,
+        "name": "Sachin",
+        "age": 49,
+        "city": "Hyderabad",
+        "salary": 35000
+    },
+    {
+        "eid": 101,
+        "name": "Arun",
+        "age": 59,
+        "city": "Shimla",
+        "salary": 17000
+    }
+]
+-------------------------------------------------------
+In API you need to learn three things:-
+1. How to Create an API.
+2. Testing an API.
+3. How to Consume an API.
+-------------------------------------------------------------
+namespace DemoAPI.Models
+{
+    public class Employee
+    {
+        public int Eid { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?City { get; set; }
+        public long Salary { get; set; }
+    }
+}
+-----------------------------------------------------------------------------
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using DemoAPI.Models;
+
+namespace DemoAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmployeeController : ControllerBase
+    {
+        [HttpGet]
+        public List<Employee> GetEmployees()
+        {
+            List<Employee> empList = new List<Employee>()
+            {
+                new Employee{Eid=101,Name="Manoj",Age=19,City="Noida",Salary=45000},
+                new Employee{Eid=101,Name="Shivam",Age=29,City="Delhi",Salary=15000},
+                new Employee{Eid=101,Name="Rajesh",Age=39,City="Banglore",Salary=25000},
+                new Employee{Eid=101,Name="Sachin",Age=49,City="Hyderabad",Salary=35000},
+                new Employee{Eid=101,Name="Arun",Age=59,City="Shimla",Salary=17000},
+            };
+            return empList;
+        }
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
