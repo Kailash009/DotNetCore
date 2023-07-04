@@ -1,0 +1,361 @@
+using Batch12PMMohit.Models;
+using Microsoft.AspNetCore.Mvc;
+using Batch12PMMohit.EmployeeOperation;
+using System.Security.Cryptography;
+
+namespace Batch12PMMohit.Controllers
+{
+    public class HelperExController : Controller
+    {
+        private EmployeeDbOperation _empOperation;
+        public HelperExController(EmployeeDbOperation empOperation)
+        {
+            _empOperation = empOperation;
+        }
+        public IActionResult Index()
+        {
+           List<Employee> employees=_empOperation.getEmployees();
+            return View(employees);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Employee empObj)
+        {
+            bool b = _empOperation.addEmployee(empObj);
+            if (b == true)
+            {
+                TempData["insert"] = "<script>alert('Employee Added SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["insert"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            //ModelState.Clear();  // To Clear all Fields.
+            return View();
+        }
+        public IActionResult Edit(int id)
+        {
+            Employee emp=_empOperation.getEmployee(id);
+            return View(emp);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Employee empObj)
+        {
+            bool b=_empOperation.updateEmployee(empObj);
+            if (b == true)
+            {
+                TempData["update"] = "<script>alert('Employee Updated SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["update"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+        public IActionResult Delete(int id)
+        {
+            bool b=_empOperation.deleteEmployee(id);
+            if (b == true)
+            {
+                TempData["delete"] = "<script>alert('Employee Deleted SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["delete"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+        public IActionResult Details(int id)
+        {
+            Employee emp = _empOperation.getEmployee(id);
+            return View(emp);
+        }
+    }
+}
+--------------------
+using Microsoft.Data.SqlClient;
+using Batch12PMMohit.Models;
+using Microsoft.Extensions.Configuration;
+
+namespace Batch12PMMohit.EmployeeOperation
+{
+    public class EmployeeDbOperation
+    {
+        private IConfiguration _configuration;
+        public EmployeeDbOperation(IConfiguration configuration)  // DI.
+        {
+            _configuration = configuration;
+        }
+        public List<Employee> getEmployees()
+        {
+            List<Employee> empList = new List<Employee>();
+            string connString = _configuration.GetConnectionString("DefaultConnection");
+            SqlConnection con = new SqlConnection(connString);
+            con.Open();
+            string str = "Select * from tbl_Employee";
+            SqlCommand cmd = new SqlCommand(str, con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                Employee emp = new Employee();
+                emp.Eid = (int)dr["eid"];
+                emp.Name = dr["ename"].ToString();
+                emp.Age = (int)dr["eage"];
+                emp.Address = dr["eaddress"].ToString();
+                emp.Salary = (decimal)dr["salary"];
+                empList.Add(emp);
+            }
+            con.Close();
+            return empList;
+        }
+        public bool addEmployee(Employee empObj)
+        {
+            string connString = _configuration.GetConnectionString("DefaultConnection");
+            SqlConnection con = new SqlConnection(connString);
+            string sql = "Insert into tbl_Employee(ename,eage,eaddress,salary)values(@name,@age,@address,@salary)";
+            SqlCommand cmd = new SqlCommand(sql, con);
+            cmd.Parameters.AddWithValue("@name", empObj.Name);
+            cmd.Parameters.AddWithValue("@age", empObj.Age);
+            cmd.Parameters.AddWithValue("@address", empObj.Address);
+            cmd.Parameters.AddWithValue("@salary", empObj.Salary);
+            con.Open();
+            int n = cmd.ExecuteNonQuery(); // No. of Rows affected. if success then return 1 else 0.
+            con.Close();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public Employee getEmployee(int id)
+        {
+            string connString = _configuration.GetConnectionString("DefaultConnection");
+            SqlConnection con = new SqlConnection(connString);
+            con.Open();
+            string str = "select * from tbl_Employee where eid=" + id;
+            SqlCommand cmd = new SqlCommand(str, con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            Employee emp = new Employee();
+            if (dr.Read())
+            {
+                emp.Eid = (int)dr["eid"];
+                emp.Name = dr["ename"].ToString();
+                emp.Age = (int)dr["eage"];
+                emp.Address = dr["eaddress"].ToString();
+                emp.Salary = (decimal)dr["salary"];
+            }
+            con.Close();
+            return emp;
+        }
+        public bool updateEmployee(Employee empObj)
+        {
+            string connString = _configuration.GetConnectionString("DefaultConnection");
+            SqlConnection con = new SqlConnection(connString);
+            string sql = "update tbl_Employee set ename=@name,eage=@age,eaddress=@address,salary=@salary where eid=@eid";
+            SqlCommand cmd = new SqlCommand(sql, con);
+            cmd.Parameters.AddWithValue("@name", empObj.Name);
+            cmd.Parameters.AddWithValue("@age", empObj.Age);
+            cmd.Parameters.AddWithValue("@address", empObj.Address);
+            cmd.Parameters.AddWithValue("@salary", empObj.Salary);
+            cmd.Parameters.AddWithValue("@eid", empObj.Eid);
+            con.Open();
+            int n = cmd.ExecuteNonQuery(); // No. of Rows affected. if success then return 1 else 0.
+            con.Close();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool deleteEmployee(int id)
+        {
+            string connString = _configuration.GetConnectionString("DefaultConnection");
+            SqlConnection con = new SqlConnection(connString);
+            string sql = "delete from tbl_Employee where eid=@eid";
+            SqlCommand cmd = new SqlCommand(sql, con);
+            cmd.Parameters.AddWithValue("@eid", id);
+            con.Open();
+            int n = cmd.ExecuteNonQuery(); // No. of Rows affected. if success then return 1 else 0.
+            con.Close();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+---------
+@model IEnumerable<Batch12PMMohit.Models.Employee>
+
+@Html.Raw(TempData["insert"])
+@Html.Raw(TempData["update"])
+@Html.Raw(TempData["delete"])
+
+<h1 class="bg-dark text-white text-center">SHOW ALL EMPLOYEE</h1>
+
+<a asp-action="Create" asp-controller="HelperEx" class="btn btn-primary">Add New Employee</a>
+
+<table class="table table-bordered bg-info mt-3" >
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>ADDRESS</th>
+        <th>SALARY</th>
+        <th colspan="2" class="text-center">ACTION</th>
+    </tr>
+    @foreach(var emp in Model)
+    {
+    <tr>
+        <td>@emp.Eid</td>
+        <td>@emp.Name</td>
+        <td>@emp.Age</td>
+        <td>@emp.Address</td>
+        <td>@emp.Salary</td>
+        <td align="center">
+            <a asp-action="Edit" asp-route-id="@emp.Eid" class="btn btn-warning" asp-controller="HelperEx">EDIT</a>
+            | <a asp-action="Details" asp-route-id="@emp.Eid" class="btn btn-dark" asp-controller="HelperEx">DETAILS</a>
+        </td>
+        <td align="center"><a asp-action="Delete" asp-route-id="@emp.Eid" class="btn btn-danger" asp-controller="HelperEx" onclick="return confirm('Are you Sure you want to Delete(Y/N)?');">DELETE</a> </td>
+    </tr>
+    }
+</table>
+---------------
+@model Employee
+
+
+<style>
+    .abc {
+        background-color: aqua;
+    }
+</style>
+<h1>Add Employee</h1>
+<form asp-action="Create" asp-controller="HelperEx" method="post">
+
+    <label asp-for="Name"></label>
+    <input type="text" asp-for="Name" />
+
+    <label asp-for="Age"></label>
+    <input type="text" asp-for="Age" />
+
+    <label asp-for="Address"></label>
+    <input type="text" asp-for="Address" />
+
+    <label asp-for="Salary"></label>
+    <input type="text" asp-for="Salary" />
+
+    <button type="submit">Add Employee</button> <br/><br/>
+    <a asp-action="Index" asp-controller="HelperEx" class="btn btn-dark">Back to List</a>
+</form>
+------------
+@model Employee
+
+
+<style>
+    .abc {
+        background-color: aqua;
+    }
+</style>
+
+<h1>Edit Employee</h1>
+
+<form asp-action="Edit" asp-controller="HelperEx" method="post">
+    <input type="hidden" asp-for="Eid" />
+    <label asp-for="Name"></label>
+    <input type="text" asp-for="Name" />
+
+    <label asp-for="Age"></label>
+    <input type="text" asp-for="Age" />
+
+    <label asp-for="Address"></label>
+    <input type="text" asp-for="Address" />
+
+    <label asp-for="Salary"></label>
+    <input type="text" asp-for="Salary" />
+
+    <button type="submit">Edit Employee</button> <br /><br />
+    <a asp-action="Index" asp-controller="HelperEx" class="btn btn-dark">Back to List</a>
+</form>
+---------------
+@model Employee
+<h1 class="text-center bg-dark text-white">Employee Details</h1>
+
+<table class="table table-bordered bg-warning">
+<tr>
+    <th>NAME</th>
+    <th>@Model.Name</th>
+</tr>
+<tr>
+    <th>AGE</th>
+    <th>@Model.Age</th>
+</tr>
+<tr>
+    <th>ADDRESS</th>
+    <th>@Model.Address</th>
+</tr>
+    <tr>
+        <th>SALARY</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+
+<br/>
+<a asp-action="Index" asp-controller="HelperEx" class="btn btn-primary">Back to List</a>
+
+--------------
+using System.ComponentModel.DataAnnotations;
+
+namespace Batch12PMMohit.Models
+{
+    public class Employee
+    {
+        [Display(Name ="Employee ID")]
+        public int Eid { set; get; }
+
+        //public void setvalue()
+        //{
+        //    Eid = 100;
+        //}
+        //public int getvalue()
+        //{
+        //    return Eid;
+        //}
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?Address { get; set; }
+        public decimal Salary { get; set; }
+    }
+}
+---------------
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(50);  // To increase session time
+});
+builder.Configuration.GetConnectionString("DefaultConnection"); // Add your connection string here.
+builder.Services.AddTransient<EmployeeDbOperation>();
+-------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
