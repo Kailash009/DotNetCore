@@ -1,0 +1,260 @@
+Complex Model:-
+-----------------------------
+School -> List of Teacher
+Teacher -> List of Student.
+Student ->
+------------------------------------------------
+Assignment:-
+-----------------------------------------------
+School -> List of Teacher
+Teacher -> List of Student.
+Student -> List of Course
+Course ->
+-------------------------------------------
+namespace BatchSushilCore.Models
+{
+    public class Student
+    {
+        public int Sid { get; set; }
+        public string? SName { get; set; }
+        public int Class { get; set; }
+        public string? City { get; set; }
+    }
+}
+---------------------------------------------
+namespace BatchSushilCore.Models
+{
+    public class Teacher
+    {
+        public int Tid { get; set; }
+        public string ?TName { get; set; }
+        public string ?TRole { get; set; }
+        public string ?City { get; set; }
+        public string ?TImage { get; set; }
+
+        public List<Student> ?ListofStudents { get; set; }
+    }
+}
+---------------
+namespace BatchSushilCore.Models
+{
+    public class School
+    {
+        public int School_Id { get; set; }
+        public string ?School_Name { get; set; }
+        public string? School_City { get; set; }
+        public List<Teacher> ?ListofTeacher { get;set; }
+    }
+}
+-----------------------------
+using BatchSushilCore.Models;
+
+namespace BatchSushilCore.DbSchool
+{
+    public class SchoolOperation
+    {
+        public static List<Student> getStudentforTeacherA()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st = new Student();
+            st.Sid = 1;
+            st.SName = "Rohit";
+            st.Class = 10;
+            st.City = "Lucknow";
+            stuList.Add(st);
+            
+            st = new Student();
+            st.Sid = 2;
+            st.SName = "Mohit";
+            st.Class = 12;
+            st.City = "Kanpur";
+            stuList.Add(st);
+            
+            st = new Student();
+            st.Sid = 3;
+            st.SName = "Kunal";
+            st.Class = 16;
+            st.City = "Banaras";
+            stuList.Add(st);
+
+            return stuList;
+        }
+        public static List<Student> getStudentforTeacherB()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st = new Student();
+            st.Sid = 4;
+            st.SName = "Abhishek";
+            st.Class = 9;
+            st.City = "Allahabad";
+            stuList.Add(st);
+
+            st = new Student();
+            st.Sid = 5;
+            st.SName = "Sunil";
+            st.Class = 8;
+            st.City = "Kasmir";
+            stuList.Add(st);
+            return stuList;
+        }
+        public static List<Student> getStudentforTeacherC()
+        {
+            List<Student> stuList = new List<Student>();
+            Student st = new Student();
+            st.Sid = 6;
+            st.SName = "Rahul";
+            st.Class = 4;
+            st.City = "Meerut";
+            stuList.Add(st);
+
+            st = new Student();
+            st.Sid = 7;
+            st.SName = "Sandeep";
+            st.Class = 6;
+            st.City = "Rajasthan";
+            stuList.Add(st);
+
+            st = new Student();
+            st.Sid = 8;
+            st.SName = "Ronit";
+            st.Class = 10;
+            st.City = "Banglore";
+            stuList.Add(st);
+
+            st = new Student();
+            st.Sid = 9;
+            st.SName = "Chandini";
+            st.Class = 5;
+            st.City = "Chennai";
+            stuList.Add(st);
+
+            return stuList;
+        }
+        public static List<Teacher> getTeachers()
+        {
+            List<Teacher> tchList = new List<Teacher>();
+            Teacher tch = new Teacher();
+            tch.Tid = 101;
+            tch.TName = "Harry";
+            tch.TRole = "Physics";
+            tch.City = "America";
+            tch.TImage = "images/team-3.jpg";
+            tch.ListofStudents = getStudentforTeacherA();
+            tchList.Add(tch);
+            
+            tch = new Teacher();
+            tch.Tid = 102;
+            tch.TName = "Marry";
+            tch.TRole = "Chemistry";
+            tch.City = "London";
+            tch.TImage = "images/testimonial-1.jpg";
+            tch.ListofStudents = getStudentforTeacherB();
+            tchList.Add(tch);
+
+            tch = new Teacher();
+            tch.Tid = 103;
+            tch.TName = "Michael";
+            tch.TRole = "Math";
+            tch.City = "Goa";
+            tch.TImage = "images/testimonial-2.jpg";
+            tch.ListofStudents = getStudentforTeacherC();
+            tchList.Add(tch);
+
+            return tchList;
+        }
+        public static School GetSchool()
+        {
+            School sc = new School
+            {
+                School_Id = 90087,
+                School_Name = "Delhi Public School",
+                School_City = "Delhi",
+                ListofTeacher = getTeachers()
+            };
+            return sc;
+        }
+    }
+}
+--------------
+using Microsoft.AspNetCore.Mvc;
+using BatchSushilCore.Models;
+using BatchSushilCore.DbSchool;
+
+namespace BatchSushilCore.Controllers
+{
+    public class SchoolController : Controller
+    {
+        public IActionResult Index()
+        {
+            School sch=SchoolOperation.GetSchool();
+            return View(sch);
+        }
+    }
+}
+---------------------------------------
+@model School
+
+<h1 class="bg-dark text-center text-white">School Information</h1>
+
+<table class="table table-bordered bg-info">
+    <tr>
+        <th>School ID</th>
+        <th>@Model.School_Id</th>
+    </tr>
+    <tr>
+        <th>School Name</th>
+        <th>@Model.School_Name</th>
+    </tr>
+    <tr>
+        <th>School City</th>
+        <th>@Model.School_City</th>
+    </tr>
+</table>
+<table class="text-center table table-bordered" style="background-color:pink;">
+    @foreach (var tch in Model.ListofTeacher)
+    {
+        <tr>
+            <td colspan="4"><h2 class="text-center bg-warning">Teacher Information</h2>  </td>
+        </tr>
+        <tr>
+            <th>TID</th>
+            <th>@tch.Tid</th>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <th>@tch.TName</th>
+        </tr>
+        <tr>
+            <th>Role</th>
+            <th>@tch.TRole</th>
+        </tr>
+        <tr>
+            <th>City</th>
+            <th>@tch.City</th>
+        </tr>
+        <tr>
+            <th>Image</th>
+            <th><img src="@tch.TImage" width="200px" height="200px" alt="Image" /></th>
+        </tr>
+        <tr>
+            <td colspan="4"><h2 class="text-center bg-danger">List of Student</h2></td>
+        </tr>
+        <tr>
+            <th>SID</th>
+            <th>Name</th>
+            <th>Class</th>
+            <th>City</th>
+        </tr>
+        foreach (var stu in tch.ListofStudents)
+        {
+            <tr>
+                <th>@stu.Sid</th>
+                <th>@stu.SName</th>
+                <th>@stu.Class</th>
+                <th>@stu.City</th>
+            </tr>
+        }
+    }
+</table>
+
+
