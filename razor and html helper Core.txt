@@ -1,0 +1,332 @@
+Razor Syntax:-
+------------------------------
+>> It is used to render c# code with html page.
+>> Here  we use @ {} symbol to render C# code.
+>> It is used to make your html pages dynamically.
+--------------------------------------------------------------------------------
+1. Single Statement.
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    string str = "Welcome to C#";
+}
+<h2>@str</h2>
+-------------------------------------------------------------------------
+2. Multiple Statement.
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    string name = "Pushpendra Pandey";
+    int age = 19;
+    string date = DateTime.Now.ToShortTimeString();
+    string city = "Noida";
+}
+
+<h2>Name= @name</h2>
+<h2>Age=@age</h2>
+<h2>Date=@date</h2>
+<h2>City=@city</h2>
+-----------------------------------------------------------------------
+3. Conditional.
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    int age = 14;
+    if(age>18)
+    {
+        <h1>Valid for Vote</h1>
+    }
+    else
+    {
+        <h1>Not Valid For Vote</h1>
+    }
+}
+-------------------
+if-else-if:-
+-------------------
+4. Loop.
+while@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    int i = 1;
+    while(i<=5)
+    {
+        <h1>@i</h1>
+        i++;
+    }
+
+}
+
+
+
+do-while
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    int i = 5;
+    do
+    {
+        <h1>@i</h1>
+        i--;
+    }
+    while (i >0);
+
+}
+for
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+for (int i = 1; i <= 10; i++)
+    {
+        <h1>@i</h1>
+    }  
+}
+--------------------------------
+foreach
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    List<string> sport = new List<string>
+    {
+    "Criket",
+    "FootBall",
+    "VolleyBall",
+    "Batminton",
+    "Ludo",
+        };
+    
+    <ol>
+    @foreach(string str in sport)
+    {
+       <li>@str</li>
+    }
+    </ol>
+}
+------------------------
+Working With Model:-
+--------------------------------
+public IActionResult Index()
+        {
+            Employee emp = new Employee
+            {
+                Eid = 101,
+                Name = "Sushil",
+                Age = 20,
+                City = "Noida",
+                Salary = 2345645
+            };
+            return View(emp);
+        }
+--------------------------------------------------------------------------
+@model Employee
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Show Employee Infomation</h1>
+<h1>@Model.Eid</h1>
+<h1>@Model.Name</h1>
+<h1>@Model.Age</h1>
+<h1>@Model.City</h1>
+<h1>@Model.Salary</h1>
+-------------------------------------------
+Html Helper in Core:-
+---------------------------------
+1. Basic/Normal Html.
+TextBox.
+RadioButton
+Select.
+TextArea
+Email
+Password
+Hidden
+date
+Form.
+using Microsoft.AspNetCore.Mvc;
+
+namespace BatchSushilCore.Controllers
+{
+    public class HelperExController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(string txtname, int txtage, string txtaddress)
+        { 
+            return View();
+        }
+    }
+}
+----------
+<h1>Basic Html</h1>
+
+
+<form method="post" action="\">
+    Name: <input type="text" name="txtname"/>
+    Age: <input type="text" name="txtage" />
+    Address: <input type="text" name="txtaddress" />
+    <button type="submit">Register</button>
+</form>
+----------------------------------------------
+2. Standard Html.
+@Html.textbox()
+@Html.RadioButton()
+@Html.TextArea()
+@Html.Email()
+@html.Password()
+@html.hidden()
+@Html.BeginForm("actionname","Contollername","methodname")
+using Microsoft.AspNetCore.Mvc;
+
+namespace BatchSushilCore.Controllers
+{
+    public class HelperExController : Controller
+    {
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(string txtname, int txtage, string txtaddress)
+        { 
+            return View();
+        }
+    }
+}
+-----------------------
+<h1>Standard Html</h1>
+
+<style>
+    .abc
+    {
+        background-color:blueviolet;
+        color:white;
+    }
+</style>
+@using(Html.BeginForm("Index","HelperEx",FormMethod.Post))
+{
+    <label>Name</label>
+    @Html.TextBox("txtname",null,new{@class="abc"})
+    
+    <label>Age</label>
+    @Html.TextBox("txtage")
+    
+    <label>Address</label>
+    @Html.TextBox("txtaddress")
+
+    <button type="submit">Register</button>
+}
+--------------------------------------------------------------------------------------------
+3. Strongly Typed.
+@Html.textboxfor()
+@Html.RadioButtonfor()
+@Html.TextAreafor()
+@Html.Emailfor()
+@html.Passwordfor()
+@html.hiddenfor()
+@Html.BeginForm("actionname","Contollername","methodname")
+--------------------------------------------
+namespace BatchSushilCore.Models
+{
+    public class Employee
+    {
+        public int Eid { get; set; }  // Property.
+        public string ?Name { get; set; }  // Nullable Property - you can leave it blank.(null).
+        public int Age { get; set; }
+        public string ?City { get; set; }
+        public long Salary { get; set; }
+    }
+}
+-------------
+using Microsoft.AspNetCore.Mvc;
+using BatchSushilCore.Models;
+
+namespace BatchSushilCore.Controllers
+{
+    public class HelperExController : Controller
+    {
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(Employee empObj)
+        {
+            return RedirectToAction("showDetails", "HelperEx",empObj);
+        }
+        public IActionResult showDetails(Employee empob)
+        {
+            return View(empob);
+        }
+    }
+}
+-----------------------
+@model Employee
+
+<h1>Strongly Typed</h1>
+
+@using(Html.BeginForm("Index","HelperEx",FormMethod.Post))
+{
+    @Html.LabelFor(m=>m.Eid)
+    @Html.TextBoxFor(m=>m.Eid)
+
+    @Html.LabelFor(m=>m.Name)
+    @Html.TextBoxFor(m=>m.Name)
+
+    @Html.LabelFor(m=>m.Age)
+    @Html.TextBoxFor(m=>m.Age)
+
+    @Html.LabelFor(m=>m.City)
+    @Html.TextBoxFor(m=>m.City)
+
+    @Html.LabelFor(m=>m.Salary)
+    @Html.TextBoxFor(m=>m.Salary)
+
+    <input type="submit" value="Register"> 
+}
+-------------------------------
+@model Employee
+
+<h1>Show Employee</h1>
+
+<h2>Eid = @Model.Eid </h2>
+<h2>Name = @Model.Name </h2>
+<h2>Age = @Model.Age </h2>
+<h2>City = @Model.City </h2>
+<h2>Salary = @Model.Salary </h2>
+-------------------------------------------------------
+4. Tag Helper. --> Pending
+------------------------------------------------- 
+
+
+
+
+
+
+
+
+
+
+
