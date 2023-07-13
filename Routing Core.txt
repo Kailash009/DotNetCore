@@ -1,0 +1,120 @@
+Routing in Dot Net Core:-
+-----------------------------------------------------
+>> Routing in asp.net core mvc is a mechanism that maps your httprequest with your controller and their action methods.
+>> It decides the route of your application that which page you are going to execute first.
+---------------------------
+Types of Routing:-
+--------------------------------
+There are two types of Routing in Dot Net Core:-
+--------------------------------------------------------------------------
+1. Conventional Based Routing.
+>> In this we decide which page gets executed first.
+builder.Services.AddControllersWithViews();  // add this service.
+	a) MapDefaultControllerRoute().
+	b) MapControllerRoute().
+2. Attribute Based Routing.
+>> Attribute Based Routing mostly used in API.
+>> We use [Route] Attribute to perform attribute based routing.
+>> [Route] attribute can be applied controller level as well as action level.
+builder.Services.AddControllersWithViews(); // also add service.
+>> app.MapControllers();  // to run attribute routing.
+---------------------------------------------------------------------------------------------------------------------
+Action Level:-
+-----------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace RoutingCore.Controllers
+{
+    public class HomeController : Controller
+    {
+        [Route("")]
+        [Route("Home")]
+        [Route("Home/index")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        [Route("Home/about")]
+        public IActionResult About()
+        {
+            return View();
+        }
+        [Route("Home/contact")]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+----------------------------------------
+Controller Level:-
+------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace RoutingCore.Controllers
+{
+    [Route("Home")]
+    public class HomeController : Controller
+    {
+        [Route("")]
+        [Route("index")]
+        [Route("~/")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        [Route("about")]
+        public IActionResult About()
+        {
+            return View();
+        }
+        [Route("contact")]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+-------------------------------------------------------------------------------------
+Token:-
+------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace RoutingCore.Controllers
+{
+    [Route("{controller}/{action}")]  // Token Level
+    public class HomeController : Controller
+    {
+        [Route("~/")]
+        [Route("")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [Route("{id?}")]
+        public int Contact(int ?id)
+        { 
+            return id ?? 100;
+        }
+    }
+}
+--------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
