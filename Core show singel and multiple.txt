@@ -1,0 +1,214 @@
+Controller -> Done.
+View -> Done
+----------------------------
+Model:- (Saif)
+-----------------
+>> it is used for creating data according to your request.
+>> It is also known as DAL.(Data Access Layer.)
+>> It contains properties.
+>> database related operation performed in this layer.
+----------------------------------------------------------------------------------------
+How to Single Employee Record.
+How to Show All Employee.
+---------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchMithilesh11AMWE.EmployeeDbOperation;
+using BatchMithilesh11AMWE.Models;
+
+namespace BatchMithilesh11AMWE.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        public IActionResult Index()
+        {
+           Employee emp= EmployeeOperation.getEmployee();
+           return View(emp);
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+-------------------------------------------------------------------------------
+@model Employee
+
+@*@{
+    Layout = null;
+}*@
+<h1 class="bg-dark text-center text-white">**Welcome to my Employee Home Page**</h1>
+
+<table class="table table-bordered bg-info">
+    <tr>
+        <th>EID</th>
+        <th>@Model.EID</th>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>Age</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>City</th>
+        <th>@Model.City</th>
+    </tr>
+    <tr>
+        <th>Salary</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+----------------------------------------------------------------------------------------------------
+using BatchMithilesh11AMWE.Models;
+
+namespace BatchMithilesh11AMWE.EmployeeDbOperation
+{
+    public class EmployeeOperation
+    {
+       public static Employee getEmployee()
+       {
+            Employee emp = new Employee
+            {
+                EID = 101,
+                Name = "Mulayam",
+                Age = 19,
+                City = "Noida",
+                Salary = 89000
+            };
+            return emp;
+       }
+    }
+}
+--------------------------------------------------------------------------------------------
+Show All Employee:-
+---------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchMithilesh11AMWE.EmployeeDbOperation;
+using BatchMithilesh11AMWE.Models;
+
+namespace BatchMithilesh11AMWE.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        public IActionResult Index()
+        {
+           List<Employee> empList= EmployeeOperation.getEmployees();
+           return View(empList);
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+-----------------
+using BatchMithilesh11AMWE.Models;
+
+namespace BatchMithilesh11AMWE.EmployeeDbOperation
+{
+    public class EmployeeOperation
+    {
+       public static List<Employee> getEmployees()
+       {
+            List<Employee> empList = new List<Employee>();
+            Employee emp = new Employee();
+            emp.EID = 101;
+            emp.Name = "Rajesh";
+            emp.Age = 19;
+            emp.City = "Noida";
+            emp.Salary = 3445.34;
+            empList.Add(emp); // First Employee Added
+
+            emp = new Employee();
+            emp.EID = 102;
+            emp.Name = "Mohit";
+            emp.Age = 29;
+            emp.City = "Delhi";
+            emp.Salary = 4445.34;
+            empList.Add(emp);
+
+            Employee emp1 = new();
+            emp1.EID = 103;
+            emp1.Name = "Shivam";
+            emp1.Age = 32;
+            emp1.City = "Rajasthan";
+            emp1.Salary = 54445.34;
+            empList.Add(emp1);
+
+            emp = new Employee();
+            emp.EID = 104;
+            emp.Name = "Tikam";
+            emp.Age = 14;
+            emp.City = "Banglore";
+            emp.Salary = 50445.34;
+            empList.Add(emp);
+
+
+            emp = new Employee();
+            emp.EID = 105;
+            emp.Name = "Salman";
+            emp.Age = 54;
+            emp.City = "Mumbai";
+            emp.Salary = 30943.34;
+            empList.Add(emp);
+
+            return empList;
+        }
+    }
+}
+-------------
+@model IEnumerable<Employee>
+
+@*@{
+    Layout = null;
+}*@
+<h1 class="bg-dark text-center text-white">**Welcome to my Employee Home Page**</h1>
+
+<table class="table table-bordered bg-info">
+   
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>CITY</th>
+        <th>SALARY</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+    <tr>
+        <td>@emp.EID</td>
+        <td>@emp.Name</td>
+        <td>@emp.Age</td>
+        <td>@emp.City</td>
+        <td>@emp.Salary</td>
+    </tr>
+    }
+</table>
+--------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
