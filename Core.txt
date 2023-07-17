@@ -1,0 +1,82 @@
+DOT NET CORE:-
+-------------------------------------
+>> dot net core is the new version of dot net framework.
+>> Dot net core introduced in the year 2016.
+>> It is the product of Microsoft.
+>> Dot net Core is the free,open source, and cross platform.(win,linux,mac).
+>> Dot net core uses kesterel web server. (It can be hosted on IIS,Apache,Tomcat,Nginx).
+>>  It is a platform independent.
+>> It has Roslyn Compiler (RYUJIT). (which is 110% faster than previous compiler)
+>> Dot net core we can develop different kind of applications- Desktop,WebApplication,GameDevelopement,Mobile App,Machine Learning,IOT,AI(Artificial Intelligence) etc.
+>> Dot net core introduced new concept called Middleware.
+>> Dot net core application N-Tier App.
+>> Dot net core  has built-in dependency injection.
+--------------------------------------------------------------------------------------------------------------
+Life Cycle of MVC Architecture:-
+------------------------------------------------------
+Model => DAL (Data Access Layer)
+>> properties, All database related operations are performed in this layer.
+View => PLL. (Presentation Logic Layer.)
+>> html,css,js. etc.
+Controller => BLL (Business Logic Layer)
+>> All business related logics are write in this layer.
+>> Controller is the main layer in mvc.
+>> Controller act as an interface between model and view.
+>> controller is the heart of dot net core.
+--------------------------------------------------------------------------------------------------
+Dot Net Framework:- (Old Version)
+---------------------------------------------------
+1. Desktop App.
+2. Web app.
+3. webapp (MVC)
+4. web API.
+[
+    "Cricket",
+    "FootBall",
+    "BasketBall",
+    "Tennis",
+    "Hockey"
+]  => JSON FORMAT.
+----------------------------------------
+Dot Core - web app
+----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
