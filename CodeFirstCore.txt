@@ -1,269 +1,115 @@
+Assignment Task:-
+----------------------------------
+Cascading Dropdown in Core. (24 July 2023)
+-----------------------------------------------------------------------------
 Entity Framework:-
--------------------------------
->> it is a orm(Object Relational Mapping) tool.
->> it is  an approach that allows developers to directly connect with your database without using Sql Queries.
->> In this we can't use Sql here we use LINQ Query.
->> LINQ stands for Language Integrated Query.
->> It uses Lambda Expression. (=>)
->> LINQ query are faster than sql query.
----------------------------------------------------------------------------------------------------------------------------------------------
-It uses two approaches:-
+----------------------------------
+>> EF is an ORM (Object Relational Mapping) tool.
+>> EF is a Tool that directly Map/bind your model classes into your database.
+>> In EF no need to write sql Queries.
+>> In EF we write LINQ (Language Integrated) Query.
+>> LINQ uses Lamdba Expression.
+>> Lambda expression is represented by [ => ] .
+-------------------------------------------------------------------------------------------------------------
+EF has two approaches:-
 1. Code First Approach.
-2. Data base First Approach.
--------------------------------------------
-1. Code First Approach:-
---------------------------------------------
-1. Install Entity Framework packages.
-Microsoft.EntityFrameworkCore.
-Microsoft.EntityFrameworkCore.SqlServer
-Microsoft.EntityFrameworkCore.Tools
----------------------------------------------------------------------
-2.  Create Model Class.
+2. Database First Approach.
+------------------------------------------------------------
+1. Code First Approach.
+----------------------------------------------
+>> In code first approach we write model classes,and after that we perform migration command by which it is automatically generated database and their tables.
+------------------------------------------------------------------------------------------------------------------------------
+step-1:-
+------------------
+Install Packages:-
+1. Microsoft.EntityFrameworkCore
+2. Microsoft.EntityFrameworkCore.SqlServer
+3. Microsoft.EntityFrameworkCore.Tools
+----------------------------------------------------------------------------
+step-2:-
+-------------------
 using System.ComponentModel.DataAnnotations;
-
-namespace CodeFirstDemoWE.Models
+Create Model Class:-
+namespace CodeFirstAvinash.Models
 {
     public class Employee
     {
-        [Key]
+         [Key]
         public int Eid { get; set; }
-        public string ?EName { get; set; }
+        public string ?Name { get; set; }
         public int Age { get; set; }
         public string ?MobileNo { get; set; }
-        public int Salary { get; set; }
+        public string ?City { get; set; }
+        public decimal Salary { get; set; }
     }
 }
---------------------
-3. Create Data Context Class.
+-----------------------------------------------------------------------------------------
+step-3:-
+---------------------
+Context Class:-
+--------------------------
 using Microsoft.EntityFrameworkCore;
 
-namespace CodeFirstDemoWE.Models
+namespace CodeFirstAvinash.Models
 {
-    public class EmployeeDbContext:DbContext
+    public class DbContextEmployee:DbContext
     {
-        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options) : base(options)
+        public DbContextEmployee(DbContextOptions<DbContextEmployee> options):base(options)
         {
-
+            
         }
-        public DbSet<Employee> Employees { get; set; }  // All Crud Perform Here.
+        public DbSet<Employee> Employees { get; set; }
     }
 }
-4. Create Connection String -
+---------------------------
+step-4:- (appsettings.json)
 ------------------------------------------
-},
+Make Connection String-
+------------------------------------------
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=MAHADEV\\SQLEXPRESS;Initial Catalog=DbShiva;Integrated Security=True;"
+    "DefaultConnection": "Data Source=MAHADEV\\MSSQLSERVERJOSHI;Initial Catalog=DbAvinash;Integrated Security=True;"
   },
-------------------------------------------------------------------------------------------------------------------------------------
-5. Register this connection string service -
-
+-----------------------------------------------------------------------------------------
+step-5:-
+---------------
+Add this connection string into services:- (Program.cs)
+----------------------------------------------------------------------------
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-builder.Services.AddDbContext<EmployeeDbContext>(options =>
+builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<DbContextEmployee>(options =>
 {
-    builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-----------------------------------------------------------------------------------------------------------------
-6. Perform Migration Command  (Package Manager Console.)
-1. enable-migrations -> First time
-2. add-migration 'anyname' -> this command see you model class and generate Linq Query.
-3. update-database -> this command see your generated linq query and create database and tables into database.
------------------------------------------------------------------------------------------------------------------------------------------
-7. Create Controller and inject dbcontext class.
------------------------------------------------------------------------------------------------------
-using CodeFirstDemoWE.Models;
+-------------------------------------------------------------------------------------------
+step-6:-
+-----------------
+Write this command in Package Manager Console:-
+--------------------------------------------------------------------------------
+Run Migration Command:-
+---------------------------------------------------------------
+1. add-migration 'anyname'  -> This command see all your model classes and generate LINQ Query.
+2. update-database -> This command see your LINQ Query and generate database and table in your database.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+using CodeFirstAvinash.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace CodeFirstDemoWE.Controllers
+namespace CodeFirstAvinash.Controllers
 {
     public class EmployeeController : Controller
     {
-        private EmployeeDbContext _dbContext;
-        public EmployeeController(EmployeeDbContext dbContext)  // Dependency Injection.
+        private readonly DbContextEmployee _dbEmp;
+        public EmployeeController(DbContextEmployee dbEmp)
         {
-            _dbContext = dbContext;
+            _dbEmp = dbEmp;
         }
-        public async  Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var employee =await _dbContext.Employees.ToListAsync();
-            return View(employee);
+            var employees = _dbEmp.Employees.ToList();
+            return View(employees);
         }
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(Employee empObj)
-        {
-            _dbContext.Employees.Add(empObj);
-            int n=await _dbContext.SaveChangesAsync();
-            if (n != 0)
-            {
-                TempData["insert"] = "<script>alert('Employee Added SuccessFully!!');</script>";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                TempData["insert"] = "<script>alert('Employee Failed!!');</script>";
-            }
-            return View();
-        }
-        public IActionResult Edit(int id)
-        {
-            var employee = _dbContext.Employees.Where(m => m.Eid == id).FirstOrDefault();
-            return View(employee);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(Employee empObj)
-        {
-            _dbContext.Entry(empObj).State = EntityState.Modified;
-            int n = await _dbContext.SaveChangesAsync();
-            if (n != 0)
-            {
-                TempData["update"] = "<script>alert('Employee Updated SuccessFully!!');</script>";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                TempData["update"] = "<script>alert('Employee Failed!!');</script>";
-            }
-            return View();
-        }
-        public async Task<IActionResult> Delete(int id)
-        {
-            var employee = _dbContext.Employees.Where(m => m.Eid == id).FirstOrDefault();
-            _dbContext.Employees.Remove(employee);
-            int n = await _dbContext.SaveChangesAsync();
-            if (n != 0)
-            {
-                TempData["delete"] = "<script>alert('Employee Deleted SuccessFully!!');</script>";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                TempData["delete"] = "<script>alert('Employee Failed!!');</script>";
-            }
-            return View();
-        }
-
     }
 }
------------------------------------------
-@model IEnumerable<CodeFirstDemoWE.Models.Employee>
-
-
-@Html.Raw(TempData["insert"])
-@Html.Raw(TempData["update"])
-@Html.Raw(TempData["delete"])
-<h1 class="text-center bg-dark text-white">Show All Employee</h1>
-<a asp-action="Create" asp-controller="Employee" class="btn btn-success">Create New Employee</a>
-
-<table class="table table-bordered mt-3">
-    <tr>
-        <th>EID</th>
-        <th>NAME</th>
-        <th>AGE</th>
-        <th>MOBILE NO</th>
-        <th>SALARY</th>
-        <th colspan="2" class="text-center">ACTION</th>
-    </tr>
-    @foreach (var emp in Model)
-    {
-        <tr>
-            <td>@emp.Eid</td>
-            <td>@emp.EName</td>
-            <td>@emp.Age</td>
-            <td>@emp.MobileNo</td>
-            <td>@emp.Salary</td>
-            <td align="center"> <a asp-action="Edit" asp-controller="Employee" asp-route-id="@emp.Eid" class="btn btn-warning">EDIT</a>  </td>
-            <td align="center"> <a asp-action="Delete" asp-controller="Employee" asp-route-id="@emp.Eid" class="btn btn-danger" onclick="return confirm('Are you Sure you want to Delete this Item(Y/N)?');">DELETE</a>  </td>
-        </tr>
-    }
-</table>
--------------------------
-@model CodeFirstDemoWE.Models.Employee
-
-<h1 class="bg-dark text-center text-white">Add New Employee</h1>
-<div class="container">
-<div class="row">
-    <div class=col-6>
-        <form asp-action="Create" asp-controller="Employee" method="post">
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" asp-for="EName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Age</label>
-                <input type="text" asp-for="Age" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Mobile No</label>
-                <input type="text" asp-for="MobileNo" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Salary</label>
-                    <input type="text" asp-for="Salary" class="form-control" />
-                </div>
-                <div class="form-group">
-                <input type="submit"  value="Create" class="form-control btn btn-success mt-3" />
-                </div>
-        </form>
-    </div>
-</div>
-</div>
---------------------------------------------------------
-@model CodeFirstDemoWE.Models.Employee
-
-<h1 class="bg-dark text-center text-white">Edit New Employee</h1>
-<div class="container">
-    <div class="row">
-        <div class=col-6>
-            <form asp-action="Edit" asp-controller="Employee" method="post">
-                <div class="form-group">
-                    <input type="hidden" asp-for="Eid"/>
-                </div>
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" asp-for="EName" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label>Age</label>
-                    <input type="text" asp-for="Age" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label>Mobile No</label>
-                    <input type="text" asp-for="MobileNo" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label>Salary</label>
-                    <input type="text" asp-for="Salary" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Edit" class="form-control btn btn-dark mt-3" />
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-------------------------------------------------------------------------------------------------------------
 
 
 

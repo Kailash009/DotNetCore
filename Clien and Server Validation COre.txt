@@ -1,0 +1,133 @@
+Client Side Validation:-
+---------------------------------------
+>> _ValidationScriptsPartial.cshtml -> if you attach this file into your .cshtml then it behave like client side validation in your application.
+There are two ways to call this file in your page-
+a) 
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial"/>
+}
+b)
+@section Scripts{
+{ await @Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 
+-----------------------------------------------------------------------------------------------------
+
+using System.ComponentModel.DataAnnotations;
+
+namespace Batch12PMMohit.Models
+{
+    public class Validation
+    {
+        [Key]
+        public int Eid { get; set; }
+        
+        [Required(ErrorMessage ="Enter Your Name!")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Use Character only please!")]
+        public string ?Name { get; set; }
+        
+        [Required(ErrorMessage ="Enter Your Age!")]
+        [StringLength(2, ErrorMessage = "Max 2 digits")]
+        [RegularExpression("([0-9]+)", ErrorMessage = "Use Number only please!")]
+        public string ?Age { get; set; }
+        
+        [Required(ErrorMessage ="Enter your City!")]
+        public string ?City { get; set; }
+        
+        [Required(ErrorMessage ="Enter Your Mobile!")]
+        [RegularExpression(@"^(\d{10})$", ErrorMessage = "Enter 10 Digit Only!!")]
+        public string ?Mobile { get; set; }
+        
+        [Required(ErrorMessage ="Enter Your Email!")]
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
+        public string ?Email { get; set; }
+
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage ="Enter your Password!")]
+        [RegularExpression("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",ErrorMessage = "Minimum eight characters, at least one letter, one number and one special character")]
+        public string ?Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage ="Password and Confirm Password doesn't Match!")]
+        [Compare("Password")]
+        public string ?ConfirmPassword { get; set; }
+    }
+}
+-------------
+public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Validation vEx)
+        {
+            if(ModelState.IsValid)  // Server Side Validation
+            {
+                // Save Data into Database.
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error in Model!!");
+            }
+            return View();
+        }
+-----------------------------------------
+@model Validation
+
+<form asp-action="Create" asp-controller="ValidationEx" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div>
+    <label>Enter Name:</label>
+    <input type="text" asp-for="Name"/>
+    <span asp-validation-for="Name" class="text-danger"></span> 
+</div>
+
+    <div>
+    <label>Enter Age:</label>
+    <input type="text" asp-for="Age" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+
+    <div>
+    <label>Enter City:</label>
+    <input type="text" asp-for="City" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <div>
+    <label>Enter Mobile:</label>
+    <input type="text" asp-for="Mobile" />
+        <span asp-validation-for="Mobile" class="text-danger"></span>
+    </div>
+
+    <div>
+    <label>Enter Email:</label>
+    <input type="text" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div>
+    <label>Enter Password:</label>
+    <input type="text" asp-for="Password"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div>
+    <label>Confirm Password:</label>
+    <input type="text" asp-for="ConfirmPassword"/>
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <div>
+    <button type="submit" class="btn btn-warning">Register</button>
+    </div>
+</form>
+
+@section Scripts{
+{ await @Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+--------------
+
+
+
