@@ -1,0 +1,237 @@
+Model:-
+------------------
+>> To perform all database related operations.
+>> Create Model class properties.
+---------------------------------------------------------------------------
+1. Show Single Employee:-
+---------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchAsgarCore.EmployeeOperation;
+
+namespace BatchAsgarCore.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        public IActionResult GetEmployee(string name,int age,string city)
+        {
+            ViewBag.name = name;
+            ViewBag.age = age;
+            ViewBag.city = city;
+            return View();
+        }
+        public IActionResult Index()
+        {
+            var employee=DbEmployee.GetEmployee();
+            return View(employee);
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+--------------------
+namespace BatchAsgarCore.Models
+{
+    public class Employee
+    { 
+        public int Eid { get; set; }  // Properties.
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?City { get; set; }
+        public double Salary { get; set; }
+    }
+}
+//public void setvalue()
+//{
+//    int ?a=null;  ?
+//    Nullable<int> b = null; Nullable Class.
+
+//}
+
+//public int age { get; set; }
+//public void setAge()
+//{
+//    age = 12;  //SET
+//}
+//public int getAge()
+//{
+//    return age; //GET
+//}
+------------------------------------
+using BatchAsgarCore.Models;
+
+namespace BatchAsgarCore.EmployeeOperation
+{
+    public class DbEmployee
+    {
+        public static Employee GetEmployee()
+        {
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Name = "Suhir";
+            emp.Age = 19;
+            emp.City = "Noida";
+            emp.Salary = 34567.89;
+            return emp;
+        }
+    }
+}
+----------------------
+@model Employee
+
+<h1 class="text-center bg-dark text-white">**Welcome to My Employee Page**</h1>
+
+<table class="table table-bordered bg-white">
+    <tr>
+        <th>EID</th>
+        <th>@Model.Eid</th>
+    </tr>
+    <tr>
+        <th>NAME</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>AGE</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>CITY</th>
+        <th>@Model.City</th>
+    </tr>
+    <tr>
+        <th>SALARY</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+-----------------------------------------------------------------
+2. Show Multiple Employee:-
+----------------------------------------------
+using BatchAsgarCore.Models;
+
+namespace BatchAsgarCore.EmployeeOperation
+{
+    public class DbEmployee
+    {
+        public static List<Employee> GetEmployees()
+        {
+            List<Employee> empList = new List<Employee>();
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Name = "Asgar";
+            emp.Age = 17;
+            emp.City = "Noida";
+            emp.Salary = 45000.34;
+            empList.Add(emp); // First Employee Added
+
+            emp = new Employee();
+            emp.Eid = 102;
+            emp.Name = "Ravi";
+            emp.Age = 27;
+            emp.City = "Banglore";
+            emp.Salary = 34833.34;
+            empList.Add(emp); // Second Employee Added
+
+            emp = new Employee();
+            emp.Eid = 103;
+            emp.Name = "Subham";
+            emp.Age = 15;
+            emp.City = "Chennai";
+            emp.Salary = 14833.34;
+            empList.Add(emp); // Third Employee Added
+
+            emp = new Employee();
+            emp.Eid = 104;
+            emp.Name = "Kartik";
+            emp.Age = 23;
+            emp.City = "Hyderabad";
+            emp.Salary = 45332.234;
+            empList.Add(emp); // Fourth Employee Added
+
+            emp = new Employee();
+            emp.Eid = 105;
+            emp.Name = "Pushpendra";
+            emp.Age = 34;
+            emp.City = "Goa";
+            emp.Salary = 48303.14;
+            empList.Add(emp); // Fivth Employee Added
+
+            return empList;  
+        }
+        public static Employee GetEmployee()
+        {
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Name = "Suhir";
+            emp.Age = 19;
+            emp.City = "Noida";
+            emp.Salary = 34567.89;
+            return emp;
+        }
+    }
+}
+------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchAsgarCore.EmployeeOperation;
+
+namespace BatchAsgarCore.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        public IActionResult GetEmployee(string name,int age,string city)
+        {
+            ViewBag.name = name;
+            ViewBag.age = age;
+            ViewBag.city = city;
+            return View();
+        }
+        public IActionResult Index()
+        {
+            var employees = DbEmployee.GetEmployees();
+            return View(employees);
+
+            //var employee=DbEmployee.GetEmployee();
+            //return View(employee);
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+------------
+@model IEnumerable<Employee>
+
+<h1 class="text-center bg-dark text-white">**SHOW ALL EMPLOYEE**</h1>
+<button class="btn btn-success">Add New Employee</button>
+<table class="table table-bordered bg-white mt-3">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>CITY</th>
+        <th>SALARY</th>
+        <th colspan="3" class="text-center">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+    <tr>
+        <td>@emp.Eid</td>
+        <td>@emp.Name</td>
+        <td>@emp.Age</td>
+        <td>@emp.City</td>
+        <td>@emp.Salary</td>
+        <td align="center"><button class="btn btn-warning">EDIT</button></td>
+        <td align="center"><buton class="btn btn-dark">DETAILS</buton></td>
+        <td align="center"><button class="btn btn-danger">DELETE</button></td>
+    </tr>
+    }
+</table>
