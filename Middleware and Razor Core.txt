@@ -1,0 +1,239 @@
+How to show single record. 
+How to show multiple record.
+------------------------------------------------
+Middleware:-
+--------------------------
+>> Middleware is nothing, it is a component class, that assembled to run every request and response in web application.
+>> Middleware also show how our application look, when there is an error.
+>> Middleware must be executed when we run first time our application.
+>> In middleware is like a request pipeline that handle all httprequest and httpresponse.
+---------------------------------------------------------------------------------------------------------------------------------------
+To perform middleware we have two methods -
+a) app.Run()
+b) app.Use()
+---------------------------------------------------------------------------------
+
+app.Use(async (context,next) =>
+{
+    await context.Response.WriteAsync("This is My First Middleware\n");
+    await next(context);
+});
+app.Use(async (context, next) =>
+{
+    await context.Response.WriteAsync("This is My Second Middleware\n");
+    await next(context);
+});
+app.Use(async (context, next) =>
+{
+    await context.Response.WriteAsync("This is My Third Middleware\n");
+    await next(context);
+});
+
+app.Run(async (context) =>
+{
+    await context.Response.WriteAsync("This is My Final Middleware\n");
+});
+-------------------------------------------------------------------------------------------------------------------------
+Razor Syntax:-
+------------------------------
+>> It is used to render c# code with html file.
+>> To write razor syntax in html file we use @ { } symbol.
+Syntax:-
+--------------------
+@{
+// Write your C# Code Here........
+}
+--------------------------------------------------------------------------------
+To write razor syntax we have following ways:-
+1. Inline Expression. -> To write C# code in one line.
+@{
+    string str = "Welcome to my First Razor Page";
+}
+<h1>@str</h1>
+---------------------------------------------------------------------------------------
+2. MultiLine Statement:- An expression which contains more than one line.
+@{
+    string name = "Udham Singh";
+    int age = 19;
+    string city = "Noida";
+    string mob = "989890233";
+    string date = DateTime.Now.ToString();
+}
+
+<h1> Name= @name</h1>
+<h1>Age = @age</h1>
+<h1>City=@city</h1>
+<h1>Mobile= @mob</h1>
+<h1>Date=@date</h1>
+--------------------------------------------------------------------------------
+3. Conditional Statements:-
+--------------------------------------------
+a) if-else
+@{
+    int age = 19;
+    if(age>=18)
+    {
+        <h1>Valid for Vote..</h1>
+    }
+    else
+    {
+        <h1>Not Valid for Vote..</h1>
+    }
+}
+---------------------------------------------------------
+b) if-else-if
+@{
+    int a = 4, b = 8, c = 1;
+    if(a>b && c<b)
+    {
+        <h1>Hello C#</h1>
+    }
+    else if(a!=b && a>c)
+    {
+        <h1>Hello Java</h1>
+    }
+    else if(c<b && b>a)
+    {
+        <h1>Hello Python</h1>
+    }
+    else
+    {
+        <h1>Not Like Programming Language</h1>
+    }
+}
+-------------------------------------------------
+switch:-
+--------------------
+@{
+    string sports = "Cricket";
+    switch(sports)
+    {
+            case "FootBall":
+            <h1>Hello FootBall</h1>
+            break;
+            case "Cricket":
+            <h1>Hello Cricket</h1>
+            break;
+            case "Tennis":
+            <h1>Hello Tennis</h1>
+            break;
+            case "BasketBall":
+            <h1>Hello BasketBall</h1>
+            break;
+        default:
+            <h1>Don't Like Sports</h1>
+            break;
+    }
+}
+-----------------------------------------------
+4. Loop:-
+-----------------
+a) while
+@{
+    int i = 10;
+    while(i>=1)
+    {
+        <h1>@i</h1>
+         i= i - 1;
+    }
+}
+b) do-while
+@{
+    int i = 1;
+    do
+    {
+        <h1>@i</h1>
+        i = i + 1;
+    }
+    while (i != 6);
+}
+@{
+    int i = 3;
+    do
+    {
+        <h1>@i</h1>
+        i = i + 1;
+    }
+    while (i >6);
+}
+--------------------------------------------------
+@{
+    int i = 8;
+    do
+    {
+        <h1>@i</h1>
+        i = i + 3;
+    }
+    while (i < 13);
+}
+------------------------------------------------------------
+c) for
+@{
+    for(int i=3;i!=12;i+=2)
+    {
+        <h1>@i</h1>
+    }
+}
+-------------
+d) foreach.
+---------------------------
+@{
+    string[] sport = { "Cricket", "FootBall", "Tennis" };
+    <ol>
+    @foreach (string str in sport)
+    {
+        <li>@str</li>
+    }
+    </ol>
+}
+---------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchAsgarCore.Models;
+
+namespace BatchAsgarCore.Controllers
+{
+    public class RazorExController : Controller
+    {
+        public IActionResult Index()
+        {
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Name = "Udham Singh";
+            emp.Age = 19;
+            emp.City = "Noida";
+            emp.Salary = 45000;
+            return View(emp);
+        }
+    }
+}
+------------------------------------------------------------------------------------------
+@model Employee
+
+<h1>Show Employee Information</h1>
+
+<h1>EID=   @Model.Eid</h1>
+<h1>Name= @Model.Name</h1>
+<h1>Age=  @Model.Age</h1>
+<h1>City= @Model.City</h1>
+<h1>Salary=@Model.Salary</h1>
+-------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
