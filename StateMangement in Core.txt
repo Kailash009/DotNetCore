@@ -1,0 +1,323 @@
+State Management in Dot Net Core:-
+-----------------------------------------------------------
+>> Web application can be accessed by http protocol.
+>> https://www.amazon.in/
+>> http protocol is a stateless protocol.
+>> It doesn't maintain the information between client and server.
+>> we don't work with previous data.
+>> we need to maintain previous data for further processing then we use the concept of State Management.
+-----------------------------------------------------------------------------------------------------------------------------------
+a) Client Side State Management.
+	i)  ViewBag.
+	ii)  ViewData.
+	iii) TempData.
+	iv) Cookies.
+-------------------------------------------------------------
+b) Server Side State Mangement.
+	i) Session.  --> Pending
+	Comparision viewbag,viewdata,tempata - Pending
+-------------------------------------------------------------
+a) Client Side State Management.
+	i)  ViewBag.
+------------------------------------------------------
+>> ViewBag is dynamic property.
+>> ViewBag doesn't require type casting for complex data type.
+>> View Bag is used to transfer information between controller to view.
+>> ViewBag doesn't show compile time error, it always generate runtime.
+>> The life cycle of viewbag is only current http request.
+Syntax:-
+------------------
+ViewBag.varname/keyname=value;
+-----------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchSushilCore.Models;
+
+namespace BatchSushilCore.Controllers
+{
+    public class StateMgtController : Controller
+    { 
+        public IActionResult Index()  
+        {
+            //ViewBag.res = "Data come From View Bag"; // controller to view.
+            //string[] sports = { "Cricket", "FootBall", "Hockey", "Tennis", "Batminton" };
+            //ViewBag.spt = sports;
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Name = "Sushil";
+            emp.Age = 19;
+            emp.City = "Noida";
+            emp.Salary = 908455;
+            ViewBag.employee = emp;
+            return View();
+        }
+    }
+}
+----------------------
+<h1>Welcome to State Mangement</h1>
+
+
+@*<h1>Result=  @ViewBag.res </h1>*@
+  
+@*@{
+    <ol>
+    @foreach (string res in @ViewBag.spt)
+    {
+        <li>@res</li>
+    }
+    </ol>
+}*@
+
+
+@*<h2>Employee Information</h2>
+@{
+    var emp = ViewBag.employee;
+}
+<h3>Id=@emp.Eid</h3>
+<h3>Name=@emp.Name</h3>
+<h3>Age=@emp.Age</h3>
+<h3>City=@emp.City</h3>
+<h3>Salary=@emp.Salary</h3>
+*@
+--------------------------------------------------------
+	ii)  ViewData.
+>> ViewData inherits from ViewDataDictionary.
+>> ViewData require type casting for complex data type.
+>> View Data is used to transfer information between controller to view.
+>> ViewData doesn't show compile time error, it always generate runtime.
+>> The life cycle of viewData is only current http request.
+Syntax:-
+------------------
+ViewData["varname/keyname"]=value;
+------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchSushilCore.Models;
+
+namespace BatchSushilCore.Controllers
+{
+    public class StateMgtController : Controller
+    { 
+        public IActionResult Index()  
+        {
+            //ViewData["res"] = "Data come From ViewData"; // controller to view.
+            //string[] sports = { "Cricket", "FootBall", "Hockey", "Tennis", "Batminton" };
+            //ViewData["spt"] = sports;
+            //Employee emp = new Employee();
+            //emp.Eid = 101;
+            //emp.Name = "Sushil";
+            //emp.Age = 19;
+            //emp.City = "Noida";
+            //emp.Salary = 908455;
+            //ViewData["employee"] = emp;
+            return View();
+        }
+    }
+}
+-----------------------------
+<h1>Welcome to State Mangement</h1>
+
+
+@*<h1>Result=  @ViewData["res"] </h1>*@
+
+@*@{
+    <ol>
+        @foreach (string res in (string[])ViewData["st"])
+        {
+            <li>@res</li>
+        }
+    </ol>
+}*@
+
+@*
+<h2>Employee Information</h2>
+@{
+    var emp = (Employee)ViewData["employee"];
+}
+<h3>Id=@emp.Eid</h3>
+<h3>Name=@emp.Name</h3>
+<h3>Age=@emp.Age</h3>
+<h3>City=@emp.City</h3>
+<h3>Salary=@emp.Salary</h3>*@
+------------------------------------------------------------
+	iii) TempData.
+>> TempData inherits from TempDataDictionary.
+>> TempData require type casting for complex data type.
+>> TempData is used to transfer information between controller to view and controller to controller.
+>> TempData doesn't show compile time error, it always generate runtime.
+>> The life cycle of TempData occur one subsequent request to another subsequent request.
+Syntax:-
+------------------
+TempData["varname/keyname"]=value;
+------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchSushilCore.Models;
+
+namespace BatchSushilCore.Controllers
+{
+    public class StateMgtController : Controller
+    { 
+        public IActionResult Index()  
+        {
+            //TempData["res"] = "Data come From TempData"; // controller to view.
+            //if (TempData["res"]!=null)
+            //{
+            //    return RedirectToAction("Index","Employee");
+            //}
+            //string[] sports = { "Cricket", "FootBall", "Hockey", "Tennis", "Batminton" };
+            //TempData["spt"] = sports;
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Name = "Sushil";
+            emp.Age = 19;
+            emp.City = "Noida";
+            emp.Salary = 908455;
+            TempData["employee"] = emp;
+            return View();
+        }
+    }
+}
+---------------------------------------------------
+<h1>Welcome to State Mangement</h1>
+
+
+@*<h1>Result= @TempData["res"] </h1>*@
+
+@*@{
+    <ol>
+        @foreach (string res in (string[])TempData["spt"])
+        {
+            <li>@res</li>
+        }
+    </ol>
+}*@
+
+
+<h2>Employee Information</h2>
+@{
+    var emp = (Employee)TempData["employee"];
+}
+<h3>Id=@emp.Eid</h3>
+<h3>Name=@emp.Name</h3>
+<h3>Age=@emp.Age</h3>
+<h3>City=@emp.City</h3>
+<h3>Salary=@emp.Salary</h3>
+-------------------------------------------------------
+	iv) Cookies.
+>> It is used to hold small piece of information at client machine.
+>> it store only string data.
+>> The capacity is upto 4K.(Browser to Browser).
+>> The default time of cookie is 30 Min.
+----------------------------------------------------------------------------------------------- 
+Types of cookies:-
+---------------------------------
+a) Non-Persistent Cookie.
+>> It holds client data at temporarily manner.
+>> As soon as when you close your browser window or turn off your computer cookie information automatically gets deleted from the
+browser.
+----------------------------------------------------------------------------------------------------------------
+b) Persistent Cookie.
+>> It holds client data at Permanent manner.
+>> As soon as when you close your browser window or turn off your computer cookie information doesn't deleted from the
+browser.
+>> You have to set the time.
+--------------------------------------------------------------------------------------------------------------
+Cookies:-
+------------------------
+1. How to Write Cookie.
+2. How to Read Cookie.
+--------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchSushilCore.Models;
+
+namespace BatchSushilCore.Controllers
+{
+    public class StateMgtController : Controller
+    { 
+        public IActionResult Index()  
+        {
+            //TempData["res"] = "Data come From TempData"; // controller to view.
+            //if (TempData["res"]!=null)
+            //{
+            //    return RedirectToAction("Index","Employee");
+            //}
+            //string[] sports = { "Cricket", "FootBall", "Hockey", "Tennis", "Batminton" };
+            //TempData["spt"] = sports;
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Name = "Sushil";
+            emp.Age = 19;
+            emp.City = "Noida";
+            emp.Salary = 908455;
+            TempData["employee"] = emp;
+            return View();
+        }
+        public IActionResult WriteCookie()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult WriteCookie(Employee empObj)
+        {
+            CookieOptions cookie = new CookieOptions();
+            cookie.Expires = DateTime.Now.AddDays(2); // Persistent Cookie.
+            Response.Cookies.Append("abc", empObj.Name, cookie); // write cookie in weB Browser
+            ViewBag.cook = "Cookie Saved!!";
+            return View();
+        }
+        public IActionResult ReadCookie()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ReadCookie(Employee empObj)
+        {
+            string name = Request.Cookies["abc"].ToString();
+            if(name!=null)
+            {
+                ViewBag.res = name;
+            }
+            else
+            {
+                ViewBag.res = "Cookies Not Found!!";
+            }
+            return View();
+        }
+
+    }
+}
+----------------------------------
+@model Employee
+
+<h1>***WRITE COOKIE***</h1>
+<h2>@ViewBag.cook</h2>
+
+<form asp-action="WriteCookie" asp-controller="StateMgt">
+    <label>Enter Your Name:</label>
+    <input type="text" asp-for="Name"/>
+
+    <button type="submit">Write Cookie</button>
+</form>
+--------------
+@model Employee
+
+<h1>***READ COOKIE***</h1>
+
+<form asp-action="ReadCookie" asp-controller="StateMgt">
+    <label>Read Your Name:</label>
+    <input type="text" asp-for="Name" value="@ViewBag.res" />
+
+    <button type="submit">Read Cookie</button>
+</form>
+----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
