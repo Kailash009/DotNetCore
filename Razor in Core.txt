@@ -1,218 +1,240 @@
-Dot Net Core:-
-----------------------------------
-Model :-
------------------------
->> It is DAL(Data Access Layer)
->> All database related operation work on this layer.
----------------------------------------------------------------------------
-Show one Record of an Employee:-
---------------------------------------------------------
-namespace Batch3PMWECORE.Models
-{
-    public class Employee
-    {
-        public int Eid { get; set; }
-        public string ?Ename { get; set; }
-        public int Age { get; set; }
-        public string ?Address { get; set; }
-        public int Salary { get; set; }
-    }
-}
-------------------------------------------------------
-
-        public IActionResult Index()
-        {
-           Employee employee=EmployeeDbOperation.getEmployee();
-            return View(employee);
-        }
-------------------
-using Batch3PMWECORE.Models;
-
-namespace Batch3PMWECORE.EmployeeData
-{
-    public class EmployeeDbOperation
-    {
-        public static Employee getEmployee()
-        {
-            Employee emp = new Employee();
-            emp.Eid = 101;
-            emp.Ename = "Shiva";
-            emp.Age = 19;
-            emp.Address = "New Ashok Nagar";
-            emp.Salary = 23000;
-            return emp;
-        }
-    }
-}
----------------
-@model Batch3PMWECORE.Models.Employee
-
-<h1 class="text-center bg-dark text-white"> **SHOW SINGLE EMPLOYEE RECORD** </h1>
-
-
-<table class="table table-bordered">
-    <tr>
-        <th>EID</th>
-        <th>@Model.Eid</th>
-    </tr>
-    <tr>
-        <th>NAME</th>
-        <th>@Model.Ename</th>
-    </tr>
-    <tr>
-        <th>AGE</th>
-        <th>@Model.Age</th>
-    </tr>
-    <tr>
-        <th>ADDRESS</th>
-        <th>@Model.Address</th>
-    </tr>
-    <tr>
-        <th>SALARY</th>
-        <th>@Model.Salary</th>
-    </tr>
-</table>
------------------------------------------------------------------------------------
-Show multiple Records of an Employee:-
--------------------------------------------------------------------------
-  public class EmployeeController : Controller
-    {
-        public IActionResult Index()
-        {
-            List<Employee> employees=EmployeeDbOperation.getAllEmployee();
-            return View(employees);
-        }
------------------------------------------------------------
-  public static List<Employee> getAllEmployee()
-        {
-            List<Employee> empList = new List<Employee>();
-
-            Employee emp = new Employee();
-            emp.Eid = 101;
-            emp.Ename = "Shiva";
-            emp.Age = 19;
-            emp.Address = "New Ashok Nagar";
-            emp.Salary = 23000;
-            empList.Add(emp);  // First Employee Added.
-
-            emp = new Employee();
-            emp.Eid = 102;
-            emp.Ename = "Ram";
-            emp.Age = 20;
-            emp.Address = "Noida Sec - 37";
-            emp.Salary = 25000;
-            empList.Add(emp);  // Second Employee Added.
-
-            emp = new Employee();
-            emp.Eid = 103;
-            emp.Ename = "Manoj";
-            emp.Age = 24;
-            emp.Address = "Noida Sec - 12";
-            emp.Salary = 290000;
-            empList.Add(emp);  // Third Employee Added.
-
-
-            emp = new Employee();
-            emp.Eid = 104;
-            emp.Ename = "Sudarshan";
-            emp.Age = 23;
-            emp.Address = "Kriti Nagar";
-            emp.Salary = 21000;
-            empList.Add(emp);  // Fourth Employee Added.
-
-
-            emp = new Employee();
-            emp.Eid = 105;
-            emp.Ename = "Prateek";
-            emp.Age = 26;
-            emp.Address = "Noida Sec - 54";
-            emp.Salary = 12000;
-            empList.Add(emp);  // Fivth Employee Added.
-
-            return empList;
-
-        }
------------------------------------------------------------------------------------
-@model IEnumerable<Batch3PMWECORE.Models.Employee>
-
-<h1 class="bg-dark text-white text-center">SHOW ALL EMPLOYEE RECORDS</h1>
-
-<a asp-action="Create" asp-controller="Employee" class="btn btn-success">Add New Employee</a>
-<table class="table table-bordered mt-3 bg-info">
-    <tr>
-        <th>EID</th>
-        <th>NAME</th>
-        <th>AGE</th>
-        <th>ADDRESS</th>
-        <th>SALARY</th>
-        <th colspan="2" class="text-center">ACTION</th>
-    </tr>
-    @foreach (var emp in Model)
-    {
-    <tr>
-        <td>@emp.Eid</td>
-        <td>@emp.Ename</td>
-        <td>@emp.Age</td>
-        <td>@emp.Address</td>
-        <td>@emp.Salary</td>
-        <td align="center"><a asp-action="Edit" asp-controller="Employee" class="btn btn-warning">EDIT</a></td>
-        <td align="center"><a asp-action="Delete" asp-controller="Employee" class="btn btn-danger" onclick="return confirm('Are you Sure you want to Delete(Y/N)?');">DELETE</a></td>
-    </tr>
-    }
-</table>
-----------------------------------------------------------------------------------------------------------------------
-Razor Syntax in Core:-
---------------------------------------
->> Razor syntax is generally used in .cshtml file.
->> In .cshtml file you can write html code as well as c# Code.
->> if you want to write C# code in .cshtml file then use @ { } symbol.
-----------------------------------------------------------------------------------------------------------------------------
-Variable:-
+Razor Syntax:-
+---------------------------
+>> It is used to render html file with C# code.
+>> Here we use @{ } Synmbol.
+Syntax:-
 -------------------
-<h1 align="center">Example of Razor Syntax</h1>
 @{
-    int a = 34;
-    int b = 45;
-    int res = a + b;
-    var datetime = DateTime.Now.ToString();
+// Write C# Code here.
 }
-<h2>@a</h2>
-<h2>@datetime</h2>
-<h2>Sum=@res</h2>
-----------------------------------------
-Assignment Question of Razor:-
-------------------------------------------
-1. wap to input two no. and swap without using third var.
-2. wap to input the length and breath of rectange and find its area,perimeter and diagonal.
-3. wap to input the radius of circle and find the area and circumference.
+----------------------------------------------
+There are following ways to write razor syntax with html:-
+-----------------------------------------------------------------------------------
+1. Single Line Statement.
+2. Multi-Line Statement.
+3. Conditional Statements.
+4. Control Statements.
+-----------------------------------------------------------------------------
+1. Single Line Statement.
+----------------------------------------------------------
+>> Statement with one line.
+--------------------------------------------
+<h1>Welcome to Razor Page</h1>
+
+@{
+    string msg = "Welcome to My First Core WebApp";
+}
+<h1>@msg</h1>
+--------------------------------------------------
+How to access variable:-
+--------------------------------------------
+<h1>Welcome to Razor Page</h1>
+
+@{
+    int a = 456;
+}
+<h1>@a</h1>
+---------------------------------------------------
+2. Multi-Line Statement.
+<h1>Welcome to Razor Page</h1>
+
+@{
+    string name = "Hrishi";
+    int age = 39;
+    string city = "Noida";
+    string DoJ=DateTime.Now.ToLongDateString();
+}
+<h1>Show Employee Information</h1>
+<h2>Name=@name</h2>
+<h2>Age=@age</h2>
+<h2>City=@city</h2>
+<h2>DOJ=@DoJ</h2>
+----------------------------------------------------------
+3. Conditional Statement:-
+---------------------------------------------
+a) if-else.
+<h1>Welcome to Razor Page</h1>
+
+@{
+    int age = 22;
+    if(age>19)
+    {
+        <h1>Valid for Vote</h1>
+    }
+    else
+    {
+        <h1>Not Valid for Vote</h1>
+    }
+}
+------------------------------------------------------------
+b) if-else-if
+---------------------
+<h1>Welcome to Razor Page</h1>
+
+@{
+    int a = 4, b = 5, c = 10;
+    if(a>b && a<c)
+    {
+        <h1>Hello Python</h1>
+    }
+    else if(a!=b && b>a)
+    {
+        <h1>Hello Java</h1>
+    }
+    else if(a<b || c>a)
+    {
+        <h1>Hello C#</h1>
+    }
+    else
+    {
+        <h1>Not Like Programming Language.</h1>
+    }
+}
 -------------------------------------------------------------------------------------------------
+c) Switch.
+-------------------------
+<h1>Welcome to Razor Page</h1>
 
+@{
+    string fruits = "graphes";
+    switch (fruits)
+    {
+        case "apple":
+            <h1>Your Choice is Apple</h1>
+            break;
+        case "banana":
+            <h1>Your Choice is Banana</h1>
+            break;
+        case "graphes":
+            <h1>Your Choice is Graphes</h1>
+            break;
+        case "orange":
+            <h1>Your Choice is Orange</h1>
+            break;
+        default:
+            <h1>No Fruit Found!!</h1>
+            break;
+    }
+}
+---------------------------------------------------------------------------------------
+Loop:-
+---------------
+1. while.
+<h1>Welcome to Razor Page</h1>
 
+@{
+    int i = 1;
+    while(i!=5)
+    {
+        <h1>Welcome to Razor</h1>
+         i = i +1;
+    }
+}
+---------------------------------
+2. do-while
+<h1>Welcome to Razor Page</h1>
 
+@{
+    int i = 1;
+    do
+    {
+        <h1>Hello Do-While Loop</h1>
+        i = i + 1;
+    }
+    while(i>5);   //2>5 False
+}
+----------------------------
+3. for.
+<h1>Welcome to Razor Page</h1>
 
+@{
+    for(int i=1;i!=4;i++)
+    {
+        <h1>Hello C#</h1>
+    }
+}
+-------------------------------------------------------
+4. foreach.
+----------------------------
+<h1>Welcome to Razor Page</h1>
 
+@{
+    List<string> spt = new List<string>();
+    spt.Add("Cricket");
+    spt.Add("FootBall");
+    spt.Add("Tennis");
+    spt.Add("Batminton");
+    spt.Add("Hockey");
+    spt.Add("BaseBall");
+    <ol>
+    @foreach (string str in spt)
+    {
+       <li>@str</li>
+    }
+    </ol>
+}
+---------------------------------------------------------------
+using BatchMithilesh11AMWE.Models;
+using Microsoft.AspNetCore.Mvc;
 
+namespace BatchMithilesh11AMWE.Controllers
+{
+    public class RazorExController : Controller
+    {
+        public IActionResult Index()
+        {
+            Employee emp = new Employee();
+            emp.EID = 101;
+            emp.Name = "Ashish";
+            emp.Age = 19;
+            emp.City = "Noida";
+            emp.Salary = 45000;
+            return View(emp);
+        }
+    }
+}
+------------------
+@model Employee
 
+<h1>Welcome to Razor Page</h1>
+@*
+@{
+    List<string> spt = new List<string>();
+    spt.Add("Cricket");
+    spt.Add("FootBall");
+    spt.Add("Tennis");
+    spt.Add("Batminton");
+    spt.Add("Hockey");
+    spt.Add("BaseBall");
+    <ol>
+    @foreach (string str in spt)
+    {
+       <li>@str</li>
+    }
+    </ol>
+}*@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<h1>Employee Information</h1>
+ 
+<h1>@Model.EID</h1>
+<h1>@Model.Name</h1>
+<h1>@Model.Age</h1>
+<h1>@Model.City</h1>
+<h1>@Model.Salary</h1>
+-------------------------------------------------------------------
+Assignment Razor:-
+-------------------------------------------------------------------
+1. wap to find the sum and average of 5 NO.
+2. wap to find the area,perimeter and diagonal of rectangle.
+3. wap to find the area and cirumference of circle.
+4. wap to swap without using third variable.
+5. wap to find the factorial.
+6. wap to find the leap year.
+7. wap to check character is vowel or consonant.
+8. wap to check no. is positive or negative.
+9. wap to check no. is prime or not.
+10. wap to check no. is armstrong or not.
+-------------------------------------------------------------------------------------
 
 
 
