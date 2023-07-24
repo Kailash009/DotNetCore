@@ -1,216 +1,276 @@
 Complex Model in Core:-
--------------------------------------------------------
-DPS:-
--------------------
-1. School. -> In school we contain School Information.  -> List of Teachers
-2. Teacher. -> In Teacher we contain Teacher Information.  ->>> List of Students
-3. Student. -> In Student we contain Student Information. 
---------------------------------------------------------------------------------------------------------------------------------
-namespace Batch12PMMohit.Models
-{
-    public class School
-    {
-        public int School_Id { get; set; }
-        public string ?School_Name { get; set; }
-        public string ?School_City { get; set; }
-
-        public List<Teacher> ?ListofTeachers { get; set; }  // List of Teachers
-    }
-}
-----------------------------------------------
-namespace Batch12PMMohit.Models
-{
-    public class Teacher
-    {   
-        public int TID { get; set; }
-        public string ?TName { get; set; }
-        public int TAge { get; set; }
-        public string ?TRole { get; set; }
-        public string ?TAddress { get; set; }
-        public string ?Timage { get; set; }
-
-        public List<Student>? ListofStudents { get; set; }  // List of Students
-    }
-}
-------------------------------
-namespace Batch12PMMohit.Models
-{
-    public class Student
-    {
-        public int Sid { get; set; }
-        public string ?SName { get; set; }
-        public int SAge { get; set; }
-        public  string ?SAddress { get; set; }
-    }
-}
------------------------------
-using Batch12PMMohit.Models;
-
-namespace Batch12PMMohit.SchoolOperation
-{
-    public class DbSchool
-    {
-        public static List<Student> ListofStudentforTeacherA()
-        {
-            List<Student> stuList = new List<Student>();
-            Student stu1 = new Student();
-            stu1.Sid = 1;
-            stu1.SName = "Ram Krishna";
-            stu1.SAge = 20;
-            stu1.SAddress = "Ram Nagar";
-            stuList.Add(stu1);
-
-            stu1 = new Student();
-            stu1.Sid = 2;
-            stu1.SName = "Shiva";
-            stu1.SAge = 22;
-            stu1.SAddress = "Shiv Nagar";
-            stuList.Add(stu1);
-
-            stu1 = new Student();
-            stu1.Sid = 3;
-            stu1.SName = "Avinash";
-            stu1.SAge = 17;
-            stu1.SAddress = "SriNagar";
-            stuList.Add(stu1);
-
-            return stuList;
-
-        }
-        public static List<Student> ListofStudentforTeacherB()
-        {
-            List<Student> stuList = new List<Student>();
-            Student stu1 = new Student();
-            stu1.Sid = 4;
-            stu1.SName = "Mohit";
-            stu1.SAge = 19;
-            stu1.SAddress = "Manmohan Nagar";
-            stuList.Add(stu1);
-
-            stu1 = new Student();
-            stu1.Sid = 5;
-            stu1.SName = "Rahul";
-            stu1.SAge = 25;
-            stu1.SAddress = "Rajiv Chawk";
-            stuList.Add(stu1);
-
-            return stuList;
-
-        }
-        public static List<Student> ListofStudentforTeacherC()
-        {
-            List<Student> stuList = new List<Student>();
-            Student stu1 = new Student();
-            stu1.Sid = 6;
-            stu1.SName = "Deepak";
-            stu1.SAge = 23;
-            stu1.SAddress = "Deep Nagar";
-            stuList.Add(stu1);
-
-            stu1 = new Student();
-            stu1.Sid = 7;
-            stu1.SName = "Neetu";
-            stu1.SAge = 24;
-            stu1.SAddress = "Nirmal Vihar";
-            stuList.Add(stu1);
-
-            stu1 = new Student();
-            stu1.Sid = 8;
-            stu1.SName = "Vikas";
-            stu1.SAge = 26;
-            stu1.SAddress = "Vijay Chawk";
-            stuList.Add(stu1);
-
-            stu1 = new Student();
-            stu1.Sid = 9;
-            stu1.SName = "Harsh";
-            stu1.SAge = 12;
-            stu1.SAddress = "hariNagar";
-            stuList.Add(stu1);
-
-            return stuList;
-        }
-
-        public static List<Teacher> GetTeachers()
-        {
-            List<Teacher> tchList = new List<Teacher>();
-            Teacher tch1 = new Teacher();
-            tch1.TID = 101;
-            tch1.TName = "John Cena";
-            tch1.TAge = 23;
-            tch1.TRole = "Computer Science";
-            tch1.TAddress = "New York";
-            tch1.Timage = "~/images/tch1.jpg";
-            tch1.ListofStudents = ListofStudentforTeacherA();
-            tchList.Add(tch1);
-
-            tch1 = new Teacher();
-            tch1.TID = 102;
-            tch1.TName = "Rock";
-            tch1.TAge = 26;
-            tch1.TRole = "Math";
-            tch1.TAddress = "Australlia";
-            tch1.Timage = "~/images/tch2.png";
-            tch1.ListofStudents = ListofStudentforTeacherB();
-            tchList.Add(tch1);
-
-            tch1 = new Teacher();
-            tch1.TID = 103;
-            tch1.TName = "Marry";
-            tch1.TAge = 29;
-            tch1.TRole = "English";
-            tch1.TAddress = "England";
-            tch1.Timage = "~/images/tch3.jpg";
-            tch1.ListofStudents = ListofStudentforTeacherC();
-            tchList.Add(tch1);
-
-            return tchList;
-        }
-
-
-        public static School GetSchool()
-        {
-            School sc = new School();
-            sc.School_Id = 8909374;
-            sc.School_Name = "Delhi Public School";
-            sc.School_City = "Delhi";
-            sc.ListofTeachers = GetTeachers();
-            return sc;
-        }
-    }
-}
---------------------------------------------------
-using Batch12PMMohit.SchoolOperation;
+---------------------------------------------------
+>> When a user want to show multiple models data into single view.
+-------------------------------------------------------------------------------------------------------
+1. School.    -->> ListofTeacher.
+2. Teacher.  -->> ListofStudent
+3. Student.
+---------------------------------------------------------------
+Assignment:-
+--------------------------------
+1. School.    -->> ListofTeacher.
+2. Teacher.  -->> ListofStudent
+3. Student.  -->> ListofCourse
+4. Course.
+---------------------------------------------------------------
 using Microsoft.AspNetCore.Mvc;
-using Batch12PMMohit.Models;
+using BatchAsgarCore.SchoolDbOperation;
+using BatchAsgarCore.Models;
 
-namespace Batch12PMMohit.Controllers
-{ 
+namespace BatchAsgarCore.Controllers
+{
     public class SchoolController : Controller
     {
         public IActionResult Index()
         {
-            School school= DbSchool.GetSchool();
+            School school=SchoolOperation.getSchool();
             return View(school);
         }
     }
 }
---------------------------------------------------------------------
+------------------------------------------------------------
+using BatchAsgarCore.Models;
+
+namespace BatchAsgarCore.SchoolDbOperation
+{
+    public class SchoolOperation
+    {
+        public static List<Student> ListofStudentforTeacherA()
+        {
+            List<Student> stuList = new List<Student>();
+            Student stu = new Student();
+            stu.Sid = 1;
+            stu.sName = "Kunal";
+            stu.sAge = 19;
+            stu.sCity = "Noida";
+            stu.sMobileNo = "889330344";
+            stuList.Add(stu);
+
+            stu = new Student();
+            stu.Sid = 2;
+            stu.sName = "Saurabh";
+            stu.sAge = 29;
+            stu.sCity = "Delhi";
+            stu.sMobileNo = "789330344";
+            stuList.Add(stu);
+
+            stu = new Student();
+            stu.Sid = 3;
+            stu.sName = "Ravi";
+            stu.sAge = 13;
+            stu.sCity = "Chennai";
+            stu.sMobileNo = "349330344";
+            stuList.Add(stu);
+
+            return stuList;
+        }
+        public static List<Student> ListofStudentforTeacherB()
+        {
+            List<Student> stuList = new List<Student>();
+            Student stu = new Student();
+            stu.Sid = 4;
+            stu.sName = "Rajesh";
+            stu.sAge = 39;
+            stu.sCity = "Banglore";
+            stu.sMobileNo = "4530344";
+            stuList.Add(stu);
+
+            stu = new Student();
+            stu.Sid = 5;
+            stu.sName = "Arpita";
+            stu.sAge = 19;
+            stu.sCity = "Lucknow";
+            stu.sMobileNo = "23330344";
+            stuList.Add(stu);
+
+            return stuList;
+        }
+        public static List<Student> ListofStudentforTeacherC()
+        {
+            List<Student> stuList = new List<Student>();
+            Student stu = new Student();
+            stu.Sid = 6;
+            stu.sName = "Amit";
+            stu.sAge = 14;
+            stu.sCity = "Allahabad";
+            stu.sMobileNo = "34530344";
+            stuList.Add(stu);
+
+            stu = new Student();
+            stu.Sid = 7;
+            stu.sName = "Tikam";
+            stu.sAge = 10;
+            stu.sCity = "Punjab";
+            stu.sMobileNo = "900330344";
+            stuList.Add(stu);
+
+            stu = new Student();
+            stu.Sid = 8;
+            stu.sName = "Bablu";
+            stu.sAge = 24;
+            stu.sCity = "Hyderabad";
+            stu.sMobileNo = "3440344";
+            stuList.Add(stu);
+
+            stu = new Student();
+            stu.Sid = 9;
+            stu.sName = "Hrishi";
+            stu.sAge = 15;
+            stu.sCity = "Goa";
+            stu.sMobileNo = "84440344";
+            stuList.Add(stu);
+
+            return stuList;
+        }
+        public static List<Teacher> GetTeachers()
+        {
+            List<Teacher> tchList = new List<Teacher>();
+            Teacher tch = new Teacher();
+            tch.Tid = 101;
+            tch.tName = "John";
+            tch.tAge = 45;
+            tch.tCity = "New York";
+            tch.tRole = "Computer Science";
+            tch.tImage = "images/team-1.jpg";
+            tch.ListofStudents = ListofStudentforTeacherA();
+            tchList.Add(tch); // First Teacher Add
+
+            tch = new Teacher();
+            tch.Tid = 102;
+            tch.tName = "Marry";
+            tch.tAge = 35;
+            tch.tCity = "Canada";
+            tch.tRole = "Physics";
+            tch.tImage = "images/testimonial-1.jpg";
+            tch.ListofStudents = ListofStudentforTeacherB();
+            tchList.Add(tch); // Second Teacher Add
+
+            tch = new Teacher();
+            tch.Tid = 103;
+            tch.tName = "Kelvin";
+            tch.tAge = 55;
+            tch.tCity = "America";
+            tch.tRole = "Chemistry";
+            tch.tImage = "images/testimonial-2.jpg";
+            tch.ListofStudents = ListofStudentforTeacherC();
+            tchList.Add(tch); // First Teacher Add
+
+            return tchList;
+        }
+        public static School getSchool()
+        {
+            School sc = new School();
+            sc.School_ID = 899093;
+            sc.School_Name = "Roget's Public School";
+            sc.School_City = "Noida";
+            sc.ListofTeachers = GetTeachers() ;
+            return sc;
+        }
+    }
+}
+----------------------------------------------
+namespace BatchAsgarCore.Models
+{
+    public class School
+    {
+        public int School_ID { get; set; }
+        public string ?School_Name { get; set; }
+        public string ?School_City  { get; set; }
+        public List<Teacher> ?ListofTeachers { get; set; }
+    }
+}
+---------------------
+namespace BatchAsgarCore.Models
+{
+    public class Teacher
+    {
+        public int Tid { get; set; }
+        public string ?tName { get; set; }
+        public int tAge { get; set; }
+        public string ?tRole { get; set; }
+        public string ?tCity { get; set; }
+        public string ?tImage { get; set; }
+
+        public List<Student>? ListofStudents { get; set; }
+    }
+}
+------------------
+namespace BatchAsgarCore.Models
+{
+    public class Student
+    {
+        public int Sid { get; set; }
+        public string ?sName { get; set; }
+        public int sAge { get; set; }
+        public string ?sMobileNo { get; set; }
+        public string ?sCity { get; set; }
+    }
+}
+------------------
 @model School
 
 <h1 class="text-center bg-dark text-white">SCHOOL INFORMATION</h1>
-<table class="table table-bordered">
+<table class="table table-bordered mt-4">
     <tr>
         <th>SCHOOL ID</th>
-        <th>@Model.School_Id</th>
+        <th>@Model.School_ID</th>
     </tr>
     <tr>
         <th>SCHOOL NAME</th>
         <th>@Model.School_Name</th>
     </tr>
     <tr>
-        <th>SCHOOL CITY</th>
+        <th>CITY</th>
         <th>@Model.School_City</th>
     </tr>
+    @foreach (var tch in Model.ListofTeachers)
+    {
+        <tr>
+            <th colspan="6" class="bg-warning text-center"> <h1> TEACHER </h1>  </th>
+        </tr>
+        <tr>
+            <th>TID</th>
+            <th>@tch.Tid</th>
+        </tr>
+        <tr>
+            <th>TNAME</th>
+            <th>@tch.tName</th>
+        </tr>
+        <tr>
+            <th>TAGE</th>
+            <th>@tch.tAge</th>
+        </tr>
+        <tr>
+            <th>TROLE</th>
+            <th>@tch.tRole</th>
+        </tr>
+        <tr>
+            <th>TCITY</th>
+            <th>@tch.tCity</th>
+        </tr>
+        <tr>
+            <th>PIC</th>
+            <th><img src="@tch.tImage" width="200px" height="200px" alt="PIC"/>  </th>
+        </tr>
+        <tr>
+            <th colspan="5" class="text-center bg-danger"> <h1>List OF STUDENTS</h1> </th>
+        </tr>
+        <tr>
+            <th>SID</th>
+            <th>NAME</th>
+            <th>AGE</th>
+            <th>CITY</th>
+            <th>MOBILE NO.</th>
+        </tr>
+        foreach (var stu in tch.ListofStudents)
+        {
+            <tr>
+                <th>@stu.Sid</th>
+                <th>@stu.sName</th>
+                <th>@stu.sAge</th>
+                <th>@stu.sCity</th>
+                <th>@stu.sMobileNo</th>
+            </tr>
+        }
+    }
 </table>
------------------------------------------------------------------------------------------------------
