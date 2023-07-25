@@ -1,0 +1,111 @@
+HTML Helper:-
+-------------------------------
+>> HTML helper is a predefined classes i.e. used to perform C# code in it.
+Types of HTML Helper:-
+--------------------------------------
+a) Normal HTML.
+b) Standard HTML.
+c) Strongly Typed.
+d) Tag Helper.
+------------------------------------------------------------------------------------------------------------------
+a) Normal HTML.
+>> To write normal html code in .cshtml.
+They are as follows -
+1. TextBox.
+2. CheckBox.
+3. Label.
+4. Select.
+5. TextArea.
+6. Form.
+7. Input.
+----------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace BatchAsgarCore.Controllers
+{
+    public class HelperExController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(string name,int age,string city)
+        {
+            return View();
+        }
+    }
+}
+-------------------------------------
+<h1>Example of HTML Helper </h1>
+
+<form action="\" method="post">
+    <label>Enter Name:</label>
+    <input type="text" name="name" class="form-control"/>
+    <label>Enter Age:</label>
+    <input type="text" name="age" class="form-control" />
+    <label>Enter City:</label>
+    <input type="text" name="city" class="form-control" />
+    <button type="submit" class="btn btn-success mt-4" >Register</button>
+</form>
+------------------------------------------------------------------------------------------------
+2. Standard Helper:-
+--------------------------------------------
+1. HTML.TextBox().
+2. HTML.Label().
+3. HTML.BeginForm().
+4. HTML.select().
+5. HTML.checkbox().
+6. HTML.radiobutton().
+7. HTML.Hidden().
+-----------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace BatchAsgarCore.Controllers
+{
+    public class HelperExController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(string name,int age,string city)
+        {
+            return View();
+        }
+    }
+}
+----------------------------
+<h1>Example of HTML Helper </h1>
+<style>
+    .ab {
+        background-color: aqua;
+    }
+</style>
+@{
+    @using (Html.BeginForm("Index", "HelperEx", FormMethod.Post))
+    {
+
+        @Html.Label("Enter Name")
+        @Html.TextBox("name",null,null,new{@class="form-control ab"})
+
+        @Html.Label("Enter Age")
+        @Html.TextBox("age",null,null,new{@class="form-control ab"})
+
+        @Html.Label("Enter City")
+        @Html.TextBox("city",null,null,new{@class="form-control ab"})
+
+        <button type="submit" class="mt-3 btn btn-warning">Register</button>
+    }
+}
+-----------------------------------------------------------
+c) Strongly Typed.  -- Pending
+-----------------------------------------------------------
+
+
+
+
+
