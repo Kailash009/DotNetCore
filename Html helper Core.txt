@@ -1,0 +1,202 @@
+c) Strongly Typed.:-
+----------------------------------------
+1. Html.TextBoxFor().
+2. Html.CheckBoxFor().
+3. Html.RadioButtonFor().
+4. Html.HiddenFor()
+5. Html.LabelFor()
+6. Html.TextAreaFor()
+7. Html.Form()
+8. Html.SelectFor()
+-----------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchAsgarCore.Models;
+
+namespace BatchAsgarCore.Controllers
+{
+    public class HelperExController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(Employee empObj)
+        {
+            return RedirectToAction("DisplayEmployee", empObj);
+            
+        }
+        public IActionResult DisplayEmployee(Employee empObj)
+        {
+            return View(empObj);
+        }
+    }
+}
+------------------------------------------------------------------------------------------------
+@model Employee
+
+<h1>Example of HTML Helper </h1>
+
+@using(@Html.BeginForm("Index","HelperEx",FormMethod.Post)){
+    @Html.LabelFor(m=>m.Eid)
+    @Html.TextBoxFor(arvind=>arvind.Eid,null,new{@class="form-control"})
+
+    @Html.LabelFor(m=>m.Name)
+    @Html.TextBoxFor(m=>m.Name,null,new{@class="form-control"})
+    
+    @Html.LabelFor(m=>m.Age)
+    @Html.TextBoxFor(m=>m.Age,null,new{@class="form-control"})
+    
+    @Html.LabelFor(m=>m.City)
+    @Html.TextBoxFor(m=>m.City,null,new{@class="form-control"})
+    
+    @Html.LabelFor(m=>m.Salary)
+    @Html.TextBoxFor(m=>m.Salary,null,new{@class="form-control"})
+    <button type="submit" class="btn btn-warning mt-4">Register</button>
+}
+---------------------------------------------------------------------------------------------------
+namespace BatchAsgarCore.Models
+{
+    public class Employee
+    { 
+        public int Eid { get; set; }  // Properties.
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?City { get; set; }
+        public double Salary { get; set; }
+    }
+}
+----------------------------------------------------------------------------
+@model Employee
+
+<h1 class="text-center bg-primary">SHOW EMPLOYEE INFORMATION</h1>
+<table class="table table-bordered bg-info">
+    <tr>
+        <th>EID</th>
+        <th>@Model.Eid</th>
+    </tr>
+    <tr>
+        <th>NAME</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>AGE</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>CITY</th>
+        <th>@Model.City</th>
+    </tr>
+    <tr>
+        <th>SALARY</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+-----------------------------------------------------
+4. Tag Helper:-
+-----------------------------------
+1. asp-action
+2. asp-controller
+3. asp-for
+4. asp-route-id
+--------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchAsgarCore.Models;
+
+namespace BatchAsgarCore.Controllers
+{
+    public class HelperExController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(Employee empObj)
+        {
+            return RedirectToAction("DisplayEmployee", empObj);
+            
+        }
+        public IActionResult DisplayEmployee(Employee empObj)
+        {
+            return View(empObj);
+        }
+    }
+}
+----------------
+@model Employee
+
+<h1>Example of HTML Helper </h1>
+<form asp-action="Index" asp-controller="HelperEx" method="post">
+    <label asp-for="Eid"></label>
+    <input type="text" asp-for="Eid" class="form-control" autocomplete="off" />
+
+    <label asp-for="Name"></label>
+    <input type="text" asp-for="Name" class="form-control" />
+
+    <label asp-for="Age"></label>
+    <input type="text" asp-for="Age" class="form-control" />
+
+    <label asp-for="City"></label>
+    <input type="text" asp-for="City" class="form-control" />
+
+    <label asp-for="Salary"></label>
+    <input type="text" asp-for="Salary" class="form-control" />
+     
+    <button type="submit" class="btn btn-danger mt-4">Register</button>
+</form>
+------------------
+@model Employee
+
+<h1 class="text-center bg-primary">SHOW EMPLOYEE INFORMATION</h1>
+<table class="table table-bordered bg-info">
+    <tr>
+        <th>EID</th>
+        <th>@Model.Eid</th>
+    </tr>
+    <tr>
+        <th>NAME</th>
+        <th>@Model.Name</th>
+    </tr>
+    <tr>
+        <th>AGE</th>
+        <th>@Model.Age</th>
+    </tr>
+    <tr>
+        <th>CITY</th>
+        <th>@Model.City</th>
+    </tr>
+    <tr>
+        <th>SALARY</th>
+        <th>@Model.Salary</th>
+    </tr>
+</table>
+--------------------
+namespace BatchAsgarCore.Models
+{
+    public class Employee
+    { 
+        public int Eid { get; set; }  // Properties.
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?City { get; set; }
+        public double Salary { get; set; }
+    }
+}
+------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
