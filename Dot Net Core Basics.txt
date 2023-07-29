@@ -1,0 +1,46 @@
+Dot Net Core:-
+------------------------------
+>> Dot net core is the new version of dot net framework.
+>> Dot net core is a cross platform (win,mac,linux),open source and platform independent.
+>> Dot net core is used to build different kind of applications - Desktop app,web app,android/mobile app, IOT (Internet of Things), Machine Learning,Cloud Based Webservices,AI(Aritifical Intelligence) and many more.
+>> Dot net core used RYUJIT (Rosyln Just-in-Time) compiler which 110% faster than dot net compiler.
+>> Dot net framework can be hosted on IIS (Internet Information Services) only but dot net core can be hosted on different servers - IIS,Linux,Apache,Nginx. [Dot net core used "Kestrel Web Server". It is a corss Platform].
+>> dot net core web api based.
+>> dot net core support Built-In Dependency Injection.
+>> Dot net core used the concept of "MiddleWare". 
+------------------------------------------------------------------------------------------------------------------------------------------------------
+MVC Architecture:-
+-------------------------------
+Model -> DAL (Data Access Layer) -> All database related operations performed in this layer.
+View -> PAL (Presentation Access Layer) -> In this layer we write html,css,js etc.
+Controller - BLL (Business Logic Layer) -> All business related logics are performed in this layer.
+>> It is the main component of mvc because it interact both model and view.
+----------------------------------------------------------------------------------------------------------------------------------------
+General Syntax of Query String:-
+---------------------------------------------------
+http://localhost:4500/home/index?varname1=value1&varname2=value2&varname3=value3
+----------------------------------------------------------------------------------------------------------------------------------------
+For Example:-
+-------------------------
+https://localhost:7041/Employee/getdetails?name=rohit&age=18&city=noida
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
