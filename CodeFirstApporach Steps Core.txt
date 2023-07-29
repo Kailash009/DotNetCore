@@ -1,0 +1,236 @@
+Session:-
+-----------------------
+>> It is Global Mangement Protocol.
+>> We can access session value throughout the application.
+>> The default time of Session is 20 Min.
+>> It is a heavy weight.
+>> we can store any type of value into session.
+----------------------------------------------------------------------------------------
+How to set Session Time:-
+----------------------------------------
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Here set session time for 30 min.
+});
+--------------------------------------------------------------------------------------------------------------------------------------
+Comparision between ViewBag,ViewData,TempData,Session:-
+-------------------------------------------------------------------------------------------------
+Tempdata  -> If you want tempdata in all http redirection then we have keep().
+-----------------------------------------------------------------------------------------------------------------
+namespace BatchSushilCore.Controllers
+{
+    public class StateMgtController : Controller
+    { 
+        public IActionResult Index()  
+        {
+            ViewBag.name = "Hello ViewBag";
+            ViewData["nm"] = "Hello ViewData";
+            TempData["tm"] = "Hello TempData";
+            HttpContext.Session.SetString("email", "sushil@gmail.com");
+            return View();
+        }
+        public IActionResult About()
+        {
+            if(TempData["tm"]!=null)
+            {
+                TempData["tm"].ToString();
+                TempData.Keep();
+            }
+            string useremail = HttpContext.Session.GetString("email");
+            TempData["user"] = useremail;
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            if (TempData["tm"] != null)
+            {
+                TempData["tm"].ToString();
+                TempData.Keep();
+            }
+            string useremail = HttpContext.Session.GetString("email");
+            TempData["user"] = useremail;
+            return View();
+        }
+------------------------------------------------------------------------------------------------------------
+<h1> This is About Page </h1>
+
+<h2>ViewBag=@ViewBag.name </h2>
+<h2>ViewData=@ViewData["nm"] </h2>
+<h2>TempData=@TempData["tm"] </h2>
+<h2>Session=@TempData["user"] </h2>
+-----------------------------------------------------------------------------------------------------------
+Connectivity In Core:-
+------------------------------------
+There are two ways to connect your application with database -
+a) ADO.NET Classes.
+b) Entity Framework.
+--------------------------------------
+Entity Framework:-
+---------------------------------------
+>> Entity Framework is an ORM (Object Relational Mapping) tool, i.e used to directly connect with your database.
+>> In EF no need to write sql Query.
+>> In EF we write LINQ (Language Integrated) Query.
+>> Performance of entity framework is very fast.
+----------------------------------------------------------------------------------------------------------------------------------
+EntityFrameworkCore has two approaches:-
+-------------------------------------------------------------------
+a) Code First Approach.
+b) Database First Approach.
+----------------------------------------------------------------
+a) Code First Approach:-
+--------------------------------------------
+>> In code first approach we create model entitites and with the help of orm tool we can automatically generate database and tables corressponding to these entities.
+------------------------------------------------------------------------------------------------------------------------------
+step-1:-
+-------------------
+1. Install Packages.
+Microsoft.EntityFrameworkCore
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools.
+Microsoft.AspNetCore.mvc.razor.runtimecompilation
+------------------------------------------------------------------------------------------
+2. Create Model.
+using System.ComponentModel.DataAnnotations;
+namespace CodeFirstSushil.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string ?EName { get; set; }
+        public int EAge { get; set; }
+        public string ?EMobile { get; set; }
+        public string ?ECity { get; set; }
+        public double ESalary { get; set; }
+    }
+}
+----------------------
+3. Create DataContext Class.
+using Microsoft.EntityFrameworkCore;
+
+namespace CodeFirstSushil.Models
+{
+    public class EmployeeDbContext:DbContext
+    {
+        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options):base(options)
+        {
+            
+        }
+        public DbSet<Employee> Employees { get; set; } // Responsible to perform CRUD
+    }
+}
+------------------------------------------------------------
+4. Make Connection String :-
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=MAHADEV\\MSSQLSERVERJOSHI;Initial Catalog=CodeSushil;Integrated Security=True;TrustServerCertificate=True;Encrypt=True;"
+  },
+  "AllowedHosts": "*"
+}
+------------------------------------------------
+5. Initialize connection string to Context Class-
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+-------------------------------------------------------------------------------------------------------------------------------------
+6. Run Migration Command:- (This command map our model classes into database.)
+----------------------------------------------------------------------------------------------------------------------------------
+Type this command in Package Manager Console:-
+a) add-migration 'MigrationName'  => This command see our model classes and generate ORM Query.
+b) update-database => This command See our ORM Query and generate database and tables into your Database.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+7. Create Controller.
+----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
