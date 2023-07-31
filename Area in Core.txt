@@ -1,0 +1,20 @@
+Area in MVC Core:-
+-----------------------------------------
+>> When we have large project,then we need to convert into separate modules to understand.
+>> Area is used to separate your project into Modules.
+>> In your project if you create 1000 controller in one Controller folder then it is very difficult to manage all the controllers at once.
+>> For Example:-  if you create an entreprise application that contains modules Like - Admin, HR, Finance,Mrkt,Sales etc.
+>> Areas are part of MVC, which is a separate module in our application.
+>> We can create a level application by diving the modules areawise.
+>> We can create the same name controller, views at multiple times.
+>> We can create areas for like Employee, Admin, Customer, etc.
+>> Areas allows you to separate your modules and organize Model, View, Controller.
+>> In live MVC Project implementation we can use Areas concept for organizing project in better manageable way. Area separate logical section like Model, View, Controller, Web.config, Routing. So for example you have 30 controllers in your projects, rather then working on single controller folder,
+>> we can classify the module wise controllers and separate it in different areas.
+>> Each MVC area has its own folder structure which allow us to keep separate controllers, views, and models. This also helps the multiple developers to work on the same web application without interfere to one another.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+How to create an Area in your Core Project -
+---------------------------------------------------------------------------
+1. Right click on your project and create one Folder name as Areas.
+2. Right click on your Areas Folder and Create Area.
+-------------------------------------------------------------------------------------------------

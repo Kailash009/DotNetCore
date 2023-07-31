@@ -1,0 +1,302 @@
+Delegate in C#:-
+----------------------------
+>> Delegate in C# is similar to pointer in C or C++.
+>> Delegate is a reference type variable that hold reference to a method.
+---------------------------------------------------------------------------------------------------------------
+To perform delegation in C# we need to follow the following three steps-
+1. Declaration.
+2. Instantiation.
+3. Invocation.
+----------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+
+namespace Batch5PMWE
+{
+    delegate int dosomething(int n); // Declaration
+    class Demo
+    {
+        static int n=0;
+        public static int Addnum(int s)
+        {
+            n += s;
+            return n; // 10
+        }
+        public static int Multnum(int m)
+        {
+            n *= m; // n=n*m => 10*6 = 60
+            return n;// 60
+        }
+        public static int getnum()
+        {
+            return n;
+        }
+        static void Main()
+        {
+            dosomething dc1 = new dosomething(Addnum); // Instantiation
+            dosomething dc2 = new dosomething(Multnum);
+            dc1(10);
+            Console.WriteLine("Sum="+getnum()); // 10
+            dc2(6);
+            Console.WriteLine("Mult=" + getnum()); // 60
+        }
+    }
+}
+----------------------------------
+using System;
+using System.Collections.Generic;
+
+namespace Batch5PMWE
+{
+    delegate void doSomething();
+    class Demo
+    {
+        public static void print()
+        {
+            Console.WriteLine("Hello Java");
+        }
+        public static void show()
+        {
+            Console.WriteLine("Hello C#");
+        }
+        public static void display()
+        { 
+            Console.WriteLine("Hello PHP");
+        }
+        public static void Hello()
+        {
+            Console.WriteLine("Hello Python");
+        }
+        static void Main()
+        {
+            doSomething dc1 = new doSomething(print);
+            doSomething dc2 = new doSomething(show);
+            doSomething dc3 = new doSomething(display);
+            doSomething dc4 = new doSomething(Hello);
+            dc1();
+            dc2();
+            dc3();
+            dc4();
+        }
+    }
+}
+----------------------------------------------------------------------------------------
+Exception Handling:-
+--------------------------------------------------
+Exception:-
+-------------------------
+>> It is an abnormal situation that halt the normal execution of a program.
+>> Exception is a Run time Error.
+--------------------------------------------------------------
+Exception Handling:-
+----------------------------------------
+>> using "System.Exception" is the namespace where all exceptions are defined.
+>> To solve Run-time error we use Exception Handling.
+In Exception Handling we have following keywords-
+1. try
+2. catch
+3. finally
+4. throw
+--------------------------------------------------------------------------------------
+Note:- "Exception is the Parent class to handle any type of Exception".
+-----------------------------------------------------------------------------------------------------
+try -> Inside try we write all logic of the code.
+catch -> it is reponsible to handle the exception which is raised by try block.
+using System;
+using System.Collections.Generic;
+
+namespace Batch5PMWE
+{
+    class Demo
+    {
+        static void Main()
+        {
+            try
+            {
+                int a, b, res;
+                Console.WriteLine("Enter two Number");
+                a = Convert.ToInt32(Console.ReadLine());
+                b = Convert.ToInt32(Console.ReadLine());
+                res = a / b;
+                Console.WriteLine("Divide=" + res);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            //catch(DivideByZeroException abhishek)
+            //{
+            //    Console.WriteLine("Can't Divide a Number by Zero"+abhishek.Message);
+            //}
+            //catch(FormatException fe)
+            //{
+            //    Console.WriteLine(fe.Message);
+            //}
+        }
+    }
+}
+---------------------------------------------------------------------------------------
+try-catch-finally
+-------------------------------
+Finally:-
+----------------
+>> This Block must be executed at once, whether an exception has raised or not.
+------------------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+
+namespace Batch5PMWE
+{
+    class Demo
+    {
+        static void Main()
+        {
+            try
+            {
+                int a, b, res;
+                Console.WriteLine("Enter two Number");
+                a = Convert.ToInt32(Console.ReadLine());
+                b = Convert.ToInt32(Console.ReadLine());
+                res = a / b;
+                Console.WriteLine("Divide=" + res);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Hello I am Finally Block!!");
+            }
+        }
+    }
+}
+--------------------------------------
+try-catch-finally-throw:-
+-------------------------------------
+>> throw keyword is used to throw an exception.
+>> catch show an exception which is generated by throw keyword.
+------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+
+namespace Batch5PMWE
+{
+    class Demo
+    {
+        static void Main()
+        {
+            try
+            {
+                int age;
+                Console.WriteLine("Enter your Age");
+                age = Convert.ToInt32(Console.ReadLine());
+                if(age>19)
+                {
+                    Console.WriteLine("User is Valid for Vote!!");
+                }
+                else
+                {
+                    throw new Exception("User is Not Valid for Vote");
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Hello I am Finally Block!!");
+            }
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------
+Pending Topics:-
+-----------------------------------------
+1. Reflection.
+2. Multithreading.
+3. Readonly and const.
+4. Lambda Expression.
+5. Extension Method.
+6. Tuple.
+7. Partial Class and Methods.
+8. Anonymous Type.
+-----------------------------------------------------  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
