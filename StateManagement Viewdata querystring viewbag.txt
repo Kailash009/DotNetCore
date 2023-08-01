@@ -1,0 +1,164 @@
+State Management in Core:-
+-----------------------------------------------
+1. Client Side.
+	a) Cookies -> Non-persistent   / Persistent -> you have to set the time.
+	b) QueryString.
+>> It is used to send small data.
+General Syntax of Query String:-
+http://localhost:3400/controller/action?keyname1=value1&keyname2=value2&keyname3=value3
+--------------------------------------------------------------------------------------------------------------------------------------------
+	c) ViewBag.
+>> ViewBag is  a dynamic property.
+>> It is used to transfer small amount of information between controller to view.
+>> ViewBag doesn't require type casting for complex data type.
+>> ViewBag only show runtime error, it doesn't show compile time error.
+>> The life cycle of viewbag is current http request only.
+------------------------------------------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using BatchAsgarCore.Models;
+
+namespace BatchAsgarCore.Controllers
+{
+    public class StateMgtController : Controller
+    {
+        public IActionResult Index()
+        {
+            //Employee emp = new Employee();
+            //emp.Eid = 1001;
+            //emp.Name = "Shivam Mishra";
+            //emp.Age = 23;
+            //emp.City = "Noida";
+            //emp.Salary = 40934;
+            //ViewBag.employee = emp;
+            //ViewBag.name = "Hello ViewBag"; // Controller to View
+            //string[] program = { "Java", "Python", "Dot Net", "Php", "Angular" };
+            //ViewBag.prg = program;
+
+            return View();
+        }
+        public IActionResult getEmployee(int eid,string name,string city,int salary)
+        {
+            int ed =Convert.ToInt32(Request.Query["eid"]);
+            string n = Request.Query["name"];
+            string cty = Request.Query["city"];
+            int sal = Convert.ToInt32(Request.Query["salary"]);
+            return View();
+        }
+        public IActionResult WriteCookie()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult WriteCookie(Employee empobj)
+        {
+            CookieOptions cookie = new CookieOptions();
+            cookie.Expires = DateTime.Now.AddDays(4); // Persistent Cookie
+            Response.Cookies.Append("xyz",empobj.Name,cookie);
+            ViewBag.cook = "Cookie Saved!!"; // controller to View
+            return View();
+        }
+        public IActionResult ReadCookie()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ReadCookie(Employee empObj)
+        {
+            string username = Request.Cookies["xyz"].ToString();
+            ViewBag.user = username;
+            return View();
+        }
+    }
+}
+-----------------------------------
+Syntax:-
+---------------------
+ViewBag.keyname/varname = value;
+---------------------------------------------------------------
+@*<h1>ViewBag =  @ViewBag.name </h1>*@
+
+
+@*<h1>List of Programming Languages</h1>
+<ol>
+@foreach (var pg in ViewBag.prg)
+{
+    <li>@pg</li>
+}
+</ol>*@
+<h1>Show Employee Information</h1>
+@{
+    var emp = ViewBag.employee;
+}
+<h2>EID =@emp.Eid</h2>
+<h2>NAME=@emp.Name </h2>
+<h2>AGE=@emp.Age </h2>
+<h2>CITY=@emp.City </h2>
+<h2>SALARY= @emp.Salary </h2>
+-----------------------------------------------------------------------------
+	d) ViewData.
+>> ViewData inherits from ViewData Dictionary.
+>> It is used to transfer small amount of information between controller to view.
+>> ViewData require type casting for complex data type.
+>> ViewData only show runtime error, it doesn't show compile time error.
+>> The life cycle of viewData is current http request only.
+Syntax:-
+-------------------
+ViewData["keyname/varname"]=value;
+--------------------------------------------------------------------------
+ public class StateMgtController : Controller
+    {
+        public IActionResult Index()
+        {
+            Employee emp = new Employee();
+            emp.Eid = 1001;
+            emp.Name = "Shivam Mishra";
+            emp.Age = 23;
+            emp.City = "Noida";
+            emp.Salary = 40934;
+            ViewData["employee"] = emp;
+            //ViewData["name"] = "Hello ViewData"; // Controller to View
+            //string[] program = { "Java", "Python", "Dot Net", "Php", "Angular" };
+            //ViewData["prg"] = program;
+
+            return View();
+        }
+-------------------------
+
+@*<h1>ViewData =  @ViewData["name"] </h1>
+*@
+
+@*<h1>List of Programming Languages</h1>
+<ol>
+@foreach (var pg in (string[])ViewData["prg"])
+{
+    <li>@pg</li>
+}
+</ol>*@
+
+<h1>Show Employee Information</h1>
+@{
+    var emp =(Employee)ViewData["employee"];
+}
+<h2>EID =@emp.Eid</h2>
+<h2>NAME=@emp.Name </h2>
+<h2>AGE=@emp.Age </h2>
+<h2>CITY=@emp.City </h2>
+<h2>SALARY= @emp.Salary </h2>
+------------------------------------------------------------------------
+	e) TempData.
+>> TempData inherits from TempDataDictionary.
+>> It is used to transfer small amount of information between controller to view and controller to controller.
+>> TempData require type casting for complex data type.
+>> TempData only show runtime error, it doesn't show compile time error.
+>> The life cycle of TempData is one subsequent to another subsequent request.
+Syntax:-
+-------------------
+TempData["keyname/varname"]=value;
+-----------------------------------------------------------------------------------
+2. Server Side.
+	Session.
+-----------------------------------------------------------
+
+
+
