@@ -1,0 +1,62 @@
+e) TempData.
+>> TempData inherits from TempDataDictionary.
+>> It is used to transfer small amount of information between controller to view and controller to controller.
+>> TempData require type casting for complex data type.
+>> TempData only show runtime error, it doesn't show compile time error.
+>> The life cycle of TempData is one subsequent to another subsequent request.
+Syntax:-
+-------------------
+TempData["keyname/varname"]=value;
+-----------------------------------------------------------------------------------
+2. Server Side.
+---------------------------------
+Session:-
+--------------------
+>> It is a Global Management Protocol.
+>> Session can be accessible throughout the whole application.
+>> In session we can store any type of value.
+>> we can store large amount of data.
+>> The default life time of session is 20 Min.
+--------------------------------------------------------------------------------------------------
+How to write session value.
+--------------------------------------------
+Syntax:-
+--------------------
+HttpContext.Session.methodname("Key","Value")
+or
+HttpContext.Session.SetString("mail", "asgar123@gmail.com");
+----------------------------------------------------------------------
+How to read session value.
+------------------------------------------------------------
+HttpContext.Session.methodname("Key")
+--------------------------------------------------------------
+'Session has not been configured for this application or request.'
+>> To Add Session service in Middleware.
+string username = HttpContext.Session.GetString("mail").ToString();
+TempData["user"] = username;
+------------------------------------------------------------------------------------------------------
+Comparsion Between ViewBag,ViewData,TempData.
+--------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

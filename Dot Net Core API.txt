@@ -1,0 +1,130 @@
+Web API :-
+------------------------
+>> API stands for Application Programming Interface.
+>> Web api is used to communicate between different software applications.
+>> API is not a technology nor a framework, it is a concept in which we can interact with different applications.
+>> API is nothing, it is just a Function.
+--------------------------------------------------------------------
+REST_API :-
+---------------------------
+>> It stands for 'Representational State Transfer'.
+>> It is communication protocol under which our api will run.
+----------------------
+Protocol :- It is rules and regulation that must be follow while communication.
+----------------------------------------------------------------------------------------------------------------------
+WCF -> Windows communication Foundation -> For webapplication.
+WPF -> Windows Presentation Foundation -> For Desktop App.
+-----------------------------------------------------------------------------------------------------------------
+JSON:-
+-----------------
+>> It stands for Java Script Object Notation.
+>> JSON is a light weight.
+>> with the help of json we can transfer large amount of data.
+>> To represent data with json in a fast manner.
+---------------------------------------------------------------------------------------------------------
+{
+"ID": 101,
+"Name": "Neetu",
+"Age": 18,
+"City": "Noida",
+"Salary": 34567.89,
+"MobileNo": 890787383
+} => JSON Format.
+----------------------------------------------------------------------
+In Api you need to perform only three Operations which are as follows:-
+1. How to Create your API.
+2. How to Test your API.  => POSTMAN,Swagger.    --->> https://www.postman.com/downloads/
+3. How to Consume your API.
+-------------------------------------------------------------------------------------------------------
+When you perform CRUD operation using API then you use the following Decorator which are as given below:-
+C  -> Create.   ->   api  ->  POST
+R ->  Read.     ->  api   ->  GET
+U ->  Update.  ->  api   ->  PUT
+D ->  Delete.   ->  api   ->  DELETE
+Patch -> Partial Update.
+-------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
+
+namespace Batch5PMWE
+{ 
+    class Demo
+    {
+        static void Main()
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("https://dummyjson.com/products");
+
+            // Add an Accept header for JSON format.
+            client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // List data response.
+            HttpResponseMessage response = client.GetAsync(client.BaseAddress).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine(response.StatusCode);
+            }
+            else
+            {
+                Console.WriteLine("Error in API Calling");
+            }
+        }
+    }
+}
+--------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
