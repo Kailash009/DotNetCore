@@ -1,0 +1,43 @@
+Comparison between ViewBag,ViewData,TempData.
+------------------------------------------------------------------------------------------
+ViewBag -> The Life cycle of viewBag is current http request only.
+ViewData -> The Life cycle of viewData is current http request only.
+TempData -> The Life cycle of tempdata is one subsequent request to another subsequent request.
+Keep() -> It is used to keep your tempdata value across all request.
+Syntax:-
+------------------------------------------------
+TempData.keep();
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ public IActionResult Index()
+        { 
+            ViewBag.data = "Hello Data Come From ViewBag";  // Controller to View.
+            ViewData["dat"] = "Hello Data Come From ViewData";
+            TempData["dt"] = "Hello Data Come From TempData"; // Controller to controller/view
+            HttpContext.Session.SetInt32("abc",3456); // SET
+            int empid =(int)HttpContext.Session.GetInt32("abc"); // GET
+            TempData["user"] = empid;
+}
+<h1>About Page</h1>
+
+
+<h1>ViewBag=@ViewBag.data</h1>
+<h1>ViewData=@ViewData["dat"]</h1>
+<h1>TempData=@TempData["dt"]</h1>
+<h1>EmailID = @TempData["user"]</h1>
+--------
+<h1>Contact Page</h1>
+
+
+<h1>ViewBag=@ViewBag.data</h1>
+<h1>ViewData=@ViewData["dat"]</h1>
+<h1>TempData=@TempData["dt"]</h1>
+<h1>EmailID = @TempData["user"]</h1>
+-------
+<h1>Services Page</h1>
+
+
+<h1>ViewBag=@ViewBag.data</h1>
+<h1>ViewData=@ViewData["dat"]</h1>
+<h1>TempData=@TempData["dt"]</h1>
+<h1>EmailID = @TempData["user"]</h1>
+---------

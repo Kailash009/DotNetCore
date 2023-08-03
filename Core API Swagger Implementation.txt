@@ -1,0 +1,223 @@
+Web-API:-
+---------------------
+How to create an API in dot net core:-
+--------------------------------------------------------------------------
+1. How to take API Project in Core.  -> Select Template Asp.NetCoreWebAPI.
+
+Getting Started with Swashbuckle in ASP.NET Core:-
+------------------------------------------------------------------------
+ There are three main components of Swashbuckle.
+ a) Swashbuckle.AspNetCore.Swagger
+ Swashbuckle.AspNetCore.Swagger is the Object Model and Middleware to expose swagger Document as JSON End Points.
+ b) Swashbuckle.AspNetCore.SwaggerGen
+ A Swagger Generator that builds Swagger Document Objects Directly from your routes controllers and models, this package is combined with Swagger endpoints middleware to automatically expose the Swagger JSON.
+ c) Swashbuckle.AspNetCore.SwaggerUI
+ Swashbuckle.AspNetCore.SwaggerUI is an embedded version of the Swagger UI Tool. It explains swagger JSON to build a rich customizable practical for explaining the Web API functionality and  it includes a built-in test harnessed for the public Methods. 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+How to Implement Swagger in your Project:-
+---------------------------------------------------------------------
+1. Install Package -- SwashBuckle.AspnetCore
+Add Services:-
+a) builder.Services.AddEndpointsApiExplorer();
+b) builder.services.AddSwaggerGen();
+3. if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+4. Go to launchsettings.json
+"launchBrowser": true,
+"launchUrl": "swagger",
+----------------------------------------------------------------------------------------------------------
+[
+  {
+    "eid": 101,
+    "name": "Raj",
+    "age": 19,
+    "city": "Noida",
+    "post": "SE",
+    "salary": 34000
+  },
+  {
+    "eid": 102,
+    "name": "Kamlesh",
+    "age": 29,
+    "city": "Nagpur",
+    "post": "Clerk",
+    "salary": 34000
+  },
+  {
+    "eid": 103,
+    "name": "Shivam",
+    "age": 39,
+    "city": "Goa",
+    "post": "JE",
+    "salary": 44000
+  },
+  {
+    "eid": 104,
+    "name": "Arun",
+    "age": 49,
+    "city": "Banglore",
+    "post": "Manager",
+    "salary": 54000
+  },
+  {
+    "eid": 105,
+    "name": "Bablu",
+    "age": 59,
+    "city": "Hyderabad",
+    "post": "CST",
+    "salary": 64000
+  }
+]  => JSON FORMAT
+-------------------------------------------------------------------------------------
+using FirstAPI.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FirstAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmployeeController : ControllerBase
+    {
+
+        [HttpGet]
+        public IEnumerable<Employee> Get()
+        {
+            List<Employee> empList = new List<Employee>
+            {
+                new Employee{EID=101,Name="Raj",Age=19,City="Noida",Post="SE",Salary=34000},
+                new Employee{EID=102,Name="Kamlesh",Age=29,City="Nagpur",Post="Clerk",Salary=34000},
+                new Employee{EID=103,Name="Shivam",Age=39,City="Goa",Post="JE",Salary=44000},
+                new Employee{EID=104,Name="Arun",Age=49,City="Banglore",Post="Manager",Salary=54000},
+                new Employee{EID=105,Name="Bablu",Age=59,City="Hyderabad",Post="CST",Salary=64000}
+            };
+            return empList;
+        }
+        [HttpGet("id")]
+        public int Get(int id)
+        {
+            return id;
+        }
+
+        [HttpPost]
+        public string Post()
+        {
+            return "Employee Saved SuccessFully!!";
+        }
+
+        [HttpPut]
+        public string Put()
+        {
+            return "Employee Updated SuccessFully!!";
+        }
+
+        [HttpDelete]
+        public string Delete()
+        {
+            return "Employee Deleted SuccessFully!!";
+        }
+    }
+}
+--------------------------
+namespace FirstAPI.Models
+{
+    public class Employee
+    {
+        public int EID { get; set; }
+        public string ?Name { get; set; }
+        public int Age { get; set; }
+        public string ?City { get; set; }
+        public string ?Post { get; set; }
+        public decimal Salary { get; set; }
+    }
+}
+---------------
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Swagger Implementation
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+if(app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+// Configure the HTTP request pipeline.
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
+------------------------
+using FirstAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FirstAPI.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class WeatherForecastController : ControllerBase
+    {
+        private static readonly string[] Summaries = new[]
+        {
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
+
+        private readonly ILogger<WeatherForecastController> _logger;
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        {
+            _logger = logger;
+        }
+
+        //[HttpGet]
+        //public IEnumerable<WeatherForecast> Get()
+        //{
+        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        //    {
+        //        Date = DateTime.Now.AddDays(index),
+        //        TemperatureC = Random.Shared.Next(-20, 55),
+        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        //    })
+        //    .ToArray();
+        //}
+
+        //[HttpGet]
+        //public IEnumerable<Employee> GetEmployees()
+        //{
+        //    List<Employee> empList = new List<Employee>
+        //    {
+        //        new Employee{EID=101,Name="Raj",Age=19,City="Noida",Post="SE",Salary=34000},
+        //        new Employee{EID=102,Name="Kamlesh",Age=29,City="Nagpur",Post="Clerk",Salary=34000},
+        //        new Employee{EID=103,Name="Shivam",Age=39,City="Goa",Post="JE",Salary=44000},
+        //        new Employee{EID=104,Name="Arun",Age=49,City="Banglore",Post="Manager",Salary=54000},
+        //        new Employee{EID=105,Name="Bablu",Age=59,City="Hyderabad",Post="CST",Salary=64000}
+        //    };
+        //    return empList;
+        //}
+    }
+}
+------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
