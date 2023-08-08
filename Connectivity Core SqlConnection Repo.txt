@@ -1,0 +1,231 @@
+Connectivity in dot net core using Sql Server:-
+---------------------------------------------------
+ADO.net Classes
+>> ADO stands for Active X Data Objects.
+>> ADO has predefined classes i.e. used to establish the communicatin between Front to BackEnd.
+>> It act as Bridge between frontend to backend.
+>> we have following ado.net classes which are as follows:-
+a) SqlConnection.
+b) SqlCommand.
+c) SqlDataReader.
+d) SqlDataAdapter.
+e) CommandReader.
+f) ExecuteReader.
+g) Execute Non-Query and many more....
+--------------------------------------------------------------
+Assignment-
+------------------
+1. What is DI?
+2. Types of DI?  a) Singleton.  b) Scoped c) Transient.
+-----------------------------------------------------------------
+using system.microsoft.sqlclient
+----------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using CoreDatabaseConnectivity.EmployeeOperation;
+using CoreDatabaseConnectivity.Models;
+
+namespace CoreDatabaseConnectivity.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private readonly EmployeeDbOperation _empOperation;
+        public EmployeeController(EmployeeDbOperation empOperation)
+        {
+            _empOperation = empOperation;
+        }
+        public IActionResult Index()
+        {
+            var employees = _empOperation.getEmployees();
+            return View(employees);
+        }
+        public IActionResult Create() // Show your Page
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Employee empObj) // Save your page
+        {
+            bool b=_empOperation.addEmployee(empObj);
+            if(b==true)
+            {
+                TempData["insert"] = "<script>alert('Employee Added SuccessFully!!')</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["insert"] = "<script>alert('Employee Failed!!')</script>";
+            }
+            return View();
+        }
+    }
+}
+-------------------------------------------------
+using CoreDatabaseConnectivity.Models;
+using Microsoft.Data.SqlClient;
+using System.Data;
+
+namespace CoreDatabaseConnectivity.EmployeeOperation
+{
+    public class EmployeeDbOperation
+    {
+        private readonly IConfiguration _configuration;
+        public EmployeeDbOperation(IConfiguration configuration)  // Dependency Injection.
+        {
+            _configuration = configuration;
+        }
+        public List<Employee> getEmployees()
+        {
+            List<Employee> empList = new List<Employee>();
+            string dbConn = _configuration.GetConnectionString("DefaultConnection");
+            SqlConnection con = new SqlConnection(dbConn);
+            if(con.State==ConnectionState.Closed)
+            {
+                con.Open();
+            }
+            string sql = "select * from tbl_Employee";
+            SqlCommand cmd = new SqlCommand(sql,con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            while(dr.Read())
+            {
+                Employee emp = new Employee();
+                emp.Eid =(int)dr["eid"];
+                emp.Name = dr["ename"].ToString();
+                emp.Age = (int)dr["eage"];
+                emp.Post = dr["post"].ToString();
+                emp.City = dr["city"].ToString();
+                emp.Salary =(decimal)dr["salary"];
+                empList.Add(emp);
+            }
+            con.Close();
+            return empList;
+        }
+        public bool addEmployee(Employee empObj)
+        {
+            string dbConn = _configuration.GetConnectionString("DefaultConnection");
+            SqlConnection con = new SqlConnection(dbConn);
+            if(con.State==ConnectionState.Closed)
+            {
+                con.Open();
+            }
+            string sql = "insert into tbl_Employee(ename,eage,post,city,salary) values(@name,@age,@post,@city,@salary)";
+            SqlCommand cmd = new SqlCommand(sql,con);
+            cmd.Parameters.AddWithValue("@name",empObj.Name);
+            cmd.Parameters.AddWithValue("@age",empObj.Age);
+            cmd.Parameters.AddWithValue("@post",empObj.Post);
+            cmd.Parameters.AddWithValue("@city",empObj.City);
+            cmd.Parameters.AddWithValue("@salary",empObj.Salary);
+            int n=cmd.ExecuteNonQuery();
+            con.Close();
+            if (n!=0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+---------------------------------------------
+@model IEnumerable<Employee>
+
+@Html.Raw(TempData["insert"])
+
+<h1 class="bg-dark text-white text-center">SHOW ALL EMPLOYEE</h1>
+<a asp-action="Create" asp-controller="Employee" class="btn btn-success">Add New Employee</a>
+<table class="table table-bordered mt-4 bg-info">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>POST</th>
+        <th>CITY</th>
+        <th>SALARY</th>
+        <th class="text-center" colspan="3">ACTION</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.Eid</td>
+            <td>@emp.Name</td>
+            <td>@emp.Age</td>
+            <td>@emp.Post</td>
+            <td>@emp.City</td>
+            <td>@emp.Salary</td>
+            <td align="center"><a asp-action="Edit" asp-controller="Employee" class="btn btn-warning"> EDIT</a></td>
+            <td align="center"><a asp-action="Delete" asp-controller="Employee" class="btn btn-danger">DELETE</a> </td>
+            <td align="center"><a asp-action="Details" asp-controller="Employee" class="btn btn-dark"> DETAILS</a></td>
+        </tr>
+    }
+</table>
+--------------------
+@model CoreDatabaseConnectivity.Models.Employee
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Employee </h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+                <label asp-for="Eid" class="control-label"></label>
+                <input asp-for="Eid" class="form-control" />
+                <span asp-validation-for="Eid" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Post" class="control-label"></label>
+                <input asp-for="Post" class="form-control" />
+                <span asp-validation-for="Post" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Salary" class="control-label"></label>
+                <input asp-for="Salary" class="form-control" />
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
