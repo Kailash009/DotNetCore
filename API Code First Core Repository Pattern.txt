@@ -1,0 +1,214 @@
+API CRUD Operation using Code First Approach:-
+----------------------------------------------------
+[
+  {
+    "cid": 1,
+    "name": "ram",
+    "age": 12,
+    "city": "Lucknow",
+    "post": "SE",
+    "salary": 34934
+  },
+  {
+    "cid": 2,
+    "name": "shiva",
+    "age": 17,
+    "city": "Noida",
+    "post": "TL",
+    "salary": 48394
+  }
+]  =>> JSON.
+--------------------------------------------------
+using FirstAPI.Models;
+using FirstAPI.Repository.Contract;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FirstAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CustomerController : ControllerBase
+    {
+        private readonly ICustomer _customer;
+        public CustomerController(ICustomer customer)
+        {
+            _customer = customer;
+        }
+
+        [HttpGet]
+        public IEnumerable<Customer> GetCustomers()
+        {
+            return _customer.GetCustomers();
+        }
+
+        [HttpGet("{id}")]
+        public Customer GetCustomers(int id)
+        {
+            return _customer.GetCustomer(id);
+        }
+
+        [HttpPost]
+        public bool addCustomer(Customer cusObj)
+        {
+            return _customer.addCustomer(cusObj);
+        }
+        [HttpPut]
+        public bool updateCustomer(Customer cusObj)
+        {
+            return _customer.updateCustomer(cusObj);
+        }
+        [HttpDelete("{id}")]
+        public bool deleteCustomer(int id)
+        {
+            return _customer.deleteCustomer(id);
+        }
+    }
+}
+-----------------
+using System.ComponentModel.DataAnnotations;
+
+namespace FirstAPI.Models
+{
+    public class Customer
+    {
+        [Key]
+        public int CID { get; set; }
+        public string? Name { get; set; }
+        public int Age { get; set; }
+        public string? City { get; set; }
+        public string? Post { get; set; }
+        public decimal Salary { get; set; }
+    }
+}
+------------
+using FirstAPI.Models;
+
+namespace FirstAPI.Repository.Contract
+{
+    public interface ICustomer
+    {
+        IEnumerable<Customer> GetCustomers();
+        Customer  GetCustomer(int id);
+        bool addCustomer(Customer cusObj);
+        bool updateCustomer(Customer cusObj);
+        bool deleteCustomer(int id);
+    }
+}
+-----------
+using FirstAPI.Models;
+using FirstAPI.Repository.Contract;
+using Microsoft.EntityFrameworkCore;
+
+namespace FirstAPI.Repository.Services
+{
+    public class CustomerService : ICustomer
+    {
+        private readonly CustomerDBContext _cusDb;
+        public CustomerService(CustomerDBContext cusDb)
+        {
+            _cusDb = cusDb;
+        }
+        public IEnumerable<Customer> GetCustomers()
+        {
+            return _cusDb.Customers.ToList();
+        }
+        public bool addCustomer(Customer cusObj)
+        {
+            _cusDb.Customers.Add(cusObj);
+            int n=_cusDb.SaveChanges();
+            if(n!=0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool updateCustomer(Customer cusObj)
+        {
+            _cusDb.Entry(cusObj).State = EntityState.Modified;
+            int n = _cusDb.SaveChanges();
+            if (n != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public Customer GetCustomer(int id)
+        {
+           Customer cus= _cusDb.Customers.Where(m => m.CID == id).FirstOrDefault();
+            return cus;
+        }
+        public bool deleteCustomer(int id)
+        {
+            Customer cus = _cusDb.Customers.Where(m => m.CID == id).FirstOrDefault();
+            if(cus!=null)
+            {
+                _cusDb.Customers.Remove(cus);
+                int n = _cusDb.SaveChanges();
+                if (n != 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+    }
+}
+------------
+using Microsoft.EntityFrameworkCore;
+
+namespace FirstAPI.Models
+{
+    public class CustomerDBContext:DbContext
+    {
+        public CustomerDBContext(DbContextOptions<CustomerDBContext> options):base(options)
+        {
+            
+        }
+        public DbSet<Customer> Customers { get; set; }
+    }
+}
+-----------
+using FirstAPI.Models;
+using FirstAPI.Repository.Contract;
+using FirstAPI.Repository.Services;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddDbContext<CustomerDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddTransient<ICustomer, CustomerService>();
+
+// Swagger Implementation
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+if(app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+// Configure the HTTP request pipeline.
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
