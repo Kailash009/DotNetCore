@@ -1,0 +1,33 @@
+Getting Started with Swashbuckle in ASP.NET Core:-
+------------------------------------------------------
+ There are three main components of Swashbuckle.
+ a) Swashbuckle.AspNetCore.Swagger
+ Swashbuckle.AspNetCore.Swagger is the Object Model and Middleware to expose swagger Document as JSON End Points.
+ b) Swashbuckle.AspNetCore.SwaggerGen
+ A Swagger Generator that builds Swagger Document Objects Directly from your routes controllers and models, this package is combined with Swagger endpoints middleware to automatically expose the Swagger JSON.
+ c) Swashbuckle.AspNetCore.SwaggerUI
+ Swashbuckle.AspNetCore.SwaggerUI is an embedded version of the Swagger UI Tool. It explains swagger JSON to build a rich customizable practical for explaining the Web API functionality and  it includes a built-in test harnessed for the public Methods. 
+------------------------------------------------------------
+Steps to Implement Swagger in your Project:-
+------------------------------------------------
+1. Install Package -- Swashbuckle.AspnetCore
+2. Add Services:-
+// Add services to the container.
+builder.Services.AddControllers();
+a) builder.Services.AddEndpointsApiExplorer();
+b) builder.Services.AddSwaggerGen();
+3. if (app.Environment.IsDevelopment())
+   {
+    app.UseSwagger();
+    app.UseSwaggerUI();
+   }
+4. Go to launchsettings.json
+"launchBrowser": true,
+"launchUrl": "swagger",
+----------------------------------------------
+
+
+
+
+
+

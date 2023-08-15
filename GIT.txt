@@ -1,6 +1,5 @@
 Right click on Project and then open Git Bash Here--
----------------------------------------------------------------------------------
-git init   -> only first time.
+---------------------------------------------------------------------------git init   -> only first time.
 git status
 git add -A
 git status
