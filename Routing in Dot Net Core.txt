@@ -1,0 +1,240 @@
+ROUTING IN DOT NET CORE:-
+-------------------------------
+>> Routing is a mechanism in which it will inspect the incoming request and mapping that request to the controller and their action methods.
+Types of Routing:-
+-----------------------
+1. Conventional Based Routing.
+2. Attribute Routing.
+--------------------------------
+1. Conventional Based Routing-
+---------------------------------------
+>> It based on Convention.
+It uses two methods -
+	a) MapDefaultControllerRoute();
+	b) MapControllerRoute().
+--------------------------------------
+2. Attribute Based Routing:-
+-----------------------------------
+>> In api we generally used attribute based routing.
+>> [Route] attribute is used to perform routing.
+>> you can perform attribute based routing at two types of level-
+	a) Action Level.
+	b) Controller Level.
+builder.Services.AddControllersWithViews();
+app.MapControllers();
+---------------------------------------------------------
+Action Level:-
+-----------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace RoutingCore.Controllers
+{
+    public class HomeController : Controller
+    {
+        [Route("")]
+        [Route("Home")]
+        [Route("Home/Index")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Route("Home/About")]
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [Route("Home/Detail/{id?}")]
+        public int Detail(int ?id)
+        {
+            return id??500;
+        }
+    }
+}
+-----------------------------------------
+Controller Level:-
+-------------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace RoutingCore.Controllers
+{
+    [Route("Home")]
+    public class HomeController : Controller
+    {
+        [Route("")]
+        [Route("Index")]
+        [Route("~/")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        [Route("About")]
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [Route("Detail/{id?}")]
+        public int Detail(int ?id)
+        {
+            return id??500;
+        }
+    }
+}
+-------------------------------------------------
+Token Level:-
+--------------------
+using Microsoft.AspNetCore.Mvc;
+
+namespace RoutingCore.Controllers
+{
+    [Route("[controller]/[action]")]
+    public class HomeController : Controller
+    {
+        [Route("")]
+        [Route("~/")]
+        [Route("~/home")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [Route("{id?}")]
+        public int Detail(int ?id)
+        {
+            return id??500;
+        }
+    }
+}
+-----------------------------------------------------------
+Database Connectivity in Dot net Core:- using Single Procedure
+----------------------------------------------------------------
+ADO.NET:-
+---------------
+>> It stands for 'Active-X Data object'.
+>> it is a brige between front end and backend.
+In ADO.net we have predefined classes:-
+1. SqlConnection.
+2. SqlCommand.
+3. SqlDataAdapter.
+4. DataReader.
+5. Execute Scaler.
+6. ExceuteNonQuery.
+7. ExecuteReader
+8. DataSet.
+9. DataTable.
+10. XMLReader.
+------------------------------------------------------
+N-Tier / Dependency Injection:
+----------------------------------
+CommonLayer -> Model.
+DataAccesslayer -> Connectivity. [Connection String] / all Operations performed here.
+BusinessAccessLayer -> Contract [Interface] / Services. [Implement Interface]
+---------------------------------
+WEbApplication -> Inject Interface here. (DI)
+----------------------------------------------------------------
+create database DbAshish
+use DbAshish
+create table tbl_Employee
+(
+eid int primary key identity(1,1),
+ename nvarchar(50),
+eage int,
+emobile nvarchar(16),
+ecity nvarchar(50),
+esalary decimal(23,2)
+)
+select * from tbl_Employee
+create proc sp_Employee
+(
+@action nvarchar(50)=null,
+@eid int=0,
+@name nvarchar(50)=null,
+@age int=0,
+@mobileno nvarchar(16)=null,
+@city nvarchar(50)=null,
+@salary decimal(23,2)=0
+)
+as begin
+if(@action='Create')
+begin
+insert into tbl_Employee(ename,eage,emobile,ecity,esalary) values(@name,@age,@mobileno,@city,@salary)
+select 1 as msg
+end
+else if(@action='Update')
+begin
+update tbl_Employee set ename=@name,eage=@age,emobile=@mobileno,ecity=@city,esalary=@salary where eid=@eid
+select 1 as msg
+end
+else if(@action='Delete')
+begin
+delete from tbl_Employee where eid=@eid
+select 1 as msg
+end
+else if(@action='Select')
+begin
+select * from tbl_Employee
+end
+else if(@action='Select_Single')
+begin
+select * from tbl_Employee where eid=@eid
+end
+end
+
+-- Test your Procedure
+exec sp_Employee 'Select'
+exec sp_Employee 'Create',0,'abc',19,'77787034','Hyderabad',79783.23
+exec sp_Employee 'Update',2,'mulyam yadav',21,'11223343','Banglore',783932.29
+exec sp_Employee 'Select_Single',2
+exec sp_Employee 'Delete',3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
