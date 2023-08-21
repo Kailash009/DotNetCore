@@ -1,90 +1,96 @@
-Routing in Dot Net Core:-
------------------------------------------------------
->> Routing in asp.net core mvc is a mechanism that maps your httprequest with your controller and their action methods.
->> It decides the route of your application that which page you are going to execute first.
----------------------------
-Types of Routing:-
---------------------------------
-There are two types of Routing in Dot Net Core:-
---------------------------------------------------------------------------
-1. Conventional Based Routing.
->> In this we decide which page gets executed first.
-builder.Services.AddControllersWithViews();  // add this service.
-	a) MapDefaultControllerRoute().
-	b) MapControllerRoute().
-2. Attribute Based Routing.
->> Attribute Based Routing mostly used in API.
->> We use [Route] Attribute to perform attribute based routing.
->> [Route] attribute can be applied controller level as well as action level.
-builder.Services.AddControllersWithViews(); // also add service.
->> app.MapControllers();  // to run attribute routing.
----------------------------------------------------------------------------------------------------------------------
-Action Level:-
+Routing in Dot net Core:-
+-----------------------------
+>> Routing is a mechanism that will inspect the incoming request and map that request to the controller and their action methods.
+----------------------------------------------------------------
+Types of Routing in Core:-
+------------------------------
+There are two types of Routing in Core-
+1. Conventional Based routing.
+2. Attribute Routing.
+-----------------------------------------
+1. Conventional Based Routing:-
+There are two methods by which we can perform conventional based routing-
+a) MapDefaultControllerRoute();
+b) MapControllerRoute();
+--------------------------------------------------------------
+2. Attribute Based Routing:-
+----------------------------------
+>> Here we use [Route] attribute is used to define attribute based routing.
+>> In api mostly attribute based routing is used.
+There are three ways to perform attribute based routing.
+a) Action Level.
+b) Controller Level.
+c) Token Level.
+-------------------------------
+a) Action Level:-
 -----------------------------
 using Microsoft.AspNetCore.Mvc;
 
-namespace RoutingCore.Controllers
+namespace RoutingAsgar.Controllers
 {
     public class HomeController : Controller
     {
         [Route("")]
         [Route("Home")]
-        [Route("Home/index")]
+        [Route("Home/Index")]
         public IActionResult Index()
         {
             return View();
         }
-        [Route("Home/about")]
+        [Route("Home/About")]
         public IActionResult About()
         {
             return View();
         }
-        [Route("Home/contact")]
+        [Route("Home/Contact")]
         public IActionResult Contact()
         {
             return View();
         }
     }
 }
-----------------------------------------
-Controller Level:-
-------------------------------------
+----------------------------------------------
+b) Controller Level.
 using Microsoft.AspNetCore.Mvc;
 
-namespace RoutingCore.Controllers
+namespace RoutingAsgar.Controllers
 {
     [Route("Home")]
     public class HomeController : Controller
     {
-        [Route("")]
-        [Route("index")]
         [Route("~/")]
+        [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
             return View();
         }
-        [Route("about")]
+        [Route("About")]
         public IActionResult About()
         {
             return View();
         }
-        [Route("contact")]
+        [Route("Contact")]
         public IActionResult Contact()
         {
             return View();
         }
     }
 }
--------------------------------------------------------------------------------------
-Token:-
-------------------------
+------------------------------------------------
+c) Token Level.
+[] -> we use square bracket to write token
+[controller] -> Token for controller.
+[action] -> Token for action.
+------------------------------------------------
 using Microsoft.AspNetCore.Mvc;
 
-namespace RoutingCore.Controllers
+namespace RoutingAsgar.Controllers
 {
-    [Route("{controller}/{action}")]  // Token Level
+    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
+        [Route("~/Home")]
         [Route("~/")]
         [Route("")]
         public IActionResult Index()
@@ -95,15 +101,72 @@ namespace RoutingCore.Controllers
         {
             return View();
         }
-
-        [Route("{id?}")]
-        public int Contact(int ?id)
-        { 
-            return id ?? 100;
+        public IActionResult Contact()
+        {
+            return View();
         }
     }
 }
---------------------------------------------------------------------------------------------
+-------------------------------------------------------------
+Validation in Dot net Core:-
+----------------------------------
+>> To check all the necessary fields filled by the user is correct or not.
+>> Before submitting data to the server we need to check all the necessary field correct or not.
+----------------------
+Types of Validation:-
+----------------------
+There are two types of Validation:-
+1. Client-Side Validation.
+2. Server-Side Validation.
+--------------------------------------------------
+1. Client-Side Validation.
+>> A validation which checks at client machine.[Web Browser]
+--------------
+2. Server Side Validation.
+>> A validation which checks at server machine.
+-----------------------------------------------------------
+Note: As a developer you should know how to perform client as well as server side validation.
+--------------------------------------
+To perform Validation in dot net core we use following namespace-
+using System.ComponentModel.DataAnnotation; -> In this we will get all type of validation in dot net core.
+----------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
