@@ -1,0 +1,43 @@
+Types of DI:-
+--------------------
+1. Singleton.
+>> When user send httprequest to open any page first time then it generate new instance and the same instance work to open other http pages.
+2. Scoped.
+>> When user send httprequest to open any page first time then it generate new instance and in second request new instance work to open other http pages. 
+3. Transient.
+>> When user send httprequest to open any page first time then it generate new instance and in second request or other request always generate new instance to open other http pages. 
+----------------------------------------------------------------
+Scaffolding:
+>> It is code generation technique that automatically generate html code for you.
+--------------------------------------------------------------------------------
+Common Layer -> MODELS -> Employee. , ConnectionString.
+DAL -> (Microsoft.Data.SqlClient)DbConnect,EmployeeDbOperation.
+dbconnection=new SqlConnection(DbConnection.ConnectionString);
+BAL -> Contract(Interface) , Service(Employee Service)
+-------
+appsettings.json -> write your CN.
+program.cs
+DbConnection.ConnectionString=builder.configuratoin.getconnectionstring("DC");
+-----------------
+WebApplication -> IEmployee.
+private readonly IEmployee _employee;
+public EmployeeContoller(IEmployee employee)
+{
+_employee=employee;
+}
+public IActionResult Index()
+{
+var employee=_employee.GetEmployees();
+return view(employee);
+}
+--------------------------------------------------------
+
+-----------------------
+
+
+
+
+
+
+
+
