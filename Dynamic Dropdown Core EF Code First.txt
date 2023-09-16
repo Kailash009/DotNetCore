@@ -1,0 +1,56 @@
+Dropdown Binding Code First EF:-
+----------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace CodeFirstApproachIliyash.Models
+{
+    public class City
+    {
+        [Key]
+        public int City_id { get; set; }
+        public string ?City_name { get; set; }
+    }
+}
+------------------------------------------------
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CodeFirstApproachIliyash.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string ?EName { get; set; }
+        public int Age { get; set; }
+        public string ?MobileNo { get; set; }
+        public string ?City { get; set; }
+        public decimal Salary { get; set; }
+        [NotMapped]
+        public List<SelectListItem> ?cities { get; set; }
+    }
+}
+--------------------------------------------------------------------
+public IActionResult Create()
+{
+var cityList = (from city in _dbEmp.Cities
+                        select new SelectListItem()
+                        {
+                            Text = city.City_name,
+                            Value = city.City_id.ToString(),
+                        }).ToList();
+    Employee emp = new Employee();
+    emp.cities = cityList;
+    return View(emp);
+}
+---------------------------------------------------------------------------
+<div class="form-group">
+    <label asp-for="City" class="control-label"></label>
+    <select class="form-control" asp-for="City" asp-items="@(new SelectList(Model.cities,"Value","Text"))">
+        <option>--Select City--</option>
+    </select>
+    @*<input asp-for="City" class="form-control" />*@
+    <span asp-validation-for="City" class="text-danger"></span>
+</div>
+---------------------------------------------------------------------
