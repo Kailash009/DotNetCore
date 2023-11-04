@@ -1,0 +1,291 @@
+File Upload in Dot Net Core:-
+-------------------------------------
+using BatchMithilesh11AMWE.Models;
+using Microsoft.AspNetCore.Mvc;
+namespace BatchMithilesh11AMWE.Controllers
+{
+    public class FileUploadExController : Controller
+    {
+        private readonly FileUpload _fp;
+        public FileUploadExController(FileUpload fp)
+        {
+            _fp = fp;
+        }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            List<FileUpload> employees=_fp.GetEmployeesWithImage();
+            return View(employees);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(FileUpload fileUpload)
+        { 
+            bool b=_fp.addEmployee(fileUpload);
+            if(b==true)
+            {
+                TempData["insert"] = "<script>alert('Employee Added SuccessFully!!');</script>";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["insert"] = "<script>alert('Employee Failed!!');</script>";
+            }
+            return View();
+        }
+    }
+}
+-----------------------------------------------
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Data.SqlClient;
+using System.Data;
+namespace BatchMithilesh11AMWE.Models
+{
+    public class FileUpload
+    {
+        private readonly IConfiguration _config;
+        public string EmpName { get; set; }
+
+        public string EmpImg { get; set; }
+
+        [NotMapped]
+        public IFormFile EmpimgFile { get; set; }
+
+        public FileUpload()
+        {
+            
+        }
+        public FileUpload(IConfiguration config)
+        {
+            _config = config;
+        }
+        public List<FileUpload> GetEmployeesWithImage()
+        {
+            List<FileUpload> empList = new List<FileUpload>();
+            string dbConn = _config.GetConnectionString("DBCS").ToString();
+            SqlConnection con = new SqlConnection(dbConn);
+            if(con.State==ConnectionState.Closed)
+            {
+                con.Open();
+            }
+            string sql = "select * from tbl_upload";
+            SqlCommand cmd = new SqlCommand(sql, con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            while(dr.Read())
+            {
+                FileUpload fp = new FileUpload();
+                fp.EmpName = dr["empname"].ToString();
+                fp.EmpImg = dr["empimg"].ToString();
+                empList.Add(fp);
+            }
+            con.Close();
+            return empList;
+        }
+        public bool addEmployee(FileUpload file)
+        {
+           string filename=UploadedFile(file);
+           string dbConn = _config.GetConnectionString("DBCS").ToString();
+           SqlConnection con = new SqlConnection(dbConn);
+            string sql = "insert into tbl_upload(empname,empimg)values(@name,@img)";
+            SqlCommand cmd = new SqlCommand(sql, con);
+            if(con.State==ConnectionState.Closed)
+            {
+                con.Open();
+            }
+
+            cmd.Parameters.AddWithValue("@name", file.EmpName);
+            cmd.Parameters.AddWithValue("@img", filename);
+            int n=cmd.ExecuteNonQuery();
+            con.Close();
+            if (n!=0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private string UploadedFile(FileUpload fileup)
+        {
+            //save image file into folder
+            string uniqueFileName = null;
+            if (fileup.EmpimgFile != null)
+            {
+                string uploadsFolder = Path.GetFullPath("wwwroot") + "\\emp_image";
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + fileup.EmpimgFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var FileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    fileup.EmpimgFile.CopyTo(FileStream);
+                }
+            }
+            return uniqueFileName;
+        }
+    }
+}
+----------------------------------------------------------
+@model BatchMithilesh11AMWE.Models.FileUpload
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>FileUpload</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EmpName" class="control-label"></label>
+                <input asp-for="EmpName" class="form-control" />
+                <span asp-validation-for="EmpName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpImg" class="control-label"></label>
+                <input type="file" asp-for="EmpimgFile" class="form-control" />
+                <span asp-validation-for="EmpimgFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+------------------------------
+@model IEnumerable<FileUpload>
+
+@Html.Raw(TempData["insert"])
+
+<h1>Welcome to Employee Page</h1>
+<table class="table table-bordered bg-info">
+    <tr>
+        <th>Employee Name</th>
+        <th>Employee Image</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.EmpName</td>
+            <td><img src="~/emp_image/@emp.EmpImg" height="200px" width="200px" alt="Img"/>  </td>
+        </tr>
+    }
+    
+</table>
+-----------------------------------------------------
+Filters in Dot Net Core:-
+----------------------------------------
+>> Filter is very important concept in dot net core.
+>> Filter execute your operation before or after action result.
+>> Filter is like a decorate that exection can perform before or after the action method.
+>> Filter provide extra functionality to our action methods.
+-----------------------------------------------------------------------
+Types of Filter:-
+----------------------
+1. Authorization Filter.
+2. Resource Filter.
+3. Action Filter.
+4. Exception Filter.
+5. Result Filter.
+--------------------------------------------------------------------
+OnMethodExecuting -> It runs before action method execution.
+OnMethodExecuted -> It runs after action method execution.
+----------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc.Filters;
+
+namespace BatchMithilesh11AMWE.Filter
+{
+    public class CustomActionFilter : IActionFilter
+    {
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+           // Write Code Before Action Method Executing...
+        }
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            // Write Code After Action Method Executing...
+        }       
+    }
+}
+---------------------------------
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add(new CustomActionFilter());
+or
+options.Filters.Add(typeof(CustomActionFilter));
+});
+---------------------------------------------------------------
+DTO:-
+------------
+>> It stands for Data Transfer Object.
+>> When designing and developing an application,if you’re using models to pass data between the layers and sending data back to the presentation layer,then you’re exposing the internal data structures of your application. That’s a major design flaw in your application,with the help of DTO we can prevent this problem.
+>> It is the concept i.e. used in API.
+-------------------------------------------------
+using BatchMithilesh11AMWE.Dtos;
+using BatchMithilesh11AMWE.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BatchMithilesh11AMWE.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DoctorController : ControllerBase
+    {
+        [HttpPost]
+        public Doctor GetDoctorDetails(DoctorDto doctorDto)
+        {
+            Doctor doctor = new Doctor
+            {
+                Id = doctorDto.Id,
+                FirstName = doctorDto.FirstName,
+                LastName = doctorDto.LastName,
+                DepartmentName = doctorDto.DepartmentName
+            };
+            return doctor;
+        }
+    }
+}
+---------------------------------------------------------------------
+namespace BatchMithilesh11AMWE.Models
+{
+    public class Doctor
+    {
+            public int Id { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string DepartmentName { get; set; }
+            public decimal Basic { get; set; }
+            public decimal DA { get; set; }
+            public decimal HRA { get; set; }
+            public decimal NetSalary { get; set; }
+        }
+    }
+------------------------------------------------------
+namespace BatchMithilesh11AMWE.Dtos
+{
+    public class DoctorDto
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string DepartmentName { get; set; }
+    }
+}
+---------------------------------------------------------
