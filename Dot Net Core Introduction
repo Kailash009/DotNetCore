@@ -1,0 +1,32 @@
+Dot Net Core:-
+-------------------
+>> .NET Core is a free, open-source, modular, cross-platform framework developed by Microsoft for building modern, high-performance applications. It is a reimplementation of the .NET Framework to be more lightweight, modular, and flexible.
+>> .NET Core includes a runtime, a set of libraries, and a development environment that supports multiple programming languages such as C#, Visual Basic, and F#. 
+>> It is designed to run on various platforms, including Windows, macOS, and Linux. It can be used to build a wide range of applications, including web applications, desktop applications, and microservices.
+.NET Core is Free and Open Source.
+.NET Core is Cross-platform.
+.NET Core is Sharable.
+.NET Core is Modern.
+.NET Core is Fast.
+.NET Core is Lightweight.
+.NET Core is Friendly.
+It allows developers to build all kinds of software, including Web, Desktop, Mobile, Cloud, Gaming, Internet of Things.
+Razor is a new framework for building dynamic web pages using C# and TypeScript. Razor is a game-changing technology that allows C# developers to build Web apps in C#. 
+Xamarin is a set of tools and libraries for building cross-platform mobile apps using C#. Xamarin allows developers to build native iOS, Android, Windows, and macOS apps on a shared .NET codebase.
+Microservices and Containers
+
+Microservices are a new design pattern that allows developers to build small modules of software services that can communicate with each other using well-defined contracts. Microservices make it easier to develop, test, and deploy isolated parts of your application. 
+Once deployed, each microservice can be independently scaled as needed. Microservices architecture is supported in .NET Core, which allows cross-platform services to work with .NET Core, including services developed with .NET Framework, Java, Ruby, or others.
+Unity is one of the most popular game development frameworks. C# and UWP are used to build mobile, desktop, console, TV, VR, AR, and Web games.
+ASP.NET apps can be developed and run on Windows, Linux, macOS, and Docker.
+Developers can now build Android, iOS, Linux, Mac, and Windows applications with .NET, all in Open Source.
+>> UWP (Universal Windows Platform) is only for the windows ecosystem.
+UWP:-
+----------
+>> UWP stands for Universal Windows Platform. It's a framework created by Microsoft for building applications that can run on any Windows 10 device, including PCs, tablets, smartphones, Xbox One, HoloLens, and IoT devices.
+UWP (Universal Windows Platform) is used in .NET Core for several reasons:
+1. Cross-Platform Compatibility: While UWP originated as a Windows-specific platform, with .NET Core, it can target multiple platforms beyond Windows. .NET Core enables developers to create UWP apps that can run not only on Windows devices but also on other platforms supported by .NET Core, such as macOS and Linux.
+2. Unified Development Platform: .NET Core provides a unified development platform for building various types of applications, including web, desktop, and mobile apps. By supporting UWP in .NET Core, developers can leverage their existing knowledge and skills to build UWP apps alongside other types of applications using familiar tools and frameworks.
+3. Modern App Development: UWP offers modern app development capabilities, including a rich set of APIs for accessing device features, responsive design for different screen sizes, and integration with Windows features like Live Tiles, notifications, and Cortana. By incorporating UWP into .NET Core, developers can take advantage of these capabilities while benefiting from the cross-platform compatibility of .NET Core.
+4. Access to Windows Ecosystem: For developers targeting the Windows ecosystem, UWP provides a streamlined development experience and access to the Windows Store for distributing apps. By using UWP in .NET Core, developers can create apps that can reach a broad audience of Windows users while also having the flexibility to target other platforms if needed.
+5. Future-Proofing: As Microsoft continues to invest in .NET Core and UWP, using these technologies together ensures that developers have access to the latest features and improvements. By building UWP apps with .NET Core, developers can future-proof their applications and take advantage of new capabilities as they become available.
