@@ -1,0 +1,81 @@
+Angular 18: 22 May 2024(Latest)- 18.0.3 =>>>> 12 June 2024;
+--------------------------------------------------------------------
+1. node -v
+2. npm -v
+3. npm install -g @angular/cli or npm install -g @angular/cli@10.0.0
+4. ng --version
+5. ng version
+6. ng --help
+7. ng new --help
+8. ng new Project_Name
+9. cd ProjectName
+10. ng serve
+-------------------------------
+Command to Uninstall Angular version and install your specified angular version:-
+npm uninstall -g @angular/cli
+npm cache verify
+npm install -g @angular/cli@14 =>> Command to change angular version.
+ng version
+--------------------------------
+Angular 16	3 May 2023 => Currently working on Angular 16 Version.
+----------------------------------------------------------------------------------
+Component with Inline style:-
+-------------------------------------
+ng g c register --inline-style
+-------------------------------------
+Component with Inline Template:-
+ng g c student --inline-template
+------------------------------------------------------
+Component with Inline Template and Inline Style:-
+ng g c country --inline-template --inline-style
+---------------------------------------------------------------------
+Modules => It is collection of components [Login, Register ,Forget Password], services[API Call] and pipes[Helpers].
+--------------------------------------------------------------------------------------------------------------------------
+Command to Create Module:-
+ng g m user_auth
+or 
+ng generate module module_Name
+--------------------------------------------
+Command to create Component Inside Module:-
+---------------------------------------------------
+ng generate component moduleName/componentName
+----------------------------------------------------
+import { FormsModule } from '@angular/forms';
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    UserAuthModule,
+    FormsModule  <<== When use this then add [(ngModel)]
+  ]
+-----------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
