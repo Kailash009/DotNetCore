@@ -1,0 +1,503 @@
+Dot Net Core API create and Consume:-
+------------------------------------------------------
+How to create API in dot net core using Code First:-
+--------------------------------------------------------
+using CoreAPIDemo.Models;
+using CoreAPIDemo.Repository.Contract;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CoreAPIDemo.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmployeeController : ControllerBase
+    {
+        private readonly IEmployee _emp;
+        public EmployeeController(IEmployee emp)
+        {
+            _emp = emp;
+        }
+
+        [Route("GetEmployees")]
+        [HttpGet]
+        public async Task<ResponseModel> GetEmployees()
+        {
+            return await _emp.GetEmployees();
+        }
+
+        [Route("GetEmployee")]
+        [HttpGet]
+        public async Task<ResponseModel> GetEmployee(int id)
+        {
+            return await _emp.GetEmployee(id);
+        }
+
+        [Route("addEmployee")]
+        [HttpPost]
+        public async Task<ResponseModel> addEmployee([FromBody]Employee empObj)
+        {
+            return await _emp.addEmployee(empObj);
+        }
+
+        [Route("updateEmployee")]
+        [HttpPut]
+        public async Task<ResponseModel> updateEmployee([FromBody] Employee empObj)
+        { 
+            return await _emp.updateEmployee(empObj);
+        }
+        [Route("deleteEmployee")]
+        [HttpDelete]
+        public async Task<ResponseModel> deleteEmployee(int id)
+        {
+            return await _emp.deleteEmployee(id);
+        }
+    }
+}
+----------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CoreAPIDemo.Models
+{
+    [Table("Employee")]
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public string Post { get; set; }
+        public double Salary { get; set; }
+
+    }
+}
+------------------------------------------------------
+using Microsoft.EntityFrameworkCore;
+
+namespace CoreAPIDemo.Models
+{
+    public class EmployeeDbContext:DbContext
+    {
+        public EmployeeDbContext(DbContextOptions<EmployeeDbContext> options):base(options)
+        {
+            
+        }
+        public DbSet<Employee> Employees { get; set;}
+    }
+}
+-----------------------------------
+using System.Net;
+
+namespace CoreAPIDemo.Models
+{
+    public class ResponseModel
+    {
+        public string Message { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public object Data { get; set; }
+    }
+}
+-------------------------------------
+using CoreAPIDemo.Models;
+
+namespace CoreAPIDemo.Repository.Contract
+{
+    public interface IEmployee
+    {
+        Task<ResponseModel> GetEmployees();
+        Task<ResponseModel> addEmployee(Employee empObj);
+        Task<ResponseModel> GetEmployee(int id);
+        Task<ResponseModel> updateEmployee(Employee empObj);
+        Task<ResponseModel> deleteEmployee(int id);
+    }
+}
+--------------------------------------------------
+using CoreAPIDemo.Models;
+using CoreAPIDemo.Repository.Contract;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.ComponentModel;
+using System.Net;
+
+namespace CoreAPIDemo.Repository.Services
+{
+    public class EmployeeService : IEmployee
+    {
+        ResponseModel response = new ResponseModel();
+        private readonly EmployeeDbContext _db;
+        public EmployeeService(EmployeeDbContext db)
+        {
+
+            _db = db;
+
+        }
+        public async Task<ResponseModel> GetEmployees()
+        {
+            var employees = await _db.Employees.ToListAsync();
+            if (employees != null)
+            {
+                response.Message = "Employee List Recieve";
+                response.Data = employees;
+                response.StatusCode = HttpStatusCode.OK;
+                return response;
+            }
+            else
+            {
+                response.Message = "Record Not Found";
+                response.Data = null;
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel> addEmployee([FromBody] Employee empObj)
+        {
+            await _db.AddAsync(empObj);
+            int n = await _db.SaveChangesAsync();
+            if (n != 0)
+            {
+                response.Message = "Record Inserted!!";
+                response.Data = n;
+                response.StatusCode = HttpStatusCode.Created;
+                return response;
+            }
+            else
+            {
+                response.Message = "Insert Failed!!";
+                response.Data = 0;
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel> GetEmployee([FromBody] int id)
+        {
+            var employee = await _db.Employees.Where(m => m.Eid == id).FirstOrDefaultAsync();
+            if (employee != null)
+            {
+                response.Message = "Employee Recieve";
+                response.Data = employee;
+                response.StatusCode = HttpStatusCode.OK;
+                return response;
+            }
+            else
+            {
+                response.Message = "Record Not Found";
+                response.Data = 0;
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel> updateEmployee(Employee empObj)
+        {
+            _db.Entry(empObj).State = EntityState.Modified;
+            int n = await _db.SaveChangesAsync();
+            if (n != 0)
+            {
+                response.Message = "Record Updated!!";
+                response.Data = n;
+                response.StatusCode = HttpStatusCode.OK;
+                return response;
+            }
+            else
+            {
+                response.Message = "Updation Failed!!";
+                response.Data = 0;
+                response.StatusCode = HttpStatusCode.NotModified;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel> deleteEmployee(int id)
+        {
+            var employee = await _db.Employees.Where(m => m.Eid == id).FirstOrDefaultAsync();
+            if (employee != null)
+            {
+                _db.Remove(employee);
+                int n = await _db.SaveChangesAsync();
+                if (n != 0)
+                {
+                    response.Message = "Record Deleted!!";
+                    response.Data = n;
+                    response.StatusCode = HttpStatusCode.OK;
+                    return response;
+                }
+                else
+                {
+                    response.Message = "Deleted Failed!!";
+                    response.Data = 0;
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    return response;
+                }
+            }
+            else
+            {
+                response.Message = "Employee Not Found!!";
+                response.Data = 0;
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+        }
+    }
+}
+--------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=DESKTOP-VT3D96L\\SQLEXPRESS;Initial Catalog=DbApi;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;"
+  },
+  "AllowedHosts": "*"
+}
+------------------------------------------------------------
+Program.cs:-
+-----------------
+builder.Services.AddControllers();
+builder.Services.AddDbContext<EmployeeDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddScoped<IEmployee, EmployeeService>();
+builder.Services.AddScoped<EmployeeDbContext>();
+---------------------------------------------------------
+Consume an API:-
+-------------------
+Go to appsettings.json:-
+----------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "WebApiUrl": "https://localhost:7024/api/Employee/"
+}
+--------------------------
+Employee:-
+---------------
+using System.ComponentModel.DataAnnotations;
+
+namespace ConsumeAPI.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int Eid { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public string Post { get; set; }
+        public double Salary { get; set; }
+    }
+}
+--------------------------------------------------
+using ConsumeAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text;
+
+namespace ConsumeAPI.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private readonly IConfiguration _iconfiguration;
+        public EmployeeController(IConfiguration configuration)
+        {
+            _iconfiguration = configuration;
+        }
+        public async Task<IActionResult> Index()
+        {
+            string apiURL = _iconfiguration.GetSection("WebApiUrl").Value;
+            List<Employee> empList = new List<Employee>();
+            using (var httpClient = new HttpClient())// For avoiding "The SSL connection could not be established see inner Exception" we have to use "HttpClientHandle".
+            {
+                using (var response = await httpClient.GetAsync(apiURL + "GetEmployees"))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        JObject root = JObject.Parse(apiResponse);  // JSON to Object
+                        empList = root["data"].ToObject<List<Employee>>();
+                        /*empList = JsonConvert.DeserializeObject<List<Employee>>(apiResponse);*/ // JSON to Object
+                    }
+                }
+            }
+            return View(empList);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Employee empObj)
+        {
+            string dbConn = _iconfiguration.GetSection("WebApiUrl").Value;
+            using (var httpClient = new HttpClient())
+            {
+                StringContent content = new StringContent(JsonConvert.SerializeObject(empObj), Encoding.UTF8, "application/json");
+                using (var response = await httpClient.PostAsync(dbConn + "addEmployee", content))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+                return View();
+            }
+        }
+        public async Task<ActionResult> Edit(int id)
+        {
+            Employee _emp = new Employee();
+            string dbConn = _iconfiguration.GetSection("WebApiUrl").Value;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(dbConn + "GetEmployee?id=" + id))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        JObject root = JObject.Parse(apiResponse);  // JSON to Object
+                        _emp = root["data"].ToObject<Employee>();
+                        //_emp = JsonConvert.DeserializeObject<Employee>(apiResponse);
+                    }
+                }
+            }
+            return View(_emp);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Employee scObj)
+        {
+            string dbConn = _iconfiguration.GetSection("WebApiUrl").Value;
+            using (var httpClient = new HttpClient())
+            {
+                StringContent content = new StringContent(JsonConvert.SerializeObject(scObj), Encoding.UTF8, "application/json");
+                using (var response = await httpClient.PutAsync(dbConn + "updateEmployee", content))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+                return View();
+            }
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            Employee _emp = new Employee();
+            string dbConn = _iconfiguration.GetSection("WebApiUrl").Value;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(dbConn + "GetEmployee?id=" + id))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        JObject root = JObject.Parse(apiResponse);  // JSON to Object
+                        _emp = root["data"].ToObject<Employee>();
+                        //_emp = JsonConvert.DeserializeObject<Employee>(apiResponse);
+                    }
+                }
+            }
+            return View(_emp);
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            string dbConn = _iconfiguration.GetSection("WebApiUrl").Value;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.DeleteAsync(dbConn + "deleteEmployee?id=" + id))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            return RedirectToAction("Index");
+        }
+    }
+}
+------------------------------------------------------------------
+Create view using Scaffolding:-
+-----------------------------------------
+@model IEnumerable<ConsumeAPI.Models.Employee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Eid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Post)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Salary)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Eid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Post)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Salary)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Eid }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Eid }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Eid })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+---------------------------------------------------
+
+
+
+
+
+
+
+
+
+
