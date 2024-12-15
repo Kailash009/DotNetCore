@@ -1,0 +1,218 @@
+Model:-
+------------
+1. Show Single Employee.
+public IActionResult Index()
+{
+Employee emp=EmployeeData.GetEmployee();
+return View(emp);
+}
+-------
+namespace Batch10AMCore.Models
+{
+    public class Employee
+    {
+        public int Eid { get; set; }
+        public string Ename { get; set; }
+        public int Eage { get; set; }
+        public string Mobileno { get; set; }
+        public string Post { get; set; }
+        public double Salary { get; set; }
+    }
+}
+--------
+using Batch10AMCore.Models;
+
+namespace Batch10AMCore.Models
+{
+    public static class EmployeeData
+    {
+        public static Employee GetEmployee()
+        {
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Ename = "Ravi";
+            emp.Eage = 23;
+            emp.Mobileno = "9898678611";
+            emp.Post = "SE";
+            emp.Salary = 7373733.23;
+            return emp;
+        }
+    }
+}
+------------
+@model Batch10AMCore.Models.Employee;
+
+<h1>Welcome to my Employee Page**</h1>
+<table class="table table-bordered">
+    <tr>
+        <th>EID</th>
+        <th>@Model.Eid</th>
+    </tr>
+    <tr>
+        <th>NAME</th>
+        <th>@Model.Ename</th>
+    </tr>
+    <tr>
+        <th>AGE</th>
+        <th>@Model.Eage</th>
+    </tr>
+    <tr>
+        <th>MOBILE NO</th>
+        <th>@Model.Mobileno</th>
+    <tr>
+        <th>Post</th>
+        <th>@Model.Post</th>
+    </tr>
+    <tr>
+        <th>Salary</th>
+        <th>@Model.Salary</th>
+    </tr>
+    </tr>
+</table>
+2. Show Multiple Dummy Employee.
+---------------------------------
+public IActionResult Index()
+{
+List<Employee> employees=EmployeeData.GetEmployees();
+return View(employees);
+}
+-----------
+namespace Batch10AMCore.Models
+{
+    public class Employee
+    {
+        public int Eid { get; set; }
+        public string Ename { get; set; }
+        public int Eage { get; set; }
+        public string Mobileno { get; set; }
+        public string Post { get; set; }
+        public double Salary { get; set; }
+    }
+}
+---------
+using Batch10AMCore.Models;
+
+namespace Batch10AMCore.Models
+{
+    public static class EmployeeData
+    {
+        public static List<Employee> GetEmployees()
+        {
+            List<Employee> empList = new List<Employee>();
+            Employee emp = new Employee();
+            emp.Eid = 101;
+            emp.Ename = "Abhishek";
+            emp.Eage = 23;
+            emp.Mobileno = "78676876811";
+            emp.Post = "SE";
+            emp.Salary = 7373333.23;
+            empList.Add(emp); // First Employee Added
+
+            emp = new Employee();
+            emp.Eid = 102;
+            emp.Ename = "Prince";
+            emp.Eage = 22;
+            emp.Mobileno = "4676876811";
+            emp.Post = "TL";
+            emp.Salary = 8373333.23;
+            empList.Add(emp);
+
+            emp = new Employee();
+            emp.Eid = 103;
+            emp.Ename = "Amrendra";
+            emp.Eage = 25;
+            emp.Mobileno = "8676876811";
+            emp.Post = "Manager";
+            emp.Salary = 9373333.23;
+            empList.Add(emp);
+
+            emp = new Employee();
+            emp.Eid = 104;
+            emp.Ename = "Samar";
+            emp.Eage = 24;
+            emp.Mobileno = "676876811";
+            emp.Post = "Data Analyst";
+            emp.Salary = 3373333.23;
+            empList.Add(emp);
+
+
+            emp = new Employee();
+            emp.Eid = 105;
+            emp.Ename = "Anoop";
+            emp.Eage = 26;
+            emp.Mobileno = "86876811";
+            emp.Post = "Sr. Developer";
+            emp.Salary = 703333.23;
+            empList.Add(emp);
+
+            return empList;
+        }
+    }
+}
+------------
+@model IEnumerable<Employee>;
+
+<h1 class="bg-dark text-white">Welcome to my Employee Page**</h1>
+<table class="table table-hover">
+    <tr>
+        <th>EID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+        <th>MOBILE NO</th>
+        <th>POST</th>
+        <th>SALARY</th>
+    </tr>
+    @foreach(var emp in Model)
+    {
+        <tr>
+            <td>@emp.Eid</td>
+            <td>@emp.Ename</td>
+            <td>@emp.Eage</td>
+            <td>@emp.Mobileno</td>
+            <td>@emp.Post</td>
+            <td>@emp.Salary</td>
+        </tr>
+    }
+</table>
+------------------------------------
+Razor in Core:-
+--------------------
+>> When you want render/run C# code into html file then we use the concept of Razor syntax.
+>> The @ symbol is used to write razor syntax.
+Syntax:-
+-------------
+@
+{
+// write your C# Code...
+}
+-------------------------------
+Types of razor:-
+1. simple Statement. -- Pending
+2. Multiple Statement.
+3. Conditional Statement.
+4. Loop.
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
