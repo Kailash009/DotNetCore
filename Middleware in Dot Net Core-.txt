@@ -1,0 +1,248 @@
+Middleware in Dot Net Core:-
+----------------------------------
+>> A middleware is a series of software component that handle all request and response.
+>> It is also responsible to show how an application look when there is an error.
+>> A middleware assemble into an http request pipeline.
+There are two methods to create middleware:
+a) app.run() => It doesn't run next middleware
+b) app.use() => It is responsible to run next middleware.
+>> it has next() method.
+----------------------------------------------------------------------
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+//app.MapGet("/", () => "Hello World!");
+
+app.Use(async (context,next)=> 
+{
+   await context.Response.WriteAsync("This is My First MiddleWare!!\n");
+   await next();
+});
+
+app.Use(async (context, next) =>
+{
+    await context.Response.WriteAsync("This is My Second MiddleWare!!\n");
+    await next();
+});
+app.Use(async (context, next) =>
+{
+    await context.Response.WriteAsync("This is My Third MiddleWare!!\n");
+    await next();
+});
+app.Run(async context=>
+{
+    await context.Response.WriteAsync("This is My Fourth MiddleWare!!");
+});
+
+app.Run();
+-----------------------------------------------------------
+Routing in Core:-
+-----------------------
+>> Routing is a mechanism that inspect all the incoming request and map that request to the controller with their action methods.
+>> Routing decide the path where you want to reach.
+---------------------------------------------------------------
+Types of Routing:-
+-----------------------
+1. Conventional Based Routing.
+	a) MapDefaultControllerRoute().
+	b) app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Abut}/{id?}"
+   );
+app.MapControllerRoute(
+    name: "default1",
+    pattern: "{controller=Employee}/{action=Index}/{id?}"
+   );
+---------------------------------------------------------------------------
+2. Attribute Based Routing.
+>> Mostly used in API.
+>> [Route] attribute is used to perform attribute based routing.
+a) Action Level.
+using Microsoft.AspNetCore.Mvc;
+
+namespace MiddlewareCore.Controllers
+{
+    public class HomeController : Controller
+    {
+        [Route("~/")]
+        [Route("Home/Index")]
+        [Route("Home")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        [Route("Home/About")]
+        public IActionResult About()
+        {
+            return View();
+        }
+        [Route("Home/Services")]
+        public IActionResult Services()
+        {
+            return View();
+        }
+        [Route("Home/Contact")]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+or
+using Microsoft.AspNetCore.Mvc;
+
+namespace MiddlewareCore.Controllers
+{
+    public class SamarController : Controller
+    {
+        [Route("~/")]
+        [Route("Home/Index")]
+        [Route("Home")]
+        public IActionResult Abhi()
+        {
+            return View("~/Views/Home/Index.cshtml");
+        }
+        [Route("Home/About")]
+        public IActionResult About()
+        {
+            return View();
+        }
+        [Route("Home/Services")]
+        public IActionResult Services()
+        {
+            return View();
+        }
+        [Route("Home/Contact")]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+-------------------------------------------------------
+b) Controller Level.
+using Microsoft.AspNetCore.Mvc;
+
+namespace MiddlewareCore.Controllers
+{
+    [Route("Home")]
+    public class HomeController : Controller
+    {
+        [Route("~/")]
+        [Route("")]
+        [Route("Index")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        [Route("About")]
+        public IActionResult About()
+        {
+            return View();
+        }
+        [Route("Services")]
+        public IActionResult Services()
+        {
+            return View();
+        }
+        [Route("Contact")]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+---------------------------------
+c) Token Level.
+using Microsoft.AspNetCore.Mvc;
+
+namespace MiddlewareCore.Controllers
+{
+    [Route("[controller]/[action]")]
+    public class HomeController : Controller
+    {
+        [Route("~/")]
+        [Route("")]
+        [Route("~/Home")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult About()
+        {
+            return View();
+        }
+        public IActionResult Services()
+        {
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
+--------------------------------------
+State Management in Core:-
+------------------------------
+>> web application use http protocol.
+>> http is stateless protocol.
+>> It doesn't maintain the communication between client and server then we use the concept of
+state management technique.
+https://www.amazon.in/
+There are two types of state management-
+a) Client side state management.
+	i) Cookies.
+	ii) ViewBag.
+	iii) ViewData.
+	iv) Tempdata
+----------------------------------------
+b) Server side state management.
+	i) Session.
+---------------------------------------------------------------------------
+a) Client side state management.
+	i) Cookies.
+>> Cookies is used to store small piece of data at client machine.
+>> it hold about 4k. [it depend upon browser to browser].
+>> It hold only string data.
+>> The default time of cookies is 30 min.
+There are two types of cookies:
+a) Non-Persistent Cookies.
+>> It store client information on a temporarily basis.
+>> When you turn off your computer or close the browser window your cookie information automatically gets deleted from the Web Browser.
+b) Persistent Cookies.
+>> It store client information on a Permanent basis.
+>> When you turn off your computer or close the browser window your cookie information doesn't deleted from the Web Browser.
+>> You have to set the time.
+-----------------------------------
+a) How to Write Cookie. -- Pending.
+b) How to Read Cookie.
+--------------------------------------------------------------------------
+	ii) ViewBag.
+	iii) ViewData.
+	iv) Tempdata
+-------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
