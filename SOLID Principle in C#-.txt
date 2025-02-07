@@ -1,0 +1,378 @@
+SOLID Principle in C#:-
+----------------------------
+The SOLID principles are a set of five design principles that help to create more maintainable, flexible, and scalable software. These principles were introduced by Robert C. Martin and are widely regarded as best practices in object-oriented programming.
+Let’s go through each of the SOLID principles in C# with detailed examples:-
+1. S - Single Responsibility Principle (SRP)
+Definition: A class should have only one reason to change, meaning it should have only one job or responsibility.
+Goal: Keep each class focused on a single responsibility to make it easier to maintain and modify.
+Example:
+Without SRP:-
+----------------
+public class User
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+
+    public void SaveUserToDatabase()
+    {
+        // Code to save user to database
+    }
+
+    public void SendEmailConfirmation()
+    {
+        // Code to send email confirmation
+    }
+}
+Problem: The User class has two responsibilities: saving the user to the database and sending the email confirmation. These responsibilities should be separated.
+-----------------------------------------------------------------
+With SRP:
+-----------
+public class User
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+
+public class UserRepository
+{
+    public void SaveUser(User user)
+    {
+        // Code to save user to database
+    }
+}
+
+public class EmailService
+{
+    public void SendEmailConfirmation(string email)
+    {
+        // Code to send email confirmation
+    }
+}
+-------------------------------------------------------------
+Explanation: Now, each class has one responsibility. The User class only stores user information, the UserRepository handles saving data, and the EmailService handles sending emails.
+--------------------------------------------------------------
+2. O - Open/Closed Principle (OCP)
+Definition: Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.
+Goal: Allow new functionality to be added without modifying existing code, which reduces the risk of introducing bugs.
+Example:
+Without OCP (modifying classes directly):-
+public class Invoice
+{
+    public decimal Amount { get; set; }
+    public string CustomerType { get; set; }
+
+    public decimal CalculateDiscount()
+    {
+        if (CustomerType == "Regular")
+        {
+            return Amount * 0.1m;
+        }
+        else if (CustomerType == "Premium")
+        {
+            return Amount * 0.2m;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
+Problem: The Invoice class needs to be modified whenever a new customer type or discount strategy is introduced.
+------------------------------------------------------
+With OCP (using inheritance):
+public abstract class Discount
+{
+    public abstract decimal CalculateDiscount(decimal amount);
+}
+
+public class RegularDiscount : Discount
+{
+    public override decimal CalculateDiscount(decimal amount)
+    {
+        return amount * 0.1m;
+    }
+}
+
+public class PremiumDiscount : Discount
+{
+    public override decimal CalculateDiscount(decimal amount)
+    {
+        return amount * 0.2m;
+    }
+}
+
+public class Invoice
+{
+    public decimal Amount { get; set; }
+    public Discount DiscountStrategy { get; set; }
+
+    public decimal GetDiscount()
+    {
+        return DiscountStrategy.CalculateDiscount(Amount);
+    }
+}
+Explanation: Now, we can extend the discount logic by adding new classes that extend Discount without modifying the Invoice class itself. The Invoice class is closed for modification but open for extension.
+-------------------------------------------------------------------
+3. L - Liskov Substitution Principle (LSP):-
+Definition: Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program.
+Goal: Ensure that subclasses can be used interchangeably with their base class without causing errors.
+Example:
+Without LSP:-
+public class Bird
+{
+    public virtual void Fly()
+    {
+        Console.WriteLine("Bird is flying");
+    }
+}
+public class Ostrich : Bird
+{
+    public override void Fly()
+    {
+        throw new InvalidOperationException("Ostriches can't fly!");
+    }
+}
+Problem: Ostrich is a type of Bird, but it can't fly. Substituting a Bird with an Ostrich would cause an error.
+With LSP (proper subclassing):-
+public class Bird
+{
+    public virtual void Move()
+    {
+        Console.WriteLine("Bird is flying");
+    }
+}
+public class Sparrow : Bird
+{
+    public override void Move()
+    {
+        Console.WriteLine("Sparrow is flying");
+    }
+}
+public class Ostrich : Bird
+{
+    public override void Move()
+    {
+        Console.WriteLine("Ostrich is running");
+    }
+}
+Explanation: Now, both Sparrow and Ostrich are substitutable for Bird without breaking the code. They just implement Move() differently.
+-----------------------------------------------------------------------------------------------------------------------------------------------
+4. I - Interface Segregation Principle (ISP):-
+Definition: Clients should not be forced to depend on interfaces they do not use.
+Goal: Split large interfaces into smaller, more specific ones, so that clients only need to know about the methods relevant to them.
+Example:
+Without ISP:
+public interface IWorker
+{
+    void Work();
+    void Eat();
+}
+
+public class Worker : IWorker
+{
+    public void Work()
+    {
+        Console.WriteLine("Working...");
+    }
+
+    public void Eat()
+    {
+        Console.WriteLine("Eating...");
+    }
+}
+
+public class Robot : IWorker
+{
+    public void Work()
+    {
+        Console.WriteLine("Working...");
+    }
+
+    public void Eat()
+    {
+        throw new NotImplementedException("Robots don't eat.");
+    }
+}
+Problem: The Robot class is forced to implement Eat(), which doesn't make sense for robots.
+---------------------------------------------------------------------------------------------
+With ISP:-
+public interface IWorkable
+{
+    void Work();
+}
+
+public interface IFeeder
+{
+    void Eat();
+}
+
+public class Worker : IWorkable, IFeeder
+{
+    public void Work()
+    {
+        Console.WriteLine("Working...");
+    }
+
+    public void Eat()
+    {
+        Console.WriteLine("Eating...");
+    }
+}
+
+public class Robot : IWorkable
+{
+    public void Work()
+    {
+        Console.WriteLine("Working...");
+    }
+}
+--------------------------------------------------------------------------------------
+Explanation: Now, Robot only implements the IWorkable interface, and Worker implements both IWorkable and IFeeder. This way, clients are not forced to depend on unnecessary methods.
+-------------------------------------------------------------------------------------------------
+5. D - Dependency Inversion Principle (DIP)
+Definition: High-level modules should not depend on low-level modules. Both should depend on abstractions. Additionally, abstractions should not depend on details. Details should depend on abstractions.
+Goal: Decouple high-level business logic from low-level implementation details.
+Example:
+Without DIP:-
+public class FileLogger
+{
+    public void Log(string message)
+    {
+        Console.WriteLine($"Logging to file: {message}");
+    }
+}
+
+public class Application
+{
+    private FileLogger _logger;
+
+    public Application()
+    {
+        _logger = new FileLogger();
+    }
+
+    public void Run()
+    {
+        _logger.Log("Application started.");
+    }
+}
+Problem: The Application class depends directly on FileLogger, which makes it hard to change logging behavior (e.g., using a database or cloud logging).
+-------------------------------------------------------------------------
+With DIP:-
+public interface ILogger
+{
+    void Log(string message);
+}
+
+public class FileLogger : ILogger
+{
+    public void Log(string message)
+    {
+        Console.WriteLine($"Logging to file: {message}");
+    }
+}
+
+public class DatabaseLogger : ILogger
+{
+    public void Log(string message)
+    {
+        Console.WriteLine($"Logging to database: {message}");
+    }
+}
+
+public class Application
+{
+    private readonly ILogger _logger;
+
+    public Application(ILogger logger)
+    {
+        _logger = logger;
+    }
+
+    public void Run()
+    {
+        _logger.Log("Application started.");
+    }
+}
+Explanation: Now, Application depends on the ILogger abstraction rather than a specific implementation. This allows the logging mechanism to be easily changed (e.g., to use DatabaseLogger instead of FileLogger) without modifying the Application class.
+Conclusion:-
+----------------------------
+The SOLID principles guide object-oriented design and help create more maintainable, flexible, and scalable software. By applying these principles, you can avoid common design pitfalls, such as tight coupling and unclear responsibilities. Here's a quick recap of each principle:
+S - Single Responsibility Principle: One class, one responsibility.
+O - Open/Closed Principle: Open for extension, closed for modification.
+L - Liskov Substitution Principle: Subtypes must be substitutable for their base types.
+I - Interface Segregation Principle: Clients should not depend on methods they don’t use.
+D - Dependency Inversion Principle: Depend on abstractions, not concrete implementations.
+By following these principles, you can create software that is easier to understand, extend, and maintain over time.
+-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

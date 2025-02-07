@@ -1,0 +1,211 @@
+http://10.103.41.203/reports/browse/CGA.CPSMS.Reports
+=============================================================
+ SELECT                     
+   S.*                    
+  FROM cga_cpsms.dbo.tblState S with(nolock) where StateId not in (select UTId  from DW_PFMS..tblUTsWithoutLegislature) and S.IsActive=1 -- S.isUT is NULL OR S.isUT <> 1  -- Added by kailash doesn't show UT state      
+  ORDER BY S.Name   
+============================================================
+update rpt.tblreportmaster set Description=' - Select - ' where Id in (13361,13362,13363,13364)
+INSERT INTO rpt.tblreportmaster(Type,Value,Module,Item,Description,Isvisible,SequenceNo) VALUES('FinancialYear','2023','SNA19','DropDown','2022-2023','1','1')
+INSERT INTO rpt.tblreportmaster(Type,Value,Module,Item,Description,Isvisible,SequenceNo) VALUES('FinancialYear','2024','SNA19','DropDown','2023-2024','1','2')
+INSERT INTO rpt.tblreportmaster(Type,Value,Module,Item,Description,Isvisible,SequenceNo) VALUES('FinancialYear','2025','SNA19','DropDown','2024-2025','1','3')
+INSERT INTO rpt.tblreportmaster(Type,Value,Module,Item,Description,Isvisible,SequenceNo) VALUES('FilterSetting','ddlController','SNA19','DropDown',' - All - ','1','0')
+INSERT INTO rpt.tblreportmaster(Type,Value,Module,Item,Description,Isvisible,SequenceNo) VALUES('FilterSetting','ddlGrant','SNA19','DropDown',' - All - ','1','0')
+INSERT INTO rpt.tblreportmaster(Type,Value,Module,Item,Description,Isvisible,SequenceNo) VALUES('FilterSetting','ddlCSSScheme','SNA19','DropDown',' - All - ','1','0')
+INSERT INTO rpt.tblreportmaster(Type,Value,Module,Item,Description,Isvisible,SequenceNo) VALUES('FilterSetting','ddlState','SNA19','DropDown',' - All - ','1','0')
+INSERT INTO rpt.tblreportmaster(Type,Value,Module,Item,Description,Isvisible,SequenceNo) VALUES('SNAReportRDL','rpt_SNA19BankBalanceofZBSAAccounts_Report','SNA19','RDL','SNA19 - Bank Balance of ZBSA Accounts','1','0')
+================================================================================================================================
+[RPT].[RP_GetMultpleScheme_SNA] 
+[RPT].[RP_GetScheme_SNA]
+================================
+select * from rpt.tblreportmaster where module='SNASummary'
+SELECT DISTINCT         
+            S.SchemeId,        
+            S.Code,        
+            S.Name,        
+            S.SchemeDesc,        
+            S.StatusId,        
+            S.SchemeTypeId,        
+            S.SchemeGroupId,        
+            S.SchemeSectorId,        
+            S.StartYear,        
+            S.EndYear,        
+            ' [' + S.Code + '] - ' + S.Name AS SCM_DESC        
+            --into #tempschemefinal        
+         From CGA_CPSMS.dbo.VW_SchemeDetails S         
+            --INNER JOIN dbo.tblUserSchemeMapping US ON US.SchemeId=S.SchemeId                
+                
+            INNER JOIN GIFMIS.dbo.tblSchemeGBE gbe WITH(NOLOCK)        
+                 ON  gbe.SchemeId IN (S.SchemeId)        
+            INNER JOIN GIFMIS.dbo.tblGrantControllerMapping GC WITH(NOLOCK)        
+                 ON  GC.GrantNoID IN(gbe.GrantNoId)
+
+     WHERE  S.SchemeTypeId IN (ISNULL(1, S.SchemeTypeId))        
+            AND GC.ControllerID IN (select value from STRING_SPLIT('1',','))   
+            AND GC.GrantNoID IN (Select value from STRING_SPLIT('0',','))        
+            AND GC.FinancialYear IN(2023)        
+            AND ISNULL(S.SchemeSectorId, 1) IN(COALESCE(0, S.SchemeSectorId, 1))        
+            AND ISNULL(S.SchemeGroupId, 1) IN(COALESCE(0, S.SchemeGroupId, 1))        
+            --AND s.StartDate <= '2022-04-01'        
+            --AND ISNULL(s.EndDate, '2023-03-31') >= '2023-03-31'         
+     UNION        
+     SELECT DISTINCT         
+            S.SchemeId,        
+            S.Code,        
+            S.Name,        
+            S.SchemeDesc,        
+            S.StatusId,        
+            S.SchemeTypeId,        
+            S.SchemeGroupId,        
+            S.SchemeSectorId,        
+            S.StartYear,        
+            S.EndYear,        
+            ' [' + S.Code + '] - ' + S.Name AS SCM_DESC        
+     FROM   rpt.vw_AgencySchemes ABSM        
+            --CGA_CPSMS.dbo.tblAgencyUserMapping AUM  with(nolock)        
+            --INNER JOIN CGA_CPSMS.dbo.tblAgencyBankSchemeMapping ABSM with(nolock) ON ABSM.AgencyId =AUM.AgencyId                
+                    
+            INNER JOIN CGA_CPSMS.dbo.VW_SchemeDetails S        
+                 ON  S.SchemeId IN (ABSM.SchemeId)        
+     WHERE  SchemeTypeId IN (12, 14)        
+            AND S.SchemeTypeId IN(ISNULL(1, S.SchemeTypeId))         
+                --AND ISNULL(S.Startyear,YEAR(getdate()))<= @FinancialYear        
+            AND ISNULL(S.SchemeSectorId, 1) IN(COALESCE(0, S.SchemeSectorId, 1))        
+            AND ISNULL(S.SchemeGroupId, 1) IN(COALESCE(0, S.SchemeGroupId, 1))        
+            AND ISNULL(null, 0) = 0       
+            --AND s.StartDate <= '2022-04-01'          
+            --AND ISNULL(s.EndDate, '2023-03-31') >= '2023-03-31'         
+     UNION        
+     SELECT SchemeId,        
+            Code,        
+            NAME,        
+            SchemeDesc,        
+            StatusId,        
+            SchemeTypeId,        
+            SchemeGroupId,        
+            SchemeSectorId,        
+            StartYear,        
+            EndYear,        
+            ' [' + S.Code + '] - ' + S.Name AS SCM_DESC        
+     FROM   rpt.VW_SubSchemeDetails_SNACNA S        
+     WHERE  ControllerId IN (Select value  from STRING_SPLIT('1',','))       
+            --AND s.StartDate <= '2022-04-01'         
+            --AND ISNULL(s.EndDate, '2023-03-31') = '2023-03-31'         
+       --   UNION        
+              -- SELECT        
+                -- S.*,  S.Name + ' [' + S.Code + '] - 'AS SCM_DESC        
+                --FROM VW_SchemeDetails S       --WHERE   S.SchemeId =2230        
+                --and ISNULL(@ControllerId,0)=0        
+     ORDER BY        
+            SCM_DESC        
+=====================================
+select * from CGA_CPSMS.dbo.VW_SchemeDetails 
+select * from GIFMIS.dbo.tblSchemeGBE
+select * from GIFMIS.dbo.tblGrantControllerMapping
+select * from	rpt.vw_AgencySchemes ABSM  
+select * from  CGA_CPSMS.dbo.VW_SchemeDetails
+select * from rpt.VW_SubSchemeDetails_SNACNA
+
+IF @myString IS NULL
+BEGIN
+    SELECT NULL AS SplitResult;
+END
+ELSE
+BEGIN
+    SELECT value AS SplitResult
+    FROM STRING_SPLIT(@myString, ',');
+
+	declare @ControllerId nvarchar(max)
+	set @ControllerId='1,2,3'
+
+	select value from STRING_SPLIT(@ControllerID,',')
+	 
+select ISNULL(value,GCM.ControllerID) from STRING_SPLIT(@ControllerID,',')) 
+
+IN (Select CASE WHEN @ControllerId is NULL THEN GC.ControllerID ELSE (Select value from STRING_SPLIT(@ControllerId,',')) END ) 
+
+--select ISNULL(@ControllerId, ControllerID) from GIFMIS.dbo.tblGrantControllerMapping
+
+	SELECT DISTINCT         
+            S.SchemeId,        
+            S.Code,        
+            S.Name,        
+            S.SchemeDesc,        
+            S.StatusId,        
+            S.SchemeTypeId,        
+            S.SchemeGroupId,        
+            S.SchemeSectorId,        
+            S.StartYear,        
+            S.EndYear,        
+            ' [' + S.Code + '] - ' + S.Name AS SCM_DESC        
+            --into #tempschemefinal        
+     FROM   CGA_CPSMS.dbo.VW_SchemeDetails S         
+            --INNER JOIN dbo.tblUserSchemeMapping US ON US.SchemeId=S.SchemeId                
+                
+            INNER JOIN GIFMIS.dbo.tblSchemeGBE gbe WITH(NOLOCK)        
+                 ON  gbe.SchemeId = S.SchemeId        
+            INNER JOIN GIFMIS.dbo.tblGrantControllerMapping GC WITH(NOLOCK)        
+                 ON  GC.GrantNoID = gbe.GrantNoId        
+     WHERE  S.SchemeTypeId = ISNULL(1, S.SchemeTypeId)        
+            AND GC.ControllerID IN (Select ISNULL(null, GC.ControllerID) value from STRING_SPLIT(null,','))
+            AND GC.GrantNoID IN (Select ISNULL(null,GC.GrantNoID) value from STRING_SPLIT(null,','))        
+            AND GC.FinancialYear = 2023        
+            AND ISNULL(S.SchemeSectorId, 1) = COALESCE(0, S.SchemeSectorId, 1)        
+            AND ISNULL(S.SchemeGroupId, 1) = COALESCE(0, S.SchemeGroupId, 1)        
+            AND s.StartDate <= '2022-04-01'        
+            AND ISNULL(s.EndDate, '2023-03-31') >= '2023-03-31'         
+     UNION        
+     SELECT DISTINCT         
+            S.SchemeId,        
+            S.Code,        
+            S.Name,        
+            S.SchemeDesc,        
+            S.StatusId,        
+            S.SchemeTypeId,        
+            S.SchemeGroupId,        
+            S.SchemeSectorId,        
+            S.StartYear,        
+            S.EndYear,        
+            ' [' + S.Code + '] - ' + S.Name AS SCM_DESC        
+     FROM   rpt.vw_AgencySchemes ABSM        
+            --CGA_CPSMS.dbo.tblAgencyUserMapping AUM  with(nolock)        
+            --INNER JOIN CGA_CPSMS.dbo.tblAgencyBankSchemeMapping ABSM with(nolock) ON ABSM.AgencyId =AUM.AgencyId                
+                    
+            INNER JOIN CGA_CPSMS.dbo.VW_SchemeDetails S        
+                 ON  S.SchemeId = ABSM.SchemeId        
+     WHERE  SchemeTypeId IN (12, 14)        
+            AND S.SchemeTypeId = ISNULL(1, S.SchemeTypeId)         
+                --AND ISNULL(S.Startyear,YEAR(getdate()))<= @FinancialYear        
+            AND ISNULL(S.SchemeSectorId, 1) = COALESCE(0, S.SchemeSectorId, 1)        
+            AND ISNULL(S.SchemeGroupId, 1) = COALESCE(0, S.SchemeGroupId, 1)        
+            AND ISNULL(null, 0) = 0        
+            AND s.StartDate <= '2022-04-01'        
+            AND ISNULL(s.EndDate, '2023-03-31') >= '2023-03-31'         
+     UNION        
+     SELECT SchemeId,        
+            Code,        
+            NAME,        
+            SchemeDesc,        
+            StatusId,        
+            SchemeTypeId,        
+            SchemeGroupId,        
+            SchemeSectorId,        
+            StartYear,        
+            EndYear,        
+            ' [' + S.Code + '] - ' + S.Name AS SCM_DESC        
+     FROM   rpt.VW_SubSchemeDetails_SNACNA S        
+     WHERE  ControllerId IN (Select ISNULL(null, ControllerId) value from STRING_SPLIT(null,','))       
+            AND s.StartDate <= '2022-04-01'        
+            AND ISNULL(s.EndDate, '2023-03-31') = '2023-03-31'         
+       --   UNION        
+              -- SELECT        
+                -- S.*,  S.Name + ' [' + S.Code + '] - 'AS SCM_DESC        
+                --FROM VW_SchemeDetails S       --WHERE   S.SchemeId =2230        
+                --and ISNULL(@ControllerId,0)=0        
+     ORDER BY        
+            SCM_DESC
+==================================
+declare @ControllerId nvarchar(max)
+set @ControllerId='1'
+SELECT CASE When @ControllerId IS NULL THEN NULL ELSE value END as SplitResult from STRING_SPLIT(@ControllerId,',')
+===================================================================

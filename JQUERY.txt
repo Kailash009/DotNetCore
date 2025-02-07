@@ -1,0 +1,221 @@
+JQUERY:-
+--------------
+select * from rpt.tblreportmaster where module='SNASummary'
+--update rpt.tblreportmaster set Description=' - Select - ' where id in (12328,12329,12330,12331)
+If the listbox loses focus or the user clicks outside the listbox. 
+<%-- var sumoSelect = $('#<%= lstController.ClientID %>').SumoSelect();
+            console.log(sumoSelect);--%>
+
+            <%--$('#<%= lstController.ClientID %>').change(function () {
+                var controllerList = $('#<%=lstController.ClientID %>').val();
+                console.log('controllerList=', controllerList);
+                if (controllerList != undefined && controllerList != "") {
+                    /* $('#divmain').click(function () {*/
+                    alert('hello');
+                    var controllerList = $('#<%=lstController.ClientID %>').val();
+                    var controllerText = GetValue($(<%=lstController.ClientID %>))
+                    $('#<%=hdnControllerList.ClientID %>').val(controllerList);
+                    $('#<%=hdnControllerText.ClientID %>').val(controllerText);
+                    __doPostBack('<%= lstScheme.ClientID %>', '');  // Trigger postback
+                    /*});*/
+                }
+                else {
+                    return false;
+                }
+            });--%>
+
+            // Trigger when the dropdown loses focus (e.g., when an option is selected and focus is moved)
+            <%--$('#<%=hdnControllerList.ClientID %>')[0].sumo.unselect = function () {
+                alert("SumoSelect dropdown lost focus after selection");
+            };--%>
+
+            <%--$('#<%= lstController.ClientID %>').next('.SumoSelect').find('.selectBox')
+                .on('focusin', function () {
+                    alert('focusin event triggered');
+                })
+                .on('focusout', function () {
+                    alert('focusout event triggered');
+                });--%>
+
+
+            //$('select.SlectBox').on('sumo:opened', function (sumo) {
+            //    // Do stuff here
+            //    console.log("Drop down opened", sumo)
+            //});
+            // Trigger postback when the ListBox (SumoSelect) loses focus
+              <%-- $('#<%= lstController.ClientID %>').focusout(function () {
+                alert(111);
+                var selectedItems = $('#<%= lstController.ClientID %>').val(); // get selected items' value
+                console.log(selectedItems);
+                // If items are selected, trigger the postback
+                if (selectedItems.length > 0) {
+                    __doPostBack('<%= lstScheme.ClientID %>', '');  // Trigger postback
+                }
+            });--%>
+=================================================
+    function bindController() {
+            var _lblController;
+            var controllerList = $('#<%=lstController.ClientID %>').val();
+            console.log('controllerList=', controllerList);
+            var controllerText = GetValue($(<%=lstController.ClientID %>))
+            var mylist = $('#<%=hdnControllerList.ClientID %>').val(controllerList);
+            console.log('mylist=', mylist);
+            $('#<%=hdnControllerText.ClientID %>').val(controllerText);
+            _lblController = $('#<%=hdnControllerText.ClientID %>').val();
+            <%--_lblController = $('#<%=txtController.ClientID %>').val(controllerText);--%>
+            console.log("_lblController=", _lblController);
+            var _txtCo = $('#<%=txtController.ClientID %>').val(_lblController);
+            console.log("_txtCo=", _txtCo);
+            if (_txtCo != "") {
+                $('#<%=txtController.ClientID %>').focus();
+                //$('#<%= txtController.ClientID %>').focusout(function () {
+                    //alert(111);
+            <%--var selectedItems = $('#<%= lstController.ClientID %>').val(); // get selected items' value
+            console.log(selectedItems);--%>
+                    // If items are selected, trigger the postback
+                   <%-- __doPostBack('<%= lstController.ClientID %>', ''); --%> // Trigger postback
+                /*});*/
+            }
+        }
+        }
+        else
+        {
+            return false;
+        }
+====================================
+ // Bind a click event on the document
+            //$(document).click(function (event) {
+            //    var $target = $(event.target);
+
+            //    // Check if the click is outside the SumoSelect container
+            //    if (!$target.closest('.optWrapper').length) {
+            //        // Trigger focusout on the SumoSelect input field
+            //        $('.optWrapper input').trigger('focusout');
+            //    }
+            //});
+
+            //// Optionally, handle the focusout event to add additional logic
+            //$('.optWrapper input').focusout(function () {
+            //   alert("Focus out triggered!");
+            //    // Additional actions when focusout occurs
+            //});
+========================================================================================
+alert(1);
+                var selectedDiv = $('.SumoSelect.open');
+                console.log('selectedDiv==>>',selectedDiv);
+                var isOpen = false;
+                $(this).toggleClass('SumoSelect open');
+                //var selectedOptions = $('.open');
+                //console.log('selectedOptions=', selectedOptions);
+                isOpen = $(this).hasClass('SumoSelect open');
+                console.log('is Open=', isOpen);
+               
+                //alert(selectedOptions);
+                //var _sumoClose = $('.SumoSelect').remove('outline');
+                //console.log('_sumoClose=', _sumoClose);
+                // Iterate through each selected option and log the label text
+                //selectedOptions.each(function () {
+                //    var label = $(this).find('label').text(); // Extract the label text
+                //    console.log('label=', label); // Log the label of the selected option
+                //});
+                    // Trigger focusout event on each of them
+                    //selectedOptions.trigger('focusout');
+                    //alert('23'); 
+            <%--    });
+            });--%>
+===============================================================================
+var flag = 0;
+            var selectedCount = 0;
+            var maxSelections = $(this).find('option').length;
+            $('#<%= lstController.ClientID %>').on('change', function () {
+                debugger;
+                maxSelections = $(this).find('option').length;
+                console.log('totalOptions==>>', maxSelections);
+                $(this).find('option:selected').each(function () {
+                    selectedCount++;
+                    if (selectedCount >= maxSelections ) {
+                        flag = 1;
+                        return false;
+                    }
+                    console.log('selectedOptions==>>', selectedCount, typeof (selectedCount));
+                    // Check if all options are selected (or any custom condition you want)
+                });
+                console.log('selectedOptions after Change ==>>', selectedCount);
+                if (flag == 1) {
+                    __doPostBack('<%= lstController.ClientID %>', '');
+                }
+                else {
+                    return false;
+                }
+            });
+====================================================
+$(document).ready(function () {
+                function getSelectedItems() {
+                    var selectedItems = [];
+
+                    // Loop through each option and check if it's selected
+                    $('#<%= lstController.ClientID %> option:selected').each(function () {
+                        var text = $(this).text();  // Get the text of the selected option
+                        var value = $(this).val();  // Get the value of the selected option
+                        selectedItems.push({ text: text, value: value });
+                    });
+
+                    // Display the selected values and texts in the console
+                    console.log(selectedItems);
+                }
+
+                // Call the function to get selected items when the selection changes
+             Sys.Application.add_load(function () {
+                 $('#<%= lstController.ClientID %>').change(function () {
+                     alert('HELLO');
+                    getSelectedItems();
+                });
+            });
+        });
+
+
+=====================================================================================================================================
+
+        $(document).ready(function () {
+            debugger;
+            // Bind the change event inside Sys.Application.add_load to ensure it works after each partial postback
+            Sys.Application.add_load(function () {
+                alert('HELLOO');
+                var res = $('<%=lstController.ClientID%> option').val();
+                console.log(res);
+                $('<%=lstController.ClientID%> option').change(function () {
+                    alert('fdsfds');
+                    var selectedValues = [];
+                    var selectedTexts = [];
+
+                    $('<%=lstController.ClientID%> option:selected').each(function () {
+                        selectedValues.push($(this).val());
+                        selectedTexts.push($(this).text());
+                    });
+                    var result = "Values: " + selectedValues.join(', ') + "<br/>Texts: " + selectedTexts.join(', ');
+                    $('#result').html(result);
+                });
+            });
+        });
+===========================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
