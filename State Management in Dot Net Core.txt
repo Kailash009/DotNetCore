@@ -1,0 +1,406 @@
+State Management in Dot Net Core:-
+-----------------------------------------------
+>> web application follows http protocol.  [https://www.amazon.in/]
+>> http is stateless protocol.
+>> It doesn't maintain the communication between client and server then we need state management
+protocol.
+------------------------------------------
+Types of state Management:-
+a) Client Side  state Management.
+	i) Cookies.
+	ii) ViewBag.
+	iii) ViewData.
+	iv) TempData.
+b) Server Side state Management.
+	i) Session.
+==============================================================
+i) Cookies. 
+>> It is small piece of information that stored at client machine.
+>> It store only string data.
+>> It store data upto 4k. [Browser to Browser].
+>> The default time of cookie is 30 Min.
+------------------------------------------------
+Types of Cookie:-
+a) Non-Persistent.
+>> It store cookie information on a temporarily basis.
+>> As soon as when you clear you browser , close your application or turn off your computer your cookies information automatically gets deleted from the Web Browser.
+b) Persistent.
+>> >> It store cookie information on a permanent basis.
+>> As soon as when you clear you browser , close your application or turn off your computer your cookies information doesn't deleted from the Web Browser.
+>> you need to set the time.
+----------------------------------------------------------------
+How to write cookie.
+How to read cookie.
+--------------------------------------------
+using Batch10AMCoree.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace Batch10AMCoree.Controllers
+{
+    public class StateMgtExController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult WriteCookie()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult WriteCookie(Employee empObj)
+        {
+            CookieOptions cookieOption = new CookieOptions();
+            cookieOption.Expires = DateTime.Now.AddDays(5); // Persistent Cookie.
+            Response.Cookies.Append("myName", empObj.Name, cookieOption); // Write My Cookie
+            ViewBag.name = "Cookie Write SuccessFully!!";
+            return View();
+        }
+
+        public IActionResult ReadCookie()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ReadCookie(Employee empObj)
+        {
+            string name = Request.Cookies["myName"].ToString();
+            if (name != null)
+            {
+                ViewBag.mycookie = name;
+            }
+            return View();
+        }
+
+    }
+}
+-----------------------
+@model Employee
+
+<h1>****WRITE COOKIES*****</h1>
+
+<form asp-action="WriteCookie" asp-controller="StateMgtEx" method="post">
+    Enter your Name:
+    <input type="text" asp-for="Name"/>
+
+    <button type="submit">Write Cookie</button>
+    <h2 style="color:green;">@ViewBag.name</h2>
+
+</form>
+----------------
+<h1>*******READ COOKIES*******</h1>
+
+<form asp-action="ReadCookie" asp-controller="StateMgtEx" method="post">
+    Read your Name:
+    <input type="text" value="@ViewBag.mycookie" />
+
+    <button type="submit">Read Cookie</button>
+
+</form>
+--------------------------------------------------------------
+ii) ViewBag.
+>> It is used to transfer small amount of data from controller to view.
+>> it is a dynamic type.
+>> It doesn't require type casting for complex data type.
+>> It doesn't show compile time error , only show run time error.
+>> The life cycle of viewbag is current http request only.
+Syntax:-
+-------------
+ViewBag.keyname/varname = value;
+-------------------------------------
+using Batch10AMCoree.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace Batch10AMCoree.Controllers
+{
+    public class StateMgtExController : Controller
+    {
+        public IActionResult Index()
+        {
+            //ViewBag.abc = "Hello ViewBag!!";  // Controller to View.
+            //string[] program = { "java", "php", "ml", "ai", "da" };
+            //ViewBag.myprogram = program;
+            //Employee emp = new Employee
+            //{
+            //    Eid = 101,
+            //    Name = "Nando",
+            //    Age = 23,
+            //    Mobileno = "89789791",
+            //    Post = "SE",
+            //    Salary = 37373.34
+            //};
+            //ViewBag.Emp = emp;
+            return View();
+        }     
+    }
+}
+@* <h1>
+    @ViewBag.abc
+</h1> *@
+
+@* 
+<ol>
+
+    @foreach (var pg in ViewBag.myprogram)
+    {
+        <li>@pg</li>
+    }
+    </ol> *@
+
+<h1>Employee Information</h1>
+@{
+    var emp = ViewBag.Emp;
+}
+<h3>EID =@emp.Eid </h3>
+<h3>NAME = @emp.Name</h3>
+<h3>AGE =@emp.Age </h3>
+<h3>MOBILENO =@emp.Mobileno </h3>
+<h3>POST = @emp.Post</h3>
+<h3>SALARY =@emp.Salary </h3>
+----------------------------------------
+iii) ViewData.
+>> It is used to transfer small amount of data from controller to view.
+>> it is inherits from View Data Dictionary.
+>> It require type casting for complex data type.
+>> It doesn't show compile time error , only show run time error.
+>> The life cycle of viewData is current http request only.
+Syntax:-
+-------------
+ViewData["keyname/Varname"] = value;
+-------------------------------------
+public IActionResult Index()
+{
+    /*ViewData["abc"] = "Hello ViewData!!"; */ // Controller to View.
+    //string[] program = { "java", "php", "ml", "ai", "da" };
+    //ViewData["myprogram"]= program;
+    Employee emp = new Employee
+    {
+        Eid = 101,
+        Name = "Nando",
+        Age = 23,
+        Mobileno = "89789791",
+        Post = "SE",
+        Salary = 37373.34
+    };
+    ViewData["Emp"] = emp;
+    return View();
+}
+---------------------------------------
+@* <h1>
+    @ViewData["abc"]
+</h1> *@
+
+
+@* <ol>
+
+    @foreach (var pg in (string[])ViewData["myprogram"])
+    {
+        <li>@pg</li>
+    }
+    </ol> *@
+
+<h1>Employee Information</h1>
+@{
+    var emp = (Employee)ViewData["Emp"];
+}
+<h3>EID =@emp.Eid </h3>
+<h3>NAME = @emp.Name</h3>
+<h3>AGE =@emp.Age </h3>
+<h3>MOBILENO =@emp.Mobileno </h3>
+<h3>POST = @emp.Post</h3>
+<h3>SALARY =@emp.Salary </h3>
+-------------------------------------------------------
+iv)  TempData.
+>> It is used to transfer small amount of data from controller to view and controller to controller.
+>> it is inherits from Temp Data Dictionary.
+>> It require type casting for complex data type.
+>> It doesn't show compile time error , only show run time error.
+>> The life cycle of tempData is one subsequent request to another subsequent request.
+Note:- if you need your tempdata value in all your subsequent request then we have keep() method.
+keep();
+--------------------------
+Syntax:-
+-------------
+TempData["keyname/Varname"] = value;
+-------------------------------------------------------------------
+public IActionResult Index()
+{
+    //TempData["abc"] = "Hello TempData!!";  // Controller to View.
+    //if (TempData["abc"]!=null)
+    //{
+    //    return RedirectToAction("Index", "Employee"); // Controller to Controller
+    //}
+    //string[] program = { "java", "php", "ml", "ai", "da" };
+    //TempData["myprogram"] = program;
+    Employee emp = new Employee
+    {
+        Eid = 101,
+        Name = "Nando",
+        Age = 23,
+        Mobileno = "89789791",
+        Post = "SE",
+        Salary = 37373.34
+    };
+    TempData["Emp"] = emp;
+    return View();
+}
+------------------------------------------------------
+@* <h1>
+    @TempData["abc"]
+</h1> *@
+
+
+@* <ol>
+
+    @foreach (var pg in (string[])TempData["myprogram"])
+    {
+        <li>@pg</li>
+    }
+    </ol> *@
+
+<h1>Employee Information</h1>
+@{
+    var emp = (Employee)TempData["Emp"];
+}
+<h3>EID =@emp.Eid </h3>
+<h3>NAME = @emp.Name</h3>
+<h3>AGE =@emp.Age </h3>
+<h3>MOBILENO =@emp.Mobileno </h3>
+<h3>POST = @emp.Post</h3>
+<h3>SALARY =@emp.Salary </h3>
+--------------------------------------------------
+using Batch10AMCoree.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace Batch10AMCoree.Controllers
+{
+    public class StateMgtExController : Controller
+    {
+        public IActionResult Index()
+        {
+            ViewBag.name = "Hello ViewBag How are YOU??";
+            ViewData["nme"] = "Hello ViewData How are YOU??";
+            TempData["nm"] = "Hello TempData How are YOU??";
+            //TempData["abc"] = "Hello TempData!!";  // Controller to View.
+            //if (TempData["abc"]!=null)
+            //{
+            //    return RedirectToAction("Index", "Employee"); // Controller to Controller
+            //}
+            //string[] program = { "java", "php", "ml", "ai", "da" };
+            //TempData["myprogram"] = program;
+            //Employee emp = new Employee
+            //{
+            //    Eid = 101,
+            //    Name = "Nando",
+            //    Age = 23,
+            //    Mobileno = "89789791",
+            //    Post = "SE",
+            //    Salary = 37373.34
+            //};
+            //TempData["Emp"] = emp;
+            return View();
+        }
+        public IActionResult About()
+        {
+            if (TempData["nm"] != null)
+            {
+                TempData.ToString();
+                TempData.Keep();
+            }
+            return View();
+        }
+        public IActionResult Product()
+        {
+            if (TempData["nm"] != null)
+            {
+                TempData.ToString();
+                TempData.Keep();
+            }
+            return View();
+        }
+        public IActionResult Services()
+        {
+            if (TempData["nm"] != null)
+            {
+                TempData.ToString();
+                TempData.Keep();
+            }
+            return View();
+        }
+        public IActionResult WriteCookie()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult WriteCookie(Employee empObj)
+        {
+            CookieOptions cookieOption = new CookieOptions();
+            cookieOption.Expires = DateTime.Now.AddDays(5); // Persistent Cookie.
+            Response.Cookies.Append("myName", empObj.Name, cookieOption); // Write My Cookie
+            ViewBag.name = "Cookie Write SuccessFully!!";
+            return View();
+        }
+
+        public IActionResult ReadCookie()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ReadCookie(Employee empObj)
+        {
+            string name = Request.Cookies["myName"].ToString();
+            if (name != null)
+            {
+                ViewBag.mycookie = name;
+            }
+            return View();
+        }
+
+    }
+}
+---------------------------------------------------
+<h1>***About Page***</h1>
+
+
+<h1>ViewBag ==>> @ViewBag.name </h1>
+<h1>ViewData ==>> @ViewData["nme"] </h1>
+<h1>TempData ==>> @TempData["nm"] </h1>
+----------------------------------------------
+<h1>***Product Page****</h1>
+
+
+<h1>ViewBag ==>> @ViewBag.name </h1>
+<h1>ViewData ==>> @ViewData["nme"] </h1>
+<h1>TempData ==>> @TempData["nm"] </h1>
+----------------------------------------------
+<h1>***Services Page*****</h1>
+
+
+<h1>ViewBag ==>> @ViewBag.name </h1>
+<h1>ViewData ==>> @ViewData["nme"] </h1>
+<h1>TempData ==>> @TempData["nm"] </h1>
+------------------------------------------------------
+b) Server Side state Management.
+	i) Session.  ==>> Pending.
+------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
